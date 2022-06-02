@@ -1,5 +1,5 @@
 <template>
-  <div class="relative min-h-screen bg-primary-50">
+  <div class="relative min-h-screen bg-primary-50 pb-4">
     <NavbarDesktop id="desktop" />
     <NavbarMobile class="lg:hidden"
       ><button @click="openmenu">
