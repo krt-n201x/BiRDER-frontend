@@ -21,7 +21,7 @@
               />
             </div>
             <div>
-              <TextField
+              <AreaField
                 name="address"
                 label="Address"
                 type="text"
@@ -89,6 +89,7 @@
 import AppLayout from '@/layout/AppLayout.vue'
 import FormWrapper from '@/components/form/FormWrapper.vue'
 import TextField from '@/components/textfield/BaseField.vue'
+import AreaField from '@/components/textfield/AreaField.vue'
 import BaseButton from '@/components/button/BaseButton.vue'
 import SecondaryButton from '@/components/button/SecondaryButton.vue'
 import ROUTE_PATH from '@/constants/router.js'
@@ -101,14 +102,28 @@ export default {
     AppLayout,
     FormWrapper,
     TextField,
+    AreaField,
     BaseButton,
     SecondaryButton,
     Form
   },
   data() {
     const schema = yup.object().shape({
-      //   email: yup.string().required('Email is required!'),
-      //   password: yup.string().required('Password is required!')
+      fullname: yup.string().required('fullname is required!'),
+      address: yup.string().required('address is required!'),
+      phone: yup
+        .string()
+        .required('phone number is required!')
+        .matches(/^[0-9]+$/, 'please use number')
+        .min(10, 'phone number should have 10 digit')
+        .max(10, 'phone number should have 10 digit'),
+      username: yup.string().required('username is required!'),
+      email: yup
+        .string()
+        .email('please use as e-mail form')
+        .required('Email is required!'),
+      password: yup.string().required('password is required!'),
+      confirmpassword: yup.string().required('please confirm your password')
     })
     return {
       ROUTE_PATH,
