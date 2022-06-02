@@ -5,5 +5,9 @@ export default createStore({
   getters: {},
   mutations: {},
   actions: {},
-  modules: {}
+  modules: {},
+  flashMessage: '',
+  event: null,
+  currentLowUser: localStorage.getItem('lowuser'),
+  currentUser: JSON.parse(localStorage.getItem('user'))
 })

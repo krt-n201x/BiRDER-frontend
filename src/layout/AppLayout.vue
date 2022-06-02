@@ -29,7 +29,7 @@
         </div>
       </div>
       <div class="mb-20">
-        <SecondaryButton>Log Out</SecondaryButton>
+        <SecondaryButton @click="logout">Log Out</SecondaryButton>
       </div>
     </div>
     <!-- -------- -->
@@ -40,9 +40,16 @@
 import NavbarDesktop from '@/components/NavbarDesktop.vue'
 import NavbarMobile from '@/components/NavbarMobile.vue'
 import SecondaryButton from '@/components/button/SecondaryButton.vue'
+import AuthService from '@/services/AuthService.js'
 
 export default {
   name: 'AppLayout',
+  inject: ['Store'],
+  computed: {
+    currentUser() {
+      return localStorage.getItem('lowuser')
+    }
+  },
   components: {
     NavbarDesktop,
     NavbarMobile,
@@ -57,6 +64,10 @@ export default {
   methods: {
     openmenu() {
       this.show = !this.show
+    },
+    logout() {
+      AuthService.logout()
+      this.$router.go('/ ')
     }
   }
 }

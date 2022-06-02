@@ -77,7 +77,7 @@ export default {
       console.log(logininfo)
       AuthService.login(logininfo)
         .then(() => {
-          console.log('login success')
+          this.$router.push(`${ROUTE_PATH.REGISTER_PAGE}`)
         })
         .catch(() => {
           console.log('could not login')

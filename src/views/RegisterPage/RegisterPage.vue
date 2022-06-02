@@ -77,7 +77,7 @@
           </div>
           <div class="grid grid-cols-2 gap-2 mt-[22px] lg:mt-[36px]">
             <SecondaryButton @click="cancel">Cancel</SecondaryButton>
-            <BaseButton type="submit" @click="showMessage">Register</BaseButton>
+            <BaseButton type="submit" @click="register">Register</BaseButton>
           </div>
         </Form>
       </FormWrapper>
@@ -93,6 +93,7 @@ import AreaField from '@/components/textfield/AreaField.vue'
 import BaseButton from '@/components/button/BaseButton.vue'
 import SecondaryButton from '@/components/button/SecondaryButton.vue'
 import ROUTE_PATH from '@/constants/router.js'
+import AuthService from '@/services/AuthService.js'
 import { Form } from 'vee-validate'
 import * as yup from 'yup'
 
@@ -123,7 +124,10 @@ export default {
         .email('please use as e-mail form')
         .required('Email is required!'),
       password: yup.string().required('password is required!'),
-      confirmpassword: yup.string().required('please confirm your password')
+      confirmpassword: yup
+        .string()
+        .required('please confirm your password')
+        .oneOf([yup.ref('password'), null], 'Passwords must match')
     })
     return {
       ROUTE_PATH,
@@ -132,7 +136,13 @@ export default {
   },
   methods: {
     register(registerinfo) {
-      return console.log(registerinfo)
+      AuthService.registeruser(registerinfo)
+        .then(() => {
+          this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+        })
+        .catch(() => {
+          console.log('could not register')
+        })
     },
     cancel() {
       this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)

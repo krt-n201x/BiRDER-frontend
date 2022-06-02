@@ -30,7 +30,14 @@ export default {
     Store.currentUser = null
     Store.currentLowUser = null
   },
-  getUser() {
-    return JSON.parse(localStorage.getItem('user'))
+  registeruser(user) {
+    return apiClient.post('/registers', {
+      username: user.fullname,
+      password: user.password,
+      email: user.email,
+      address: user.address,
+      phoneNumber: user.phone,
+      fullName: user.fullname
+    })
   }
 }
