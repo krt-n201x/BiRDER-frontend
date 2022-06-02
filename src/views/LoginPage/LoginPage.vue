@@ -13,8 +13,8 @@
           <div class="mt-[22px] lg:mt-[36px]">
             <div>
               <TextField
-                name="email"
-                label="E-mail"
+                name="username"
+                label="Username"
                 type="text"
                 placeholder="Plese enter your e-mail"
                 required
@@ -48,6 +48,7 @@ import BaseButton from '@/components/button/BaseButton.vue'
 import SecondaryButton from '@/components/button/SecondaryButton.vue'
 import ROUTE_PATH from '@/constants/router.js'
 import { Form } from 'vee-validate'
+import AuthService from '@/services/AuthService.js'
 import * as yup from 'yup'
 
 export default {
@@ -62,17 +63,25 @@ export default {
   },
   data() {
     const schema = yup.object().shape({
-      email: yup.string().required('Email is required!'),
+      username: yup.string().required('Username is required!'),
       password: yup.string().required('Password is required!')
     })
     return {
       ROUTE_PATH,
+      message: '',
       schema
     }
   },
   methods: {
     login(logininfo) {
-      return console.log(logininfo)
+      console.log(logininfo)
+      AuthService.login(logininfo)
+        .then(() => {
+          console.log('login success')
+        })
+        .catch(() => {
+          console.log('could not login')
+        })
     },
     register() {
       this.$router.push(`${ROUTE_PATH.REGISTER_PAGE}`)
