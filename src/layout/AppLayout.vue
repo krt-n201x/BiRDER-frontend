@@ -41,6 +41,7 @@ import NavbarDesktop from '@/components/NavbarDesktop.vue'
 import NavbarMobile from '@/components/NavbarMobile.vue'
 import SecondaryButton from '@/components/button/SecondaryButton.vue'
 import AuthService from '@/services/AuthService.js'
+import ROUTE_PATH from '@/constants/router.js'
 
 export default {
   name: 'AppLayout',
@@ -67,7 +68,7 @@ export default {
     },
     logout() {
       AuthService.logout()
-      this.$router.go('/ ')
+      this.$router.push(`${ROUTE_PATH.LOGIN_PAGE}`)
     }
   }
 }

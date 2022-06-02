@@ -49,7 +49,16 @@ import SecondaryButton from '@/components/button/SecondaryButton.vue'
 import ROUTE_PATH from '@/constants/router.js'
 import { Form } from 'vee-validate'
 import AuthService from '@/services/AuthService.js'
+import { useToast } from 'vue-toastification'
 import * as yup from 'yup'
+
+const toast = useToast()
+const loginfail = (
+  <div>
+    <h1>Login Failed!</h1>
+    <span>Your email or password may incorrect</span>
+  </div>
+)
 
 export default {
   name: 'LoginPage',
@@ -77,9 +86,11 @@ export default {
       console.log(logininfo)
       AuthService.login(logininfo)
         .then(() => {
-          this.$router.push(`${ROUTE_PATH.REGISTER_PAGE}`)
+          toast.success('Login Success!')
+          this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
         })
         .catch(() => {
+          toast.error(loginfail)
           console.log('could not login')
         })
     },
