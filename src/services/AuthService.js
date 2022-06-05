@@ -12,7 +12,7 @@ export default {
         localStorage.setItem('token', response.data.token)
         if (JSON.stringify(response.data.user) != null) {
           localStorage.setItem('user', JSON.stringify(response.data.user))
-          Store.currentUser = response.data.user
+          Store.dispatch('updateCurrentUser', response.data.user)
         } else {
           localStorage.setItem('lowuser', user.username)
           Store.currentLowUser = user.username
@@ -27,17 +27,26 @@ export default {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
     localStorage.removeItem('lowuser')
-    Store.currentUser = null
-    Store.currentLowUser = null
+    Store.dispatch('updateCurrentUser', null)
   },
   registeruser(user) {
-    return apiClient.post('/registers', {
-      username: user.fullname,
-      password: user.password,
-      email: user.email,
-      address: user.address,
-      phoneNumber: user.phone,
-      fullName: user.fullname
-    })
+    return apiClient
+      .post('/registers', {
+        username: user.username,
+        password: user.password,
+        email: user.email,
+        address: user.address,
+        phoneNumber: user.phone,
+        fullName: user.fullname
+      })
+      .then((response) => {
+        localStorage.setItem('token', response.data.token)
+        localStorage.setItem('user', JSON.stringify(response.data.user))
+        Store.dispatch('updateCurrentUser', response.data.user)
+        return Promise.resolve(response.data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
   }
 }

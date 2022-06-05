@@ -3,20 +3,29 @@
     <div class="mr-8">
       <p class="text-2xl text-white">BiRDER</p>
     </div>
-    <div class="mr-8">
+
+    <div v-if="currentuser" class="mr-8">
       <p class="text-2xl text-white">|</p>
     </div>
-    <div class="mr-8">
-      <p class="text-2xl text-white font-light">Home</p>
+    <div v-if="currentuser" class="mr-8">
+      <button class="text-2xl text-white font-light">Home</button>
     </div>
-    <div class="mr-8 h-full border-b-2 flex items-center border-white">
-      <p class="text-2xl text-white font-light">Employee Management</p>
+    <div v-if="currentuser" class="mr-8 h-full flex items-center">
+      <button class="text-2xl text-white font-light">
+        Employee Management
+      </button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'NavbarDesktop'
+  name: 'NavbarDesktop',
+  props: {
+    currentuser: {
+      type: String,
+      required: true
+    }
+  }
 }
 </script>

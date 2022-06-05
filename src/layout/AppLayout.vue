@@ -1,8 +1,8 @@
 <template>
   <div class="relative min-h-screen bg-primary-50 pb-4">
-    <NavbarDesktop id="desktop" />
+    <NavbarDesktop id="desktop" :currentuser="thiscurrentUser" />
     <NavbarMobile class="lg:hidden"
-      ><button @click="openmenu">
+      ><button v-if="thiscurrentUser" @click="openmenu">
         <fa
           icon="bars"
           class="absolute top-[18px] left-[16px] iconcolor h-6"
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import store from '@/store/index.js'
 import NavbarDesktop from '@/components/NavbarDesktop.vue'
 import NavbarMobile from '@/components/NavbarMobile.vue'
 import SecondaryButton from '@/components/button/SecondaryButton.vue'
@@ -45,12 +46,6 @@ import ROUTE_PATH from '@/constants/router.js'
 
 export default {
   name: 'AppLayout',
-  inject: ['Store'],
-  computed: {
-    currentUser() {
-      return localStorage.getItem('lowuser')
-    }
-  },
   components: {
     NavbarDesktop,
     NavbarMobile,
@@ -59,7 +54,8 @@ export default {
   props: {},
   data() {
     return {
-      show: false
+      show: false,
+      thiscurrentUser: store.getters.currentUser
     }
   },
   methods: {

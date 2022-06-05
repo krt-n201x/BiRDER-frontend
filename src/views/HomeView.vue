@@ -14,11 +14,16 @@
         <p class="text-2xl lg:text-4xl leading-[17px] pb-4 lg:pb-6">
           BiRDER welcome!
         </p>
-        <p class="text-base lg:text-2xl leading-[17px] pb-4 lg:pb-6">
+        <p
+          v-if="!thiscurrentUser"
+          class="text-base lg:text-2xl leading-[17px] pb-4 lg:pb-6"
+        >
           Please login to the system
         </p>
         <router-link :to="ROUTE_PATH.LOGIN_PAGE">
-          <BaseButton class="w-[200px]">LOGIN</BaseButton>
+          <BaseButton v-if="!thiscurrentUser" class="w-[200px]"
+            >LOGIN</BaseButton
+          >
         </router-link>
       </div>
     </div>
@@ -29,6 +34,7 @@
 import AppLayout from '@/layout/AppLayout.vue'
 import BaseButton from '@/components/button/BaseButton.vue'
 import ROUTE_PATH from '@/constants/router.js'
+import store from '@/store/index.js'
 
 export default {
   name: 'HomeView',
@@ -38,7 +44,8 @@ export default {
   },
   data() {
     return {
-      ROUTE_PATH
+      ROUTE_PATH,
+      thiscurrentUser: store.getters.currentUser
     }
   }
 }

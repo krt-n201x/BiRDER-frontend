@@ -136,6 +136,7 @@ export default {
   },
   methods: {
     register(registerinfo) {
+      console.log(registerinfo)
       AuthService.registeruser(registerinfo)
         .then(() => {
           this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
