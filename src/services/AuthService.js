@@ -39,11 +39,26 @@ export default {
         phoneNumber: user.phone,
         fullName: user.fullname
       })
-      .then((response) => {
-        localStorage.setItem('token', response.data.token)
-        localStorage.setItem('user', JSON.stringify(response.data.user))
-        Store.dispatch('updateCurrentUser', response.data.user)
-        return Promise.resolve(response.data)
+      .then(() => {
+        return apiClient
+          .post('/auth', {
+            username: user.username,
+            password: user.password
+          })
+          .then((response) => {
+            localStorage.setItem('token', response.data.token)
+            if (JSON.stringify(response.data.user) != null) {
+              localStorage.setItem('user', JSON.stringify(response.data.user))
+              Store.dispatch('updateCurrentUser', response.data.user)
+            } else {
+              localStorage.setItem('lowuser', user.username)
+              Store.currentLowUser = user.username
+            }
+            return Promise.resolve(response.data)
+          })
+          .catch((error) => {
+            return Promise.reject(error)
+          })
       })
       .catch((error) => {
         return Promise.reject(error)

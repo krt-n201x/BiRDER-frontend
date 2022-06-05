@@ -21,12 +21,14 @@
           <fa icon="user" class="iconcolor h-6 pr-4" />
           <p class="text-white">ACCOUNT SETTING</p>
         </div>
-        <div
-          class="flex justify-center py-4 hover:bg-primary-900 transition duration-300"
-        >
-          <fa icon="people-group" class="iconcolor h-6 pr-4" />
-          <p class="text-white">EMPLOYEE MANAGEMENT</p>
-        </div>
+        <router-link :to="ROUTE_PATH.EMPLOYEE_MANAGEMENT">
+          <div
+            class="flex justify-center py-4 hover:bg-primary-900 transition duration-300"
+          >
+            <fa icon="people-group" class="iconcolor h-6 pr-4" />
+            <p class="text-white">EMPLOYEE MANAGEMENT</p>
+          </div>
+        </router-link>
       </div>
       <div class="mb-20">
         <SecondaryButton @click="logout">Log Out</SecondaryButton>
@@ -54,6 +56,7 @@ export default {
   props: {},
   data() {
     return {
+      ROUTE_PATH,
       show: false,
       thiscurrentUser: store.getters.currentUser
     }

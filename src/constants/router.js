@@ -3,6 +3,7 @@ const ROUTE_PATH = {
   ABOUT: '/about',
   LOGIN_PAGE: '/login-page',
   REGISTER_PAGE: '/register',
+  EMPLOYEE_MANAGEMENT: '/employee-management',
   NETWORK_ERROR: '/network-error'
 }
 
