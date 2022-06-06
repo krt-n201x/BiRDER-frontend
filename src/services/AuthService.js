@@ -63,5 +63,19 @@ export default {
       .catch((error) => {
         return Promise.reject(error)
       })
+  },
+  registeremployee(user) {
+    return apiClient
+      .post('/registers_farm_employee', {
+        username: user.username,
+        password: user.password,
+        email: user.email,
+        address: user.address,
+        phoneNumber: user.phone,
+        fullName: user.fullname
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <router-link
-    :to="ROUTE_PATH.HOME_VIEW"
+    :to="ROUTE_PATH.EMPLOYEE_REGISTER"
     class="w-full h-[52px] px-7 grid place-content-center rounded-[20px] bg-primary-200"
   >
     <fa icon="circle-plus" class="iconcolor h-5 pr-4" />
@@ -18,7 +18,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 .iconcolor {
   color: #16537b;
 }

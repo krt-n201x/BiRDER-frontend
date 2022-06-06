@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginPage from '../views/LoginPage/LoginPage.vue'
 import RegisterPage from '../views/RegisterPage/RegisterPage.vue'
-import EmployeeRegister from '../views/Menu/EmployeeManagement/EmployeeManagement.vue'
+import EmployeeManagement from '../views/Menu/EmployeeManagement/EmployeeManagement.vue'
+import EmployeeRegisterPage from '../views/Menu/EmployeeManagement/EmployeeRegisterPage.vue'
 import NetWorkError from '../views/NetworkError.vue'
 
 import ROUTE_PATH from '../constants/router'
@@ -25,8 +26,13 @@ const routes = [
   },
   {
     path: ROUTE_PATH.EMPLOYEE_MANAGEMENT,
-    name: 'EmployeeRegister',
-    component: EmployeeRegister
+    name: 'EmployeeManagement',
+    component: EmployeeManagement
+  },
+  {
+    path: ROUTE_PATH.EMPLOYEE_REGISTER,
+    name: 'EmployeeRegisterPage',
+    component: EmployeeRegisterPage
   },
   {
     path: ROUTE_PATH.REGISTER_PAGE,
