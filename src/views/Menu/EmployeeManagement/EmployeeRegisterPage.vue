@@ -2,7 +2,7 @@
   <AppLayout>
     <div class="grid justify-items-center mt-[16px] lg:mt-[118px]">
       <FormWrapper label="Register Employee">
-        <Form @submit="register" :validation-schema="schema">
+        <Form @submit="registeremployee" :validation-schema="schema">
           <div class="mt-[22px] lg:mt-[36px]">
             <div>
               <TextField
@@ -70,7 +70,7 @@
           </div>
           <div class="grid grid-cols-2 gap-2 mt-[22px] lg:mt-[36px]">
             <SecondaryButton @click="cancel">Cancel</SecondaryButton>
-            <BaseButton type="submit" @click="registeremployee"
+            <BaseButton type="submit"
               >Register</BaseButton
             >
           </div>
@@ -133,7 +133,9 @@ export default {
     registeremployee(registerinfo) {
       console.log(registerinfo)
       AuthService.registeremployee(registerinfo)
-        .then(() => {})
+        .then(() => {
+          this.$router.push(`${ROUTE_PATH.EMPLOYEE_MANAGEMENT}`)
+        })
         .catch(() => {
           console.log('could not register')
         })

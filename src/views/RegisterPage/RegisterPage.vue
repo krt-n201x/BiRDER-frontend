@@ -77,7 +77,7 @@
           </div>
           <div class="grid grid-cols-2 gap-2 mt-[22px] lg:mt-[36px]">
             <SecondaryButton @click="cancel">Cancel</SecondaryButton>
-            <BaseButton type="submit" @click="register">Register</BaseButton>
+            <BaseButton type="submit">Register</BaseButton>
           </div>
         </Form>
       </FormWrapper>
