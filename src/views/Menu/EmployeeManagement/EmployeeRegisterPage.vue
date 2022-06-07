@@ -70,9 +70,7 @@
           </div>
           <div class="grid grid-cols-2 gap-2 mt-[22px] lg:mt-[36px]">
             <SecondaryButton @click="cancel">Cancel</SecondaryButton>
-            <BaseButton type="submit"
-              >Register</BaseButton
-            >
+            <BaseButton type="submit">Register</BaseButton>
           </div>
         </Form>
       </FormWrapper>
@@ -91,6 +89,15 @@ import ROUTE_PATH from '@/constants/router.js'
 import AuthService from '@/services/AuthService.js'
 import { Form } from 'vee-validate'
 import * as yup from 'yup'
+import { useToast } from 'vue-toastification'
+
+const toast = useToast()
+const registerfail = (
+  <div>
+    <h1>Register Failed!</h1>
+    <span>Please check your connection</span>
+  </div>
+)
 
 export default {
   name: 'RegisterPage',
@@ -134,9 +141,11 @@ export default {
       console.log(registerinfo)
       AuthService.registeremployee(registerinfo)
         .then(() => {
+          toast.success('Register Employee Success!')
           this.$router.push(`${ROUTE_PATH.EMPLOYEE_MANAGEMENT}`)
         })
         .catch(() => {
+          toast.error(registerfail)
           console.log('could not register')
         })
     },
