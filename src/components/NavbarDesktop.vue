@@ -14,7 +14,7 @@
         <button class="text-2xl text-white font-light">Home</button>
       </router-link>
     </div>
-    <div v-if="currentuser" class="mr-8 h-full flex items-center">
+    <div v-if="isOwner || isAdmin" class="mr-8 h-full flex items-center">
       <router-link :to="ROUTE_PATH.EMPLOYEE_MANAGEMENT">
         <button class="text-2xl text-white font-light">
           Employee Management
@@ -28,6 +28,7 @@
 <script>
 import ROUTE_PATH from '@/constants/router.js'
 import UserButton from '@/components/userbutton/UserButton.vue'
+import AuthService from '@/services/AuthService.js'
 
 export default {
   name: 'NavbarDesktop',
@@ -41,6 +42,14 @@ export default {
   data() {
     return {
       ROUTE_PATH
+    }
+  },
+  computed: {
+    isOwner() {
+      return AuthService.hasRoles('ROLE_OWNER')
+    },
+    isAdmin() {
+      return AuthService.hasRoles('ROLE_ADMIN')
     }
   }
 }

@@ -77,5 +77,19 @@ export default {
       .catch((error) => {
         return Promise.reject(error)
       })
+  },
+  hasRoles(roles) {
+    if (Store.getters.currentUser && roles) {
+      let containRoles = Store.getters.currentUser.authorities.filter(
+        (authority) => roles.includes(authority)
+      )
+      if (containRoles.length > 0) {
+        return true
+      } else {
+        return false
+      }
+    } else {
+      return false
+    }
   }
 }

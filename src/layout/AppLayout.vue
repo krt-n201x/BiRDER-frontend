@@ -23,6 +23,7 @@
         </div>
         <router-link :to="ROUTE_PATH.EMPLOYEE_MANAGEMENT">
           <div
+            v-if="isOwner || isAdmin"
             class="flex justify-center py-4 hover:bg-primary-900 transition duration-300"
           >
             <fa icon="people-group" class="iconcolor h-6 pr-4" />
@@ -68,6 +69,14 @@ export default {
     logout() {
       AuthService.logout()
       this.$router.push(`${ROUTE_PATH.LOGIN_PAGE}`)
+    }
+  },
+  computed: {
+    isOwner() {
+      return AuthService.hasRoles('ROLE_OWNER')
+    },
+    isAdmin() {
+      return AuthService.hasRoles('ROLE_ADMIN')
     }
   }
 }
