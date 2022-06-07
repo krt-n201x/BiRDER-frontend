@@ -16,11 +16,13 @@
       </div>
     </div>
     <div class="absolute top-[41px] left-0" v-if="show">
-      <p
-        class="bg-white w-[198px] h-[32px] rounded-t-lg flex items-center pl-2 hover:bg-primary-100 hover:cursor-pointer transition duration-300"
-      >
-        ACCOUT SETTING
-      </p>
+      <router-link :to="ROUTE_PATH.ACCOUNT_SETTING">
+        <p
+          class="bg-white w-[198px] h-[32px] rounded-t-lg flex items-center pl-2 hover:bg-primary-100 hover:cursor-pointer transition duration-300"
+        >
+          ACCOUT SETTING
+        </p>
+      </router-link>
       <p
         @click="logout"
         class="bg-white mt-[2px] w-[198px] h-[32px] rounded-b-lg flex items-center pl-2 hover:bg-primary-100 hover:cursor-pointer transition duration-300"

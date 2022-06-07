@@ -89,9 +89,9 @@ export default {
           toast.success('Login Success!')
           this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
         })
-        .catch(() => {
+        .catch((error) => {
           toast.error(loginfail)
-          console.log('could not login')
+          console.log(error)
         })
     },
     register() {

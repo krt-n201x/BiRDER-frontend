@@ -9,6 +9,7 @@
         >
           Employee List
         </p>
+        <EmployeeCard class="mb-4" />
         <EmployeeRegister />
       </div>
     </div>
@@ -17,16 +18,16 @@
 
 <script>
 import AppLayout from '@/layout/AppLayout.vue'
-// import BaseButton from '@/components/button/BaseButton.vue'
 import ROUTE_PATH from '@/constants/router.js'
 import EmployeeRegister from '@/components/employeecard/EmployeeRegister.vue'
+import EmployeeCard from '@/components/employeecard/EmployeeCard.vue'
 
 export default {
   name: 'HomeView',
   components: {
     AppLayout,
-    EmployeeRegister
-    // BaseButton
+    EmployeeRegister,
+    EmployeeCard
   },
   data() {
     return {

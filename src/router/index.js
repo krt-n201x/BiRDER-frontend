@@ -5,7 +5,7 @@ import RegisterPage from '../views/RegisterPage/RegisterPage.vue'
 import EmployeeManagement from '../views/Menu/EmployeeManagement/EmployeeManagement.vue'
 import EmployeeRegisterPage from '../views/Menu/EmployeeManagement/EmployeeRegisterPage.vue'
 import NetWorkError from '../views/NetworkError.vue'
-
+import AccountSetting from '../views/Menu/AccountSetting/AccountSetting.vue'
 import ROUTE_PATH from '../constants/router'
 
 const routes = [
@@ -38,6 +38,11 @@ const routes = [
     path: ROUTE_PATH.REGISTER_PAGE,
     name: 'RegisterPage',
     component: RegisterPage
+  },
+  {
+    path: ROUTE_PATH.ACCOUNT_SETTING,
+    name: 'AccountSetting',
+    component: AccountSetting
   },
   {
     path: ROUTE_PATH.NETWORK_ERROR,

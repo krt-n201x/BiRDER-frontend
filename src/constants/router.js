@@ -5,6 +5,7 @@ const ROUTE_PATH = {
   REGISTER_PAGE: '/register',
   EMPLOYEE_MANAGEMENT: '/employee-management',
   EMPLOYEE_REGISTER: '/evployee-register',
+  ACCOUNT_SETTING: '/account-setting',
   NETWORK_ERROR: '/network-error'
 }
 

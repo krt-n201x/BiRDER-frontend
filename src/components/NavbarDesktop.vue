@@ -27,7 +27,7 @@
 
 <script>
 import ROUTE_PATH from '@/constants/router.js'
-import UserButton from '@/components/userbutton/UserButton.vue'
+import UserButton from '@/components/UserButton.vue'
 import AuthService from '@/services/AuthService.js'
 
 export default {

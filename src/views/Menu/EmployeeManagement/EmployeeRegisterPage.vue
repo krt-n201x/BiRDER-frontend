@@ -144,9 +144,9 @@ export default {
           toast.success('Register Employee Success!')
           this.$router.push(`${ROUTE_PATH.EMPLOYEE_MANAGEMENT}`)
         })
-        .catch(() => {
+        .catch((error) => {
           toast.error(registerfail)
-          console.log('could not register')
+          console.log(error)
         })
     },
     cancel() {

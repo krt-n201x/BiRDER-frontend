@@ -3,6 +3,7 @@
     <p class="text-[10px] text-neutral-600">{{ label }}</p>
     <Field
       :name="name"
+      :value="message"
       class="outline-none h-[33px] w-full rounded-lg border-[1px] px-4 text-sm font-normal leading-[17px] focus:text-black focus:placeholder-transparent disabled:!border-neutral-100 disabled:bg-neutral-100 disabled:!placeholder-neutral-500"
       :class="[
         errors && touched
@@ -30,6 +31,10 @@ export default {
     name: {
       type: String,
       required: true
+    },
+    message: {
+      type: String,
+      required: false
     },
     required: {
       type: Boolean,

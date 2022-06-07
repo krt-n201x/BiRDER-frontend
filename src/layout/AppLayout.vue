@@ -15,12 +15,14 @@
       class="absolute top-[60px] bg-primary-500 min-h-screen w-full px-4 flex flex-col justify-between lg:hidden"
     >
       <div>
-        <div
-          class="flex justify-center py-4 hover:bg-primary-900 transition duration-300"
-        >
-          <fa icon="user" class="iconcolor h-6 pr-4" />
-          <p class="text-white">ACCOUNT SETTING</p>
-        </div>
+        <router-link :to="ROUTE_PATH.ACCOUNT_SETTING">
+          <div
+            class="flex justify-center py-4 hover:bg-primary-900 transition duration-300"
+          >
+            <fa icon="user" class="iconcolor h-6 pr-4" />
+            <p class="text-white">ACCOUNT SETTING</p>
+          </div>
+        </router-link>
         <router-link :to="ROUTE_PATH.EMPLOYEE_MANAGEMENT">
           <div
             v-if="isOwner || isAdmin"
