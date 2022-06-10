@@ -7,7 +7,7 @@
       @click="openmenu"
     >
       <div class="flex items-center">
-        <p class="text-primary-700 text-2xl leading-[17px]">
+        <p class="text-primary-700 text-xl leading-[17px]">
           {{ currentuser.username }}
         </p>
       </div>

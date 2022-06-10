@@ -12,5 +12,21 @@ export default {
   },
   getProfile(id) {
     return apiClient.get('/viewProfileDetail/' + id)
+  },
+  updateUser(id, userinfo) {
+    return apiClient.post(
+      '/updateProfileDetail/' + id + '?newPassword&confirmPassword',
+      {
+        username: userinfo.username,
+        password: '',
+        email: userinfo.email,
+        address: userinfo.address,
+        phoneNumber: userinfo.phoneNumber,
+        fullName: userinfo.fullName
+      }
+    )
+  },
+  deleteUser(id) {
+    return apiClient.delete('/deleteAccount/' + id)
   }
 }

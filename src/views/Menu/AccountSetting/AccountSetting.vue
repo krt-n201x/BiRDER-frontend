@@ -6,7 +6,7 @@
           <div class="mt-[22px] lg:mt-[36px]">
             <div>
               <TextField
-                name="fullname"
+                name="fullName"
                 label="Full Name"
                 type="text"
                 :message="user.fullName"
@@ -26,7 +26,7 @@
             </div>
             <div>
               <TextField
-                name="phone"
+                name="phoneNumber"
                 label="Phone number"
                 type="text"
                 :message="user.phoneNumber"
@@ -59,7 +59,7 @@
             class="grid grid-cols-2 gap-2 mt-[22px] lg:mt-[36px]"
             v-if="!edit"
           >
-            <SecondaryButton @click="editchange">Cancel</SecondaryButton>
+            <SecondaryButton @click="cancelChange">Cancel</SecondaryButton>
             <BaseButton type="submit">Save</BaseButton>
           </div>
           <div class="grid grid-cols-1 gap-2 mt-[22px]" v-if="!edit">
@@ -145,9 +145,12 @@ import SecondaryButton from '@/components/button/SecondaryButton.vue'
 import DeleteButton from '@/components/button/DeleteButton.vue'
 import ROUTE_PATH from '@/constants/router.js'
 import AuthService from '@/services/AuthService.js'
+import DatabaseService from '@/services/DatabaseService.js'
 import { Form } from 'vee-validate'
 import * as yup from 'yup'
+import { useToast } from 'vue-toastification'
 
+const toast = useToast()
 export default {
   name: 'AccountSetting',
   components: {
@@ -162,7 +165,7 @@ export default {
   },
   data() {
     const userinfo = yup.object().shape({
-      fullname: yup.string().required('fullname is required!'),
+      fullName: yup.string().required('fullname is required!'),
       address: yup.string().required('address is required!'),
       phoneNumber: yup
         .string()
@@ -191,13 +194,42 @@ export default {
       userinfo,
       passwordinfo,
       user: store.getters.information,
-      thiscurrentUser: store.getters.currentUser.id,
-      temp: null
+      temp: store.getters.currentUser
     }
   },
   methods: {
     updateuser(userinfo) {
       console.log(userinfo)
+      DatabaseService.updateUser(this.user.id, userinfo)
+        .then(() => {
+          // if (
+          //   this.user.id == this.temp.id &&
+          //   this.user.username != this.temp.username
+          // ) {
+          //   toast.success('Update Success! Please Login again')
+          //   AuthService.logout()
+          //   this.$router.push(`${ROUTE_PATH.LOGIN_PAGE}`)
+          // } else {
+          //   toast.success('Update Success!')
+          //   this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+          // }
+          if (this.user.id == this.temp.id) {
+            console.log(this.user.id + ' ' + this.temp.id)
+            if (this.user.username != this.userinfo.username) {
+              console.log(this.user.username + ' ' + this.userinfo.username)
+              toast.success('Update Success! Please Login again')
+              AuthService.logout()
+              this.$router.push(`${ROUTE_PATH.LOGIN_PAGE}`)
+            }
+          } else {
+            toast.success('Update Success!')
+            this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+          }
+        })
+        .catch((error) => {
+          toast.error('Update Falis!')
+          console.log(error)
+        })
     },
     updatepassword(passwordinfo) {
       console.log(passwordinfo)
@@ -205,11 +237,20 @@ export default {
     showeditpassword() {
       this.editpassword = !this.editpassword
     },
-    cancel() {
-      this.$router.push(`${ROUTE_PATH.EMPLOYEE_MANAGEMENT}`)
+    cancelChange() {
+      this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
     },
     editchange() {
       this.edit = !this.edit
+    },
+    DeleteAccount() {
+      DatabaseService.deleteUser(this.user.id)
+        .then(() => {
+          this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }
   },
   computed: {

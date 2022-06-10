@@ -1,6 +1,5 @@
 <template>
-  <router-link
-    :to="ROUTE_PATH.EMPLOYEE_REGISTER"
+  <div
     class="w-full h-[120px] lg:h-[72px] px-7 grid place-content-center grid-cols-1 lg:grid-cols-2 gap-2 rounded-[20px] bg-primary-900"
   >
     <div class="grid grid-cols-3">
@@ -28,10 +27,16 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
       <div></div>
       <div class="grid grid-cols-2 gap-2">
-        <ViewButton>View</ViewButton><DeleteButton>Delete</DeleteButton>
+        <router-link
+          :to="{
+            name: 'AccountSetting',
+            params: { id: data.id }
+          }"
+          ><ViewButton>View</ViewButton></router-link
+        ><DeleteButton>Delete</DeleteButton>
       </div>
     </div>
-  </router-link>
+  </div>
 </template>
 
 <script>
