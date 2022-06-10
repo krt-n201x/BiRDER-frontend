@@ -7,7 +7,7 @@
         <p
           class="text-xl lg:text-2xl text-primary-900 leading-[17px] pb-4 lg:pb-6"
         >
-          Employee List
+          Farm Owner List
         </p>
 
         <div
@@ -16,9 +16,8 @@
           :key="data.id"
           :data="data"
         >
-          <EmployeeCard :data="data" class="mb-4" />
+          <FarmOwnerCard :data="data" class="mb-4" />
         </div>
-        <EmployeeRegister />
       </div>
     </div>
   </AppLayout>
@@ -27,16 +26,14 @@
 <script>
 import AppLayout from '@/layout/AppLayout.vue'
 import ROUTE_PATH from '@/constants/router.js'
-import EmployeeRegister from '@/components/employeecard/EmployeeRegister.vue'
-import EmployeeCard from '@/components/employeecard/EmployeeCard.vue'
+import FarmOwnerCard from '@/components/employeecard/FarmOwnerCard.vue'
 import DatabaseService from '@/services/DatabaseService.js'
 
 export default {
-  name: 'EmployeeManagement',
+  name: 'FarmManagement',
   components: {
     AppLayout,
-    EmployeeRegister,
-    EmployeeCard
+    FarmOwnerCard
   },
   data() {
     return {
@@ -45,7 +42,7 @@ export default {
     }
   },
   created() {
-    DatabaseService.getAllEmp()
+    DatabaseService.getAllFarm()
       .then((response) => {
         this.employee = response.data
       })

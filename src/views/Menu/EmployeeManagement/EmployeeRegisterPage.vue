@@ -100,7 +100,7 @@ const registerfail = (
 )
 
 export default {
-  name: 'RegisterPage',
+  name: 'EmployeeRegisterPage',
   components: {
     AppLayout,
     FormWrapper,

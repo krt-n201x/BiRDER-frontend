@@ -14,11 +14,16 @@
         <button class="text-2xl text-white font-light">Home</button>
       </router-link>
     </div>
-    <div v-if="isOwner || isAdmin" class="mr-8 h-full flex items-center">
+    <div v-if="isOwner" class="mr-8 h-full flex items-center">
       <router-link :to="ROUTE_PATH.EMPLOYEE_MANAGEMENT">
         <button class="text-2xl text-white font-light">
           Employee Management
         </button>
+      </router-link>
+    </div>
+    <div v-if="isAdmin" class="mr-8 h-full flex items-center">
+      <router-link :to="ROUTE_PATH.FARM_MANAGEMENT">
+        <button class="text-2xl text-white font-light">Farm Management</button>
       </router-link>
     </div>
     <UserButton :currentuser="currentuser" v-if="currentuser" />

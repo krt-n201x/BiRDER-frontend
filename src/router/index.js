@@ -6,6 +6,9 @@ import EmployeeManagement from '../views/Menu/EmployeeManagement/EmployeeManagem
 import EmployeeRegisterPage from '../views/Menu/EmployeeManagement/EmployeeRegisterPage.vue'
 import NetWorkError from '../views/NetworkError.vue'
 import AccountSetting from '../views/Menu/AccountSetting/AccountSetting.vue'
+import FarmManagement from '../views/Menu/FarmManagement/FarmManagement.vue'
+import store from '@/store/index.js'
+import DatabaseService from '@/services/DatabaseService.js'
 import ROUTE_PATH from '../constants/router'
 
 const routes = [
@@ -42,7 +45,17 @@ const routes = [
   {
     path: ROUTE_PATH.ACCOUNT_SETTING,
     name: 'AccountSetting',
-    component: AccountSetting
+    component: AccountSetting,
+    beforeEnter: (to) => {
+      return DatabaseService.getProfile(to.params.id).then((response) => {
+        store.dispatch('updateInformation', response.data)
+      })
+    }
+  },
+  {
+    path: ROUTE_PATH.FARM_MANAGEMENT,
+    name: 'FarmManagement',
+    component: FarmManagement
   },
   {
     path: ROUTE_PATH.NETWORK_ERROR,

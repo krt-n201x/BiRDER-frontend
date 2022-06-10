@@ -15,7 +15,12 @@
       class="absolute top-[60px] bg-primary-500 min-h-screen w-full px-4 flex flex-col justify-between lg:hidden"
     >
       <div>
-        <router-link :to="ROUTE_PATH.ACCOUNT_SETTING">
+        <router-link
+          :to="{
+            name: 'AccountSetting',
+            params: { id: thiscurrentUser.id }
+          }"
+        >
           <div
             class="flex justify-center py-4 hover:bg-primary-900 transition duration-300"
           >
@@ -25,11 +30,20 @@
         </router-link>
         <router-link :to="ROUTE_PATH.EMPLOYEE_MANAGEMENT">
           <div
-            v-if="isOwner || isAdmin"
+            v-if="isOwner"
             class="flex justify-center py-4 hover:bg-primary-900 transition duration-300"
           >
             <fa icon="people-group" class="iconcolor h-6 pr-4" />
             <p class="text-white">EMPLOYEE MANAGEMENT</p>
+          </div>
+        </router-link>
+        <router-link :to="ROUTE_PATH.FARM_MANAGEMENT">
+          <div
+            v-if="isAdmin"
+            class="flex justify-center py-4 hover:bg-primary-900 transition duration-300"
+          >
+            <fa icon="people-roof" class="iconcolor h-6 pr-4" />
+            <p class="text-white">FARM MANAGEMENT</p>
           </div>
         </router-link>
       </div>
