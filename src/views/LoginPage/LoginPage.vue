@@ -83,7 +83,6 @@ export default {
   },
   methods: {
     login(logininfo) {
-      console.log(logininfo)
       AuthService.login(logininfo)
         .then(() => {
           toast.success('Login Success!')

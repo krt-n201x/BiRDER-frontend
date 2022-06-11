@@ -138,7 +138,6 @@ export default {
   },
   methods: {
     registeremployee(registerinfo) {
-      console.log(registerinfo)
       AuthService.registeremployee(registerinfo)
         .then(() => {
           toast.success('Register Employee Success!')

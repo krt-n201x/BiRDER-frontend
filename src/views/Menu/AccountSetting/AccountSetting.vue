@@ -199,13 +199,10 @@ export default {
   },
   methods: {
     updateuser(userinfo) {
-      console.log(userinfo)
       DatabaseService.updateUser(this.user.id, userinfo)
         .then(() => {
           if (this.user.id == this.temp.id) {
-            console.log(this.user.id + ' ' + this.temp.id)
             if (this.user.username != this.userinfo.username) {
-              console.log(this.user.username + ' ' + this.userinfo.username)
               toast.success('Update Success! Please Login again')
               AuthService.logout()
               this.$router.push(`${ROUTE_PATH.LOGIN_PAGE}`)
@@ -221,7 +218,15 @@ export default {
         })
     },
     updatepassword(passwordinfo) {
-      console.log(passwordinfo)
+      DatabaseService.updateUserPassword(this.user.id, this.user, passwordinfo)
+        .then(() => {
+          toast.success('Update Success!')
+          this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+        })
+        .catch((error) => {
+          toast.error('Update Falis!')
+          console.log(error)
+        })
     },
     showeditpassword() {
       this.editpassword = !this.editpassword

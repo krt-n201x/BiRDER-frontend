@@ -26,6 +26,24 @@ export default {
       }
     )
   },
+  updateUserPassword(id, userinfo, passwordinfo) {
+    return apiClient.post(
+      '/updateProfileDetail/' +
+        id +
+        '?newPassword=' +
+        passwordinfo.newpassword +
+        '&confirmPassword=' +
+        passwordinfo.confirmnewpassword,
+      {
+        username: userinfo.username,
+        password: passwordinfo.oldpassword,
+        email: userinfo.email,
+        address: userinfo.address,
+        phoneNumber: userinfo.phoneNumber,
+        fullName: userinfo.fullName
+      }
+    )
+  },
   deleteUser(id) {
     return apiClient.delete('/deleteAccount/' + id)
   }
