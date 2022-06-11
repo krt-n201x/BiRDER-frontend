@@ -202,17 +202,6 @@ export default {
       console.log(userinfo)
       DatabaseService.updateUser(this.user.id, userinfo)
         .then(() => {
-          // if (
-          //   this.user.id == this.temp.id &&
-          //   this.user.username != this.temp.username
-          // ) {
-          //   toast.success('Update Success! Please Login again')
-          //   AuthService.logout()
-          //   this.$router.push(`${ROUTE_PATH.LOGIN_PAGE}`)
-          // } else {
-          //   toast.success('Update Success!')
-          //   this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
-          // }
           if (this.user.id == this.temp.id) {
             console.log(this.user.id + ' ' + this.temp.id)
             if (this.user.username != this.userinfo.username) {
