@@ -4,6 +4,12 @@ export default {
   getAllEmp() {
     return apiClient.get('/viewFarmEmployeeList')
   },
+  searchFarmUsername(username) {
+    return apiClient.get('/searchFarmList/?username=' + username)
+  },
+  searchFarmFullname(fullName) {
+    return apiClient.get('/searchFarmList/?fullName=' + fullName)
+  },
   getEmpInFarm(affiliation) {
     return apiClient.get('/viewFarmEmployeeList?affiliation=' + affiliation)
   },
