@@ -100,7 +100,7 @@ const registerfail = (
 )
 
 export default {
-  name: 'RegisterPage',
+  name: 'EmployeeRegisterPage',
   components: {
     AppLayout,
     FormWrapper,
@@ -138,15 +138,14 @@ export default {
   },
   methods: {
     registeremployee(registerinfo) {
-      console.log(registerinfo)
       AuthService.registeremployee(registerinfo)
         .then(() => {
           toast.success('Register Employee Success!')
           this.$router.push(`${ROUTE_PATH.EMPLOYEE_MANAGEMENT}`)
         })
-        .catch(() => {
+        .catch((error) => {
           toast.error(registerfail)
-          console.log('could not register')
+          console.log(error)
         })
     },
     cancel() {

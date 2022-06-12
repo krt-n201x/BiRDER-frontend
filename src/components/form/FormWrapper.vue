@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative rounded-lg bg-white pt-9 pb-4 px-4 lg:min-h-[305px] w-[265px] lg:w-[598px]"
+    class="relative rounded-lg bg-white pt-9 pb-4 px-4 lg:min-h-[50px] w-[265px] lg:w-[598px]"
   >
     <div
       id="desktop"

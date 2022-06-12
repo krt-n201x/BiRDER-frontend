@@ -1,7 +1,13 @@
 <template>
   <div class="mt-4">
     <p class="text-[10px] text-neutral-600">{{ label }}</p>
-    <Field v-slot="{ field }" :name="name" :type="type" :required="required">
+    <Field
+      v-slot="{ field }"
+      :name="name"
+      :type="type"
+      :required="required"
+      :value="message"
+    >
       <textarea
         v-bind="field"
         :disabled="disabled"
@@ -33,6 +39,10 @@ export default {
     name: {
       type: String,
       required: true
+    },
+    message: {
+      type: String,
+      required: false
     },
     required: {
       type: Boolean,

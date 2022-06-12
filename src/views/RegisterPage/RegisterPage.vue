@@ -136,13 +136,12 @@ export default {
   },
   methods: {
     register(registerinfo) {
-      console.log(registerinfo)
       AuthService.registeruser(registerinfo)
         .then(() => {
           this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
         })
-        .catch(() => {
-          console.log('could not register')
+        .catch((error) => {
+          console.log('could not register status: ' + error)
         })
     },
     cancel() {

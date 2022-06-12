@@ -83,15 +83,14 @@ export default {
   },
   methods: {
     login(logininfo) {
-      console.log(logininfo)
       AuthService.login(logininfo)
         .then(() => {
           toast.success('Login Success!')
           this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
         })
-        .catch(() => {
+        .catch((error) => {
           toast.error(loginfail)
-          console.log('could not login')
+          console.log(error)
         })
     },
     register() {

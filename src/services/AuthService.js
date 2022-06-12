@@ -20,7 +20,8 @@ export default {
         return Promise.resolve(response.data)
       })
       .catch((error) => {
-        return Promise.reject(error)
+        let status = error.response.status
+        return Promise.reject(status)
       })
   },
   logout() {
@@ -57,11 +58,13 @@ export default {
             return Promise.resolve(response.data)
           })
           .catch((error) => {
-            return Promise.reject(error)
+            let status = error.response.status
+            return Promise.reject(status)
           })
       })
       .catch((error) => {
-        return Promise.reject(error)
+        let status = error.response.status
+        return Promise.reject(status)
       })
   },
   registeremployee(user) {
@@ -75,7 +78,8 @@ export default {
         fullName: user.fullname
       })
       .catch((error) => {
-        return Promise.reject(error)
+        let status = error.response.status
+        return Promise.reject(status)
       })
   },
   hasRoles(roles) {
