@@ -15,14 +15,14 @@
           {{ data.username }}
         </p>
       </div>
-      <div class="grid place-content-end">
+      <!-- <div class="grid place-content-end">
         <div class="grid grid-cols-1">
           <p class="text-white text-[10px] leading-[17px]">Role</p>
           <p class="text-white text-[14px] lg:text-[16px] leading-[17px]">
             Role
           </p>
         </div>
-      </div>
+      </div> -->
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
       <div></div>
