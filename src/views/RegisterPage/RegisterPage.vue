@@ -34,7 +34,7 @@
                 name="phone"
                 label="Phone number"
                 type="text"
-                placeholder="Plese enter phone number"
+                placeholder="ex: 0801234566, +6601234566, 080-1234566"
                 required
               />
             </div>
@@ -115,7 +115,7 @@ export default {
       phone: yup
         .string()
         .required('phone number is required!')
-        .matches(/^[0-9]+$/, 'please use number')
+        .matches(/^[0-9+-]+$/, 'please use number')
         .min(10, 'phone number should have 10 digit')
         .max(10, 'phone number should have 10 digit'),
       username: yup.string().required('username is required!'),

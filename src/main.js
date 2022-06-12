@@ -9,12 +9,14 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import '@/services/AxiosInterceptorSetup.js'
+import VueSimpleAlert from 'vue-simple-alert'
 
 library.add(fas)
 
 createApp(App)
   .use(store)
   .use(router)
+  .use(VueSimpleAlert)
   .use(Toast, {
     closeOnClick: false,
     timeout: 5000,

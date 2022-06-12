@@ -170,9 +170,8 @@ export default {
       phoneNumber: yup
         .string()
         .required('phone number is required!')
-        .matches(/^[0-9]+$/, 'please use number')
-        .min(10, 'phone number should have 10 digit')
-        .max(10, 'phone number should have 10 digit'),
+        .matches(/^[0-9+-]+$/, 'please use number')
+        .max(12, 'phone number should less then 12 digit'),
       username: yup.string().required('username is required!'),
       email: yup
         .string()
@@ -220,8 +219,14 @@ export default {
     updatepassword(passwordinfo) {
       DatabaseService.updateUserPassword(this.user.id, this.user, passwordinfo)
         .then(() => {
-          toast.success('Update Success!')
-          this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+          if (this.user.id == this.temp.id) {
+            toast.success('Update Password Success! Please Login again')
+            AuthService.logout()
+            this.$router.push(`${ROUTE_PATH.LOGIN_PAGE}`)
+          } else {
+            toast.success('Update Success!')
+            this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+          }
         })
         .catch((error) => {
           toast.error('Update Falis!')
