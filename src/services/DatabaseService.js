@@ -10,6 +10,22 @@ export default {
   searchFarmFullname(fullName) {
     return apiClient.get('/searchFarmList/?fullName=' + fullName)
   },
+  searchEmpFullname(fullName, affiliation) {
+    return apiClient.get(
+      '/searchFarmEmployeeList/?fullName=' +
+        fullName +
+        '&affiliation=' +
+        affiliation
+    )
+  },
+  searchEmpUsername(username, affiliation) {
+    return apiClient.get(
+      '/searchFarmEmployeeList/?username=' +
+        username +
+        '&affiliation=' +
+        affiliation
+    )
+  },
   getEmpInFarm(affiliation) {
     return apiClient.get('/viewFarmEmployeeList?affiliation=' + affiliation)
   },
@@ -51,6 +67,6 @@ export default {
     )
   },
   deleteUser(id) {
-    return apiClient.delete('/deleteAccount/' + id)
+    return apiClient.post('/deleteAccount/' + id)
   }
 }

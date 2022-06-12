@@ -14,7 +14,7 @@
               >
                 <TextField
                   class="w-full mt-0 lg:mb-0"
-                  label="Search"
+                  label="Search Farm Owner"
                   name="searchinformation"
                   type="text"
                 />

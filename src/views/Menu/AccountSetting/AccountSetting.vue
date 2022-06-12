@@ -240,9 +240,11 @@ export default {
     DeleteAccount() {
       DatabaseService.deleteUser(this.user.id)
         .then(() => {
+          toast.success('Deleted Success!')
           this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
         })
         .catch((error) => {
+          toast.error('Deleted Falis!')
           console.log(error)
         })
     }

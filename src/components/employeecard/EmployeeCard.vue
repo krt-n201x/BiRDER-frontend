@@ -4,7 +4,7 @@
   >
     <div class="grid grid-cols-3">
       <div class="grid grid-cols-1">
-        <p class="text-white text-[10px] leading-[17px]">Name</p>
+        <p class="text-white text-[10px] leading-[17px]">Full Name</p>
         <p class="text-white text-[14px] lg:text-[16px] leading-[17px]">
           {{ data.fullName }}
         </p>
@@ -33,7 +33,7 @@
             params: { id: data.id }
           }"
           ><ViewButton>View</ViewButton></router-link
-        ><DeleteButton>Delete</DeleteButton>
+        ><DeleteButton @click="DeleteAccount">Delete</DeleteButton>
       </div>
     </div>
   </div>
@@ -43,6 +43,10 @@
 import ROUTE_PATH from '@/constants/router.js'
 import DeleteButton from '@/components/button/DeleteButton.vue'
 import ViewButton from '@/components/button/ViewButton.vue'
+import DatabaseService from '@/services/DatabaseService.js'
+import { useToast } from 'vue-toastification'
+
+const toast = useToast()
 export default {
   name: 'EmployeeCard',
   components: { DeleteButton, ViewButton },
@@ -55,6 +59,19 @@ export default {
   data() {
     return {
       ROUTE_PATH
+    }
+  },
+  methods: {
+    DeleteAccount() {
+      DatabaseService.deleteUser(this.data.id)
+        .then(() => {
+          toast.success('Deleted Success!')
+          this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+        })
+        .catch((error) => {
+          toast.error('Deleted Falis!')
+          console.log(error)
+        })
     }
   }
 }

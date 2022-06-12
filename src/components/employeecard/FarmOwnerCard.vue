@@ -38,8 +38,9 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
       <div></div>
       <div class="grid grid-cols-2 gap-2">
+        <div></div>
         <ViewButton @click="viewfarm">View</ViewButton>
-        <DeleteButton>Delete</DeleteButton>
+        <!-- <DeleteButton>Delete</DeleteButton> -->
       </div>
     </div>
   </div>
@@ -47,14 +48,17 @@
 
 <script>
 import ROUTE_PATH from '@/constants/router.js'
-import DeleteButton from '@/components/button/DeleteButton.vue'
+// import DeleteButton from '@/components/button/DeleteButton.vue'
 import ViewButton from '@/components/button/ViewButton.vue'
 import DatabaseService from '@/services/DatabaseService.js'
 import Store from '@/store'
 
 export default {
   name: 'FarmOwnerCard',
-  components: { DeleteButton, ViewButton },
+  components: {
+    // DeleteButton,
+    ViewButton
+  },
   props: {
     data: {
       type: String,
