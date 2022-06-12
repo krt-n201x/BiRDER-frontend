@@ -243,15 +243,34 @@ export default {
       this.edit = !this.edit
     },
     DeleteAccount() {
-      DatabaseService.deleteUser(this.user.id)
-        .then(() => {
-          toast.success('Deleted Success!')
-          this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
-        })
-        .catch((error) => {
-          toast.error('Deleted Falis!')
-          console.log(error)
-        })
+      this.$swal({
+        icon: 'warning',
+        title: 'Deleted User!',
+        text: 'Are you sure to deleted this user?',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it',
+        cancelButtonText: 'No, cancel',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          console.log('deleted')
+          DatabaseService.deleteUser(this.user.id)
+            .then(() => {
+              if (this.user.id == this.temp.id) {
+                toast.success('Delete Success! Please Login again')
+                AuthService.logout()
+                this.$router.push(`${ROUTE_PATH.LOGIN_PAGE}`)
+              } else {
+                toast.success('Delete Success!')
+                this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+              }
+            })
+            .catch((error) => {
+              toast.error('Deleted Falis!')
+              console.log(error)
+            })
+        }
+      })
     }
   },
   computed: {
