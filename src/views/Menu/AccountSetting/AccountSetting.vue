@@ -6,6 +6,17 @@
           <div class="mt-[22px] lg:mt-[36px]">
             <div>
               <TextField
+                class="invisible absolute"
+                name="status"
+                label="Full Name"
+                type="text"
+                :message="isadmin"
+                :disabled="edit"
+                required
+              />
+            </div>
+            <div>
+              <TextField
                 name="fullName"
                 label="Full Name"
                 type="text"
@@ -165,18 +176,64 @@ export default {
   },
   data() {
     const userinfo = yup.object().shape({
-      fullName: yup.string().required('fullname is required!'),
-      address: yup.string().required('address is required!'),
+      status: yup.string(),
+      fullName: yup
+        .string()
+        .when('status', {
+          is: 'true',
+          then: yup.string().nullable(true)
+        })
+        .when('status', {
+          is: 'false',
+          then: yup.string().required('fullname is required!').nullable(true)
+        }),
+      address: yup
+        .string()
+        .when('status', {
+          is: 'true',
+          then: yup.string().nullable(true)
+        })
+        .when('status', {
+          is: 'false',
+          then: yup
+            .string()
+            .required('address is required!')
+            .nullable(true)
+            .nullable(true)
+        }),
       phoneNumber: yup
         .string()
-        .required('phone number is required!')
-        .matches(/^[0-9+-]+$/, 'please use number')
-        .max(12, 'phone number should less then 12 digit'),
-      username: yup.string().required('username is required!'),
+        .when('status', {
+          is: 'true',
+          then: yup.string().nullable(true)
+        })
+        .when('status', {
+          is: 'false',
+          then: yup
+            .string()
+            .required('phone number is required!')
+            .matches(/^[0-9+-]+$/, 'please use number')
+            .max(12, 'phone number should less then 12 digit')
+            .nullable(true)
+        }),
+      username: yup.string().when('status', {
+        is: 'false',
+        then: yup.string().required('username is required!').nullable(true)
+      }),
       email: yup
         .string()
-        .email('please use as e-mail form')
-        .required('Email is required!')
+        .when('status', {
+          is: 'true',
+          then: yup.string().nullable(true)
+        })
+        .when('status', {
+          is: 'false',
+          then: yup
+            .string()
+            .email('please use as e-mail form')
+            .required('Email is required!')
+            .nullable(true)
+        })
     })
     const passwordinfo = yup.object().shape({
       oldpassword: yup.string().required('old-password is required!'),
@@ -192,6 +249,7 @@ export default {
       ROUTE_PATH,
       userinfo,
       passwordinfo,
+      isadmin: AuthService.hasRoles('ROLE_ADMIN'),
       user: store.getters.information,
       temp: store.getters.currentUser
     }
