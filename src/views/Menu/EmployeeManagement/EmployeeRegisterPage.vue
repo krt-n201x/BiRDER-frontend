@@ -94,16 +94,11 @@ import { useToast } from 'vue-toastification'
 const toast = useToast()
 const NetworkError = (
   <div>
-    <h1>Login Failed!</h1>
+    <h1>Register Failed!</h1>
     <span>The system cannot connect to database</span>
   </div>
 )
-const status500 = (
-  <div>
-    <h1>Login Failed!</h1>
-    <span>The username is already used</span>
-  </div>
-)
+
 export default {
   name: 'EmployeeRegisterPage',
   components: {
@@ -162,9 +157,8 @@ export default {
         .catch((error) => {
           if (error.message == 'Network Error') {
             toast.error(NetworkError)
-          }
-          if (error.response.status == '500') {
-            toast.error(status500)
+          } else {
+            toast.error(error.response.data.message)
           }
           console.log(error)
         })

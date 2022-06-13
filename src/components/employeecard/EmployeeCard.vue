@@ -2,7 +2,7 @@
   <div
     class="w-full h-[120px] lg:h-[72px] px-7 grid place-content-center grid-cols-1 lg:grid-cols-2 gap-2 rounded-[20px] bg-primary-900"
   >
-    <div class="grid grid-cols-3">
+    <div class="grid grid-cols-2 lg:grid-cols-3">
       <div class="grid grid-cols-1">
         <p class="text-white text-[10px] leading-[17px]">Full Name</p>
         <p class="text-white text-[14px] lg:text-[16px] leading-[17px]">
