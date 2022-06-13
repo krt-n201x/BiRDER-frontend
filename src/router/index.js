@@ -9,6 +9,7 @@ import NotFound from '../views/NotFound.vue'
 import NotAuth from '@/views/NotAuth.vue'
 import AccountSetting from '../views/Menu/AccountSetting/AccountSetting.vue'
 import FarmManagement from '../views/Menu/FarmManagement/FarmManagement.vue'
+import BirdRegisterPage from '../views/Menu/BirdManagement/BirdRegisterPage.vue'
 import store from '@/store/index.js'
 import DatabaseService from '@/services/DatabaseService.js'
 import ROUTE_PATH from '../constants/router'
@@ -67,6 +68,11 @@ const routes = [
           }
         })
     }
+  },
+  {
+    path: ROUTE_PATH.BIRD_REGISTER,
+    name: 'BirdRegisterPage',
+    component: BirdRegisterPage
   },
   {
     path: ROUTE_PATH.FARM_MANAGEMENT,

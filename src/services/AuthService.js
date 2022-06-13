@@ -54,8 +54,28 @@ export default {
         fullName: user.fullname
       })
       .catch((error) => {
-        let status = error.response.status
-        return Promise.reject(status)
+        return Promise.reject(error)
+      })
+  },
+  createBird(registerinfo, time, birdstatus, birdsex, imageUrls) {
+    return apiClient
+      .post('/createBirdDetail', {
+        birdName: registerinfo.birdname,
+        birdCode: registerinfo.birdcode,
+        birdColor: registerinfo.birdcolor,
+        cageNumber: registerinfo.cagenumber,
+        maleParentId: registerinfo.maleparentcode,
+        femaleParentId: registerinfo.femaleparentcode,
+        paringBirdId: registerinfo.paringcode,
+        birdTreatmentRecord: registerinfo.birdtrecord,
+        birdSpecies: registerinfo.birdspecies,
+        dateOfBirth: time,
+        sexOfBird: birdsex,
+        birdStatus: birdstatus,
+        birdImage: imageUrls
+      })
+      .catch((error) => {
+        return Promise.reject(error)
       })
   },
   hasRoles(roles) {

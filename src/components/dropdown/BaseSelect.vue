@@ -16,7 +16,7 @@
         }
       }"
     >
-      <option value="" disabled selected>Select your fillter</option>
+      <option value="" disabled selected>{{ placeholder }}</option>
       <option
         v-for="option in options"
         :value="option.message"
@@ -40,6 +40,10 @@ export default {
     modelValue: {
       type: [String, Number, Object],
       default: ''
+    },
+    placeholder: {
+      type: String,
+      required: true
     },
     options: {
       type: Array,

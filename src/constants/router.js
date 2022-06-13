@@ -7,6 +7,7 @@ const ROUTE_PATH = {
   EMPLOYEE_REGISTER: '/evployee-register',
   ACCOUNT_SETTING: '/account-setting',
   FARM_MANAGEMENT: '/farm-management',
+  BIRD_REGISTER: '/bird-register',
   NETWORK_ERROR: '/network-error'
 }
 
