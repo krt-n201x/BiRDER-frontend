@@ -9,12 +9,19 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import '@/services/AxiosInterceptorSetup.js'
+import VueSweetalert2 from 'vue-sweetalert2'
+import 'sweetalert2/dist/sweetalert2.min.css'
 
 library.add(fas)
+const options = {
+  confirmButtonColor: '#41b882',
+  cancelButtonColor: '#ff7674'
+}
 
 createApp(App)
   .use(store)
   .use(router)
+  .use(VueSweetalert2, options)
   .use(Toast, {
     closeOnClick: false,
     timeout: 5000,

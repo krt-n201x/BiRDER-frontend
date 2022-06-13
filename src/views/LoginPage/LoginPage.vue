@@ -53,13 +53,18 @@ import { useToast } from 'vue-toastification'
 import * as yup from 'yup'
 
 const toast = useToast()
-const loginfail = (
+const NetworkError = (
   <div>
     <h1>Login Failed!</h1>
-    <span>Your email or password may incorrect</span>
+    <span>The system cannot connect to database</span>
   </div>
 )
-
+const Userinvalid = (
+  <div>
+    <h1>Login Failed!</h1>
+    <span>The username or the password is not correct</span>
+  </div>
+)
 export default {
   name: 'LoginPage',
   components: {
@@ -72,8 +77,20 @@ export default {
   },
   data() {
     const schema = yup.object().shape({
-      username: yup.string().required('Username is required!'),
-      password: yup.string().required('Password is required!')
+      username: yup
+        .string()
+        .min(2, 'The length shall be between 2-10')
+        .max(10, 'The length shall be between 2-10')
+        .required('The username is required'),
+      password: yup
+        .string()
+        .matches(
+          /^[aA-zZ0-9]+$/,
+          'The password must be numerical, symbol or alphabet a-z or A-Z'
+        )
+        .min(4, 'The length shall be between 2-14')
+        .max(15, 'The length shall be between 2-15')
+        .required('The password is required')
     })
     return {
       ROUTE_PATH,
@@ -89,7 +106,12 @@ export default {
           this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
         })
         .catch((error) => {
-          toast.error(loginfail)
+          if (error.message == 'Network Error') {
+            toast.error(NetworkError)
+          }
+          if (error.response.status == '401') {
+            toast.error(Userinvalid)
+          }
           console.log(error)
         })
     },

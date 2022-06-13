@@ -6,6 +6,17 @@
           <div class="mt-[22px] lg:mt-[36px]">
             <div>
               <TextField
+                class="invisible absolute"
+                name="status"
+                label="Full Name"
+                type="text"
+                :message="isadmin"
+                :disabled="edit"
+                required
+              />
+            </div>
+            <div>
+              <TextField
                 name="fullName"
                 label="Full Name"
                 type="text"
@@ -150,6 +161,12 @@ import { Form } from 'vee-validate'
 import * as yup from 'yup'
 import { useToast } from 'vue-toastification'
 
+const NetworkError = (
+  <div>
+    <h1>Login Failed!</h1>
+    <span>The system cannot connect to database</span>
+  </div>
+)
 const toast = useToast()
 export default {
   name: 'AccountSetting',
@@ -165,19 +182,75 @@ export default {
   },
   data() {
     const userinfo = yup.object().shape({
-      fullName: yup.string().required('fullname is required!'),
-      address: yup.string().required('address is required!'),
+      status: yup.string(),
+      fullName: yup
+        .string()
+        .when('status', {
+          is: 'true',
+          then: yup.string().nullable(true)
+        })
+        .when('status', {
+          is: 'false',
+          then: yup
+            .string()
+            .min(4, 'The length shall be between 4-50')
+            .max(50, 'The length shall be between 4-50')
+            .required('Fullname is required!')
+            .nullable(true)
+        }),
+      address: yup
+        .string()
+        .when('status', {
+          is: 'true',
+          then: yup.string().nullable(true)
+        })
+        .when('status', {
+          is: 'false',
+          then: yup
+            .string()
+            .min(2, 'The length shall be between 2-255')
+            .max(255, 'The length shall be between 2-255')
+            .required('Address is required!')
+            .nullable(true)
+        }),
       phoneNumber: yup
         .string()
-        .required('phone number is required!')
-        .matches(/^[0-9]+$/, 'please use number')
-        .min(10, 'phone number should have 10 digit')
-        .max(10, 'phone number should have 10 digit'),
-      username: yup.string().required('username is required!'),
+        .when('status', {
+          is: 'true',
+          then: yup.string().nullable(true)
+        })
+        .when('status', {
+          is: 'false',
+          then: yup
+            .string()
+            .required('phone number is required!')
+            .matches(/^[0-9+-]+$/, 'please use number')
+            .max(12, 'The length shall be less than 12')
+            .nullable(true)
+        }),
+      username: yup.string().when('status', {
+        is: 'false',
+        then: yup
+          .string()
+          .min(2, 'The length shall be between 2-10')
+          .max(10, 'The length shall be between 2-10')
+          .required('The Username is required!')
+          .nullable(true)
+      }),
       email: yup
         .string()
-        .email('please use as e-mail form')
-        .required('Email is required!')
+        .when('status', {
+          is: 'true',
+          then: yup.string().nullable(true)
+        })
+        .when('status', {
+          is: 'false',
+          then: yup
+            .string()
+            .email('please use as e-mail form')
+            .required('The Email is required!')
+            .nullable(true)
+        })
     })
     const passwordinfo = yup.object().shape({
       oldpassword: yup.string().required('old-password is required!'),
@@ -193,6 +266,7 @@ export default {
       ROUTE_PATH,
       userinfo,
       passwordinfo,
+      isadmin: AuthService.hasRoles('ROLE_ADMIN'),
       user: store.getters.information,
       temp: store.getters.currentUser
     }
@@ -220,11 +294,19 @@ export default {
     updatepassword(passwordinfo) {
       DatabaseService.updateUserPassword(this.user.id, this.user, passwordinfo)
         .then(() => {
-          toast.success('Update Success!')
-          this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+          if (this.user.id == this.temp.id) {
+            toast.success('Update Password Success! Please Login again')
+            AuthService.logout()
+            this.$router.push(`${ROUTE_PATH.LOGIN_PAGE}`)
+          } else {
+            toast.success('Update Success!')
+            this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+          }
         })
         .catch((error) => {
-          toast.error('Update Falis!')
+          if (error.message == 'Network Error') {
+            toast.error(NetworkError)
+          }
           console.log(error)
         })
     },
@@ -238,15 +320,34 @@ export default {
       this.edit = !this.edit
     },
     DeleteAccount() {
-      DatabaseService.deleteUser(this.user.id)
-        .then(() => {
-          toast.success('Deleted Success!')
-          this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
-        })
-        .catch((error) => {
-          toast.error('Deleted Falis!')
-          console.log(error)
-        })
+      this.$swal({
+        icon: 'warning',
+        title: 'Deleted User!',
+        text: 'Are you sure to deleted this user?',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it',
+        cancelButtonText: 'No, cancel',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          console.log('deleted')
+          DatabaseService.deleteUser(this.user.id)
+            .then(() => {
+              if (this.user.id == this.temp.id) {
+                toast.success('Delete Success! Please Login again')
+                AuthService.logout()
+                this.$router.push(`${ROUTE_PATH.LOGIN_PAGE}`)
+              } else {
+                toast.success('Delete Success!')
+                this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+              }
+            })
+            .catch((error) => {
+              toast.error('Deleted Falis!')
+              console.log(error)
+            })
+        }
+      })
     }
   },
   computed: {

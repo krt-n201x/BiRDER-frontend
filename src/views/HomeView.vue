@@ -25,6 +25,17 @@
             >LOGIN</BaseButton
           >
         </router-link>
+        <p
+          v-if="!thiscurrentUser"
+          class="text-base lg:text-2xl leading-[17px] py-4 lg:pb-6"
+        >
+          Or register
+        </p>
+        <router-link :to="ROUTE_PATH.REGISTER_PAGE">
+          <SecondaryButton v-if="!thiscurrentUser" class="w-[200px]"
+            >REGISTER</SecondaryButton
+          >
+        </router-link>
       </div>
     </div>
   </AppLayout>
@@ -35,12 +46,14 @@ import AppLayout from '@/layout/AppLayout.vue'
 import BaseButton from '@/components/button/BaseButton.vue'
 import ROUTE_PATH from '@/constants/router.js'
 import store from '@/store/index.js'
+import SecondaryButton from '@/components/button/SecondaryButton.vue'
 
 export default {
   name: 'HomeView',
   components: {
     AppLayout,
-    BaseButton
+    BaseButton,
+    SecondaryButton
   },
   data() {
     return {
