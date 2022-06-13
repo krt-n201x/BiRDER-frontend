@@ -58,6 +58,7 @@
             </div>
           </Form>
         </div>
+        <div v-if="notfound">Not found any employee</div>
         <div
           class="w-full"
           v-for="data in employee"
@@ -107,6 +108,7 @@ export default {
       farmownerid: store.getters.farminspect,
       farmowner: null,
       schema,
+      notfound: false,
       searchfiller: '',
       items: [{ message: 'Full Name' }, { message: 'Username' }]
     }
@@ -157,6 +159,10 @@ export default {
           .then((response) => {
             console.log(response.data)
             this.employee = response.data
+            this.notfound = false
+            if (response.data.length == 0) {
+              this.notfound = true
+            }
           })
           .catch((error) => {
             console.log(error)
@@ -170,6 +176,10 @@ export default {
           .then((response) => {
             console.log(response.data)
             this.employee = response.data
+            this.notfound = false
+            if (response.data.length == 0) {
+              this.notfound = true
+            }
           })
           .catch((error) => {
             console.log(error)

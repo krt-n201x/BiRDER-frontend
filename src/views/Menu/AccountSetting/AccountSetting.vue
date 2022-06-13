@@ -161,6 +161,12 @@ import { Form } from 'vee-validate'
 import * as yup from 'yup'
 import { useToast } from 'vue-toastification'
 
+const NetworkError = (
+  <div>
+    <h1>Login Failed!</h1>
+    <span>The system cannot connect to database</span>
+  </div>
+)
 const toast = useToast()
 export default {
   name: 'AccountSetting',
@@ -185,7 +191,12 @@ export default {
         })
         .when('status', {
           is: 'false',
-          then: yup.string().required('fullname is required!').nullable(true)
+          then: yup
+            .string()
+            .min(4, 'The length shall be between 4-50')
+            .max(50, 'The length shall be between 4-50')
+            .required('Fullname is required!')
+            .nullable(true)
         }),
       address: yup
         .string()
@@ -197,8 +208,9 @@ export default {
           is: 'false',
           then: yup
             .string()
-            .required('address is required!')
-            .nullable(true)
+            .min(2, 'The length shall be between 2-255')
+            .max(255, 'The length shall be between 2-255')
+            .required('Address is required!')
             .nullable(true)
         }),
       phoneNumber: yup
@@ -213,12 +225,17 @@ export default {
             .string()
             .required('phone number is required!')
             .matches(/^[0-9+-]+$/, 'please use number')
-            .max(12, 'phone number should less then 12 digit')
+            .max(12, 'The length shall be less than 12')
             .nullable(true)
         }),
       username: yup.string().when('status', {
         is: 'false',
-        then: yup.string().required('username is required!').nullable(true)
+        then: yup
+          .string()
+          .min(2, 'The length shall be between 2-10')
+          .max(10, 'The length shall be between 2-10')
+          .required('The Username is required!')
+          .nullable(true)
       }),
       email: yup
         .string()
@@ -231,7 +248,7 @@ export default {
           then: yup
             .string()
             .email('please use as e-mail form')
-            .required('Email is required!')
+            .required('The Email is required!')
             .nullable(true)
         })
     })
@@ -287,7 +304,9 @@ export default {
           }
         })
         .catch((error) => {
-          toast.error('Update Falis!')
+          if (error.message == 'Network Error') {
+            toast.error(NetworkError)
+          }
           console.log(error)
         })
     },

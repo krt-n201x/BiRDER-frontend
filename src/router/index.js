@@ -56,8 +56,7 @@ const routes = [
         .catch((error) => {
           if (error.response && error.response.status == 404) {
             return {
-              name: '404Resource',
-              params: { resource: 'patient' }
+              name: '404Resource'
             }
           } else if (error.response && error.response.status == 401) {
             return {

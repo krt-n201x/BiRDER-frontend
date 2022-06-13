@@ -96,7 +96,21 @@ import ROUTE_PATH from '@/constants/router.js'
 import AuthService from '@/services/AuthService.js'
 import { Form } from 'vee-validate'
 import * as yup from 'yup'
+import { useToast } from 'vue-toastification'
 
+const toast = useToast()
+const NetworkError = (
+  <div>
+    <h1>Login Failed!</h1>
+    <span>The system cannot connect to database</span>
+  </div>
+)
+const status500 = (
+  <div>
+    <h1>Login Failed!</h1>
+    <span>The username is already used</span>
+  </div>
+)
 export default {
   name: 'RegisterPage',
   components: {
@@ -110,20 +124,31 @@ export default {
   },
   data() {
     const schema = yup.object().shape({
-      fullname: yup.string().required('fullname is required!'),
-      address: yup.string().required('address is required!'),
+      fullname: yup
+        .string()
+        .min(4, 'The length shall be between 4-50')
+        .max(50, 'The length shall be between 4-50')
+        .required('Fullname is required!'),
+      address: yup
+        .string()
+        .min(2, 'The length shall be between 2-255')
+        .max(255, 'The length shall be between 2-255')
+        .required('Address is required!'),
       phone: yup
         .string()
         .required('phone number is required!')
         .matches(/^[0-9+-]+$/, 'please use number')
-        .min(10, 'phone number should have 10 digit')
-        .max(10, 'phone number should have 10 digit'),
-      username: yup.string().required('username is required!'),
+        .max(12, 'The length shall be less than 12'),
+      username: yup
+        .string()
+        .min(2, 'The length shall be between 2-10')
+        .max(10, 'The length shall be between 2-10')
+        .required('The Username is required!'),
       email: yup
         .string()
         .email('please use as e-mail form')
-        .required('Email is required!'),
-      password: yup.string().required('password is required!'),
+        .required('The Email is required!'),
+      password: yup.string().required('The Password is required!'),
       confirmpassword: yup
         .string()
         .required('please confirm your password')
@@ -138,10 +163,17 @@ export default {
     register(registerinfo) {
       AuthService.registeruser(registerinfo)
         .then(() => {
-          this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+          toast.success('Register Success!')
+          this.$router.push(`${ROUTE_PATH.LOGIN_PAGE}`)
         })
         .catch((error) => {
-          console.log('could not register status: ' + error)
+          if (error.message == 'Network Error') {
+            toast.error(NetworkError)
+          }
+          if (error.response.status == '500') {
+            toast.error(status500)
+          }
+          console.log(error)
         })
     },
     cancel() {
