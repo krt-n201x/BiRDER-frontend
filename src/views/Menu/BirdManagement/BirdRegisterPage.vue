@@ -234,6 +234,12 @@ export default {
     registerbird(registerinfo) {
       if (this.files.length == 0) {
         toast.error("Please upload bird's picture")
+      } else if (this.birdstatus == '') {
+        toast.error('Please select bird status')
+      } else if (this.birdsex == '') {
+        toast.error('Please select bird sex')
+      } else if (this.time1 == '' || this.time1 == null) {
+        toast.error('Please select birth date')
       } else {
         Promise.all(
           this.files.map((file) => {
@@ -261,7 +267,6 @@ export default {
                   toast.error(NetworkError)
                 } else {
                   toast.error(error.response.data.message)
-                  this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
                 }
                 console.log(error)
               })

@@ -352,7 +352,6 @@ export default {
                 toast.error(NetworkError)
               } else {
                 toast.error(error.response.data.message)
-                this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
               }
               console.log(error)
             })
