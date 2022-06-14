@@ -262,7 +262,7 @@ export default {
       })
     },
     cancel() {
-      this.$router.push(`${ROUTE_PATH.EMPLOYEE_MANAGEMENT}`)
+      this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
     },
     handleImages(files) {
       console.log(files)

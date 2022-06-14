@@ -72,6 +72,9 @@ export default {
   deleteUser(id) {
     return apiClient.post('/deleteAccount/' + id)
   },
+  deleteBird(id) {
+    return apiClient.post('/deleteBird/' + id)
+  },
   uploadFile(file) {
     let formData = new FormData()
     formData.append('file', file)

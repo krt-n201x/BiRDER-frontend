@@ -1,28 +1,5 @@
 <template>
   <AppLayout>
-    <div v-if="isAdmin" class="grid justify-items-center m-6">
-      <div
-        class="w-full max-w-[1078px] grid justify-items-center lg:justify-items-start"
-      >
-        <p
-          class="text-xl lg:text-2xl text-primary-900 leading-[17px] pb-4 lg:pb-6"
-        >
-          Farm Owner
-        </p>
-        <div
-          class="w-full"
-          v-for="data in farmowner"
-          :key="data.id"
-          :data="data"
-        >
-          <EmployeeCard
-            :data="data"
-            class="mb-4"
-            v-if="data.affiliation.id == this.farmownerid"
-          />
-        </div>
-      </div>
-    </div>
     <div class="grid justify-items-center m-6">
       <div
         class="w-full max-w-[1078px] grid justify-items-center lg:justify-items-start"
@@ -30,7 +7,7 @@
         <p
           class="text-xl lg:text-2xl text-primary-900 leading-[17px] pb-4 lg:pb-6"
         >
-          Employee List
+          Bird List
         </p>
         <div class="w-full mb-4">
           <Form @submit="search" :validation-schema="schema">
@@ -61,10 +38,30 @@
         </div>
         <div v-if="notfound">Not found any employee</div>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-          <div class="w-full" v-for="data in bird" :key="data.id" :data="data">
-            <BirdCard :data="data" />
+          <div
+            class="w-full"
+            v-for="data in Otherstatus"
+            :key="data.id"
+            :data="data"
+          >
+            <BirdCard :data="data" v-if="data.birdStatus" />
           </div>
           <BirdRegister v-if="isOwner" />
+        </div>
+        <p
+          class="text-xl lg:text-2xl text-primary-900 leading-[17px] pb-4 lg:pb-6"
+        >
+          Unavailable Bird
+        </p>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+          <div
+            class="w-full"
+            v-for="data in Unavailable"
+            :key="data.id"
+            :data="data"
+          >
+            <BirdCard :data="data" v-if="data.birdStatus" />
+          </div>
         </div>
       </div>
     </div>
@@ -102,7 +99,7 @@ export default {
     })
     return {
       ROUTE_PATH,
-      bird: null,
+      bird: [],
       farmownerid: store.getters.farminspect,
       farmowner: null,
       schema,
@@ -145,6 +142,16 @@ export default {
     },
     isAdmin() {
       return AuthService.hasRoles('ROLE_ADMIN')
+    },
+    Unavailable: function () {
+      return this.bird.filter(function (item) {
+        return item.birdStatus == 'Unavailable'
+      })
+    },
+    Otherstatus: function () {
+      return this.bird.filter(function (item) {
+        return item.birdStatus != 'Unavailable'
+      })
     }
   },
   methods: {
