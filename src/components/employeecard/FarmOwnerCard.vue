@@ -39,7 +39,7 @@
         <p
           class="text-white text-[14px] lg:text-[16px] leading-[17px] grid place-content-center lg:place-content-start"
         >
-          {{ data.affiliation.id }}
+          {{ totalBird }}
         </p>
       </div>
     </div>
@@ -59,6 +59,7 @@ import ROUTE_PATH from '@/constants/router.js'
 // import DeleteButton from '@/components/button/DeleteButton.vue'
 import ViewButton from '@/components/button/ViewButton.vue'
 import DatabaseService from '@/services/DatabaseService.js'
+import BirdService from '@/services/BirdService.js'
 import Store from '@/store'
 
 export default {
@@ -77,7 +78,9 @@ export default {
     return {
       ROUTE_PATH,
       employee: null,
-      totalEmp: null
+      totalEmp: null,
+      bird: null,
+      totalBird: null
     }
   },
   created() {
@@ -89,11 +92,19 @@ export default {
       .catch((error) => {
         console.log(error)
       })
+    BirdService.getAllBirdAdmin(this.data.affiliation.id)
+      .then((response) => {
+        this.bird = response.data
+        this.totalBird = this.bird.length
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   },
   methods: {
     viewfarm() {
       Store.dispatch('updateFarmInspect', this.data.affiliation.id)
-      this.$router.push(`${ROUTE_PATH.EMPLOYEE_MANAGEMENT}`)
+      this.$router.push(`${ROUTE_PATH.SELECT_MANAGE}`)
     }
   }
 }

@@ -7,6 +7,7 @@ import EmployeeRegisterPage from '../views/Menu/EmployeeManagement/EmployeeRegis
 import NetWorkError from '../views/NetworkError.vue'
 import NotFound from '../views/NotFound.vue'
 import NotAuth from '@/views/NotAuth.vue'
+import SelectManage from '../views/Menu/FarmManagement/SelectManage.vue'
 import AccountSetting from '../views/Menu/AccountSetting/AccountSetting.vue'
 import FarmManagement from '../views/Menu/FarmManagement/FarmManagement.vue'
 import BirdRegisterPage from '../views/Menu/BirdManagement/BirdRegisterPage.vue'
@@ -79,6 +80,11 @@ const routes = [
     path: ROUTE_PATH.BIRD_MANAGEMENT,
     name: 'BirdManagement',
     component: BirdManagement
+  },
+  {
+    path: ROUTE_PATH.SELECT_MANAGE,
+    name: 'SelectManage',
+    component: SelectManage
   },
   {
     path: ROUTE_PATH.FARM_MANAGEMENT,

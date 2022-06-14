@@ -13,22 +13,6 @@ export default {
   searchFarmFullname(fullName) {
     return apiClient.get('/searchFarmList/?fullName=' + fullName)
   },
-  searchEmpFullname(fullName, affiliation) {
-    return apiClient.get(
-      '/searchFarmEmployeeList/?fullName=' +
-        fullName +
-        '&affiliation=' +
-        affiliation
-    )
-  },
-  searchEmpUsername(username, affiliation) {
-    return apiClient.get(
-      '/searchFarmEmployeeList/?username=' +
-        username +
-        '&affiliation=' +
-        affiliation
-    )
-  },
   getEmpInFarm(affiliation) {
     return apiClient.get('/viewFarmEmployeeList?affiliation=' + affiliation)
   },

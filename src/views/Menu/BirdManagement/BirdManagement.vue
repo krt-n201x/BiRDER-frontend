@@ -36,7 +36,7 @@
             </div>
           </Form>
         </div>
-        <div v-if="notfound">Not found any employee</div>
+        <div v-if="notfound">Not found any birds</div>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
           <div
             class="w-full"
@@ -46,7 +46,7 @@
           >
             <BirdCard :data="data" v-if="data.birdStatus" />
           </div>
-          <BirdRegister v-if="isOwner" />
+          <BirdRegister v-if="!isAdmin" />
         </div>
         <p
           class="text-xl lg:text-2xl text-primary-900 leading-[17px] pb-4 lg:pb-6"
@@ -74,6 +74,8 @@ import ROUTE_PATH from '@/constants/router.js'
 import BirdRegister from '@/components/birdcard/BirdRegister.vue'
 import BirdCard from '@/components/birdcard/BirdCard.vue'
 import DatabaseService from '@/services/DatabaseService.js'
+import BirdService from '@/services/BirdService.js'
+import BirdSearchService from '@/services/BirdSearchService.js'
 import AuthService from '@/services/AuthService.js'
 import TextField from '@/components/textfield/BaseField.vue'
 import BaseButton from '@/components/button/BaseButton.vue'
@@ -105,31 +107,29 @@ export default {
       schema,
       notfound: false,
       searchfiller: '',
-      items: [{ message: 'Full Name' }, { message: 'Username' }]
+      items: [
+        { message: 'Bird Name' },
+        { message: 'Bird Code' },
+        { message: 'Bird Species' },
+        { message: 'Bird Status' }
+      ]
     }
   },
   created() {
-    if (AuthService.hasRoles('ROLE_OWNER')) {
-      console.log('this is owner')
-      DatabaseService.getAllBird()
+    if (AuthService.hasRoles('ROLE_ADMIN')) {
+      console.log('this is admin')
+      BirdService.getAllBirdAdmin(this.farmownerid)
         .then((response) => {
           this.bird = response.data
         })
         .catch((error) => {
           console.log(error)
         })
-    } else if (AuthService.hasRoles('ROLE_ADMIN')) {
-      console.log('this is admin')
-      DatabaseService.getEmpInFarm(this.farmownerid)
+    } else {
+      console.log('this is owner')
+      DatabaseService.getAllBird()
         .then((response) => {
-          this.employee = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-      DatabaseService.getAllFarm()
-        .then((response) => {
-          this.farmowner = response.data
+          this.bird = response.data
         })
         .catch((error) => {
           console.log(error)
@@ -156,39 +156,133 @@ export default {
   },
   methods: {
     search(searchinfo) {
-      if (this.searchfiller == 'Full Name') {
-        DatabaseService.searchEmpFullname(
-          searchinfo.searchinformation,
-          store.getters.farminspect
-        )
-          .then((response) => {
-            console.log(response.data)
-            this.employee = response.data
-            this.notfound = false
-            if (response.data.length == 0) {
-              this.notfound = true
-            }
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-      }
-      if (this.searchfiller == 'Username') {
-        DatabaseService.searchEmpUsername(
-          searchinfo.searchinformation,
-          store.getters.farminspect
-        )
-          .then((response) => {
-            console.log(response.data)
-            this.employee = response.data
-            this.notfound = false
-            if (response.data.length == 0) {
-              this.notfound = true
-            }
-          })
-          .catch((error) => {
-            console.log(error)
-          })
+      if (AuthService.hasRoles('ROLE_ADMIN')) {
+        if (this.searchfiller == 'Bird Name') {
+          BirdSearchService.searchBirdNameAdmin(
+            searchinfo.searchinformation,
+            store.getters.farminspect
+          )
+            .then((response) => {
+              console.log(response.data)
+              this.bird = response.data
+              this.notfound = false
+              if (response.data.length == 0) {
+                this.notfound = true
+              }
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+        }
+        if (this.searchfiller == 'Bird Code') {
+          BirdSearchService.searchBirdCodeAdmin(
+            searchinfo.searchinformation,
+            store.getters.farminspect
+          )
+            .then((response) => {
+              console.log(response.data)
+              this.bird = response.data
+              this.notfound = false
+              if (response.data.length == 0) {
+                this.notfound = true
+              }
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+        }
+        if (this.searchfiller == 'Bird Species') {
+          BirdSearchService.searchBirdSpeciesAdmin(
+            searchinfo.searchinformation,
+            store.getters.farminspect
+          )
+            .then((response) => {
+              console.log(response.data)
+              this.bird = response.data
+              this.notfound = false
+              if (response.data.length == 0) {
+                this.notfound = true
+              }
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+        }
+        if (this.searchfiller == 'Bird Status') {
+          BirdSearchService.searchBirdStatusAdmin(
+            searchinfo.searchinformation,
+            store.getters.farminspect
+          )
+            .then((response) => {
+              console.log(response.data)
+              this.bird = response.data
+              this.notfound = false
+              if (response.data.length == 0) {
+                this.notfound = true
+              }
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+        }
+      } else {
+        if (this.searchfiller == 'Bird Name') {
+          console.log(this.searchfiller + searchinfo.searchinformation)
+          BirdSearchService.searchBirdNameOther(searchinfo.searchinformation)
+            .then((response) => {
+              console.log(response.data)
+              this.bird = response.data
+              this.notfound = false
+              if (response.data.length == 0) {
+                this.notfound = true
+              }
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+        }
+        if (this.searchfiller == 'Bird Code') {
+          BirdSearchService.searchBirdCodeOther(searchinfo.searchinformation)
+            .then((response) => {
+              console.log(response.data)
+              this.bird = response.data
+              this.notfound = false
+              if (response.data.length == 0) {
+                this.notfound = true
+              }
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+        }
+        if (this.searchfiller == 'Bird Species') {
+          BirdSearchService.searchBirdSpeciesOther(searchinfo.searchinformation)
+            .then((response) => {
+              console.log(response.data)
+              this.bird = response.data
+              this.notfound = false
+              if (response.data.length == 0) {
+                this.notfound = true
+              }
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+        }
+        if (this.searchfiller == 'Bird Status') {
+          BirdSearchService.searchBirdStatusOther(searchinfo.searchinformation)
+            .then((response) => {
+              console.log(response.data)
+              this.bird = response.data
+              this.notfound = false
+              if (response.data.length == 0) {
+                this.notfound = true
+              }
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+        }
       }
     }
   }

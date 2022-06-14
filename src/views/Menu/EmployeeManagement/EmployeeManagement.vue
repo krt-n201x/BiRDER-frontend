@@ -80,6 +80,7 @@ import ROUTE_PATH from '@/constants/router.js'
 import EmployeeRegister from '@/components/employeecard/EmployeeRegister.vue'
 import EmployeeCard from '@/components/employeecard/EmployeeCard.vue'
 import DatabaseService from '@/services/DatabaseService.js'
+import EmployeeSearchService from '@/services/EmployeeSearchService.js'
 import AuthService from '@/services/AuthService.js'
 import TextField from '@/components/textfield/BaseField.vue'
 import BaseButton from '@/components/button/BaseButton.vue'
@@ -152,39 +153,75 @@ export default {
   },
   methods: {
     search(searchinfo) {
-      if (this.searchfiller == 'Full Name') {
-        DatabaseService.searchEmpFullname(
-          searchinfo.searchinformation,
-          store.getters.farminspect
-        )
-          .then((response) => {
-            console.log(response.data)
-            this.employee = response.data
-            this.notfound = false
-            if (response.data.length == 0) {
-              this.notfound = true
-            }
-          })
-          .catch((error) => {
-            console.log(error)
-          })
+      if (AuthService.hasRoles('ROLE_ADMIN')) {
+        if (this.searchfiller == 'Full Name') {
+          EmployeeSearchService.searchEmpFullnameAdmin(
+            searchinfo.searchinformation,
+            store.getters.farminspect
+          )
+            .then((response) => {
+              console.log(response.data)
+              this.employee = response.data
+              this.notfound = false
+              if (response.data.length == 0) {
+                this.notfound = true
+              }
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+        }
+        if (this.searchfiller == 'Username') {
+          EmployeeSearchService.searchEmpUsernameAdmin(
+            searchinfo.searchinformation,
+            store.getters.farminspect
+          )
+            .then((response) => {
+              console.log(response.data)
+              this.employee = response.data
+              this.notfound = false
+              if (response.data.length == 0) {
+                this.notfound = true
+              }
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+        }
       }
-      if (this.searchfiller == 'Username') {
-        DatabaseService.searchEmpUsername(
-          searchinfo.searchinformation,
-          store.getters.farminspect
-        )
-          .then((response) => {
-            console.log(response.data)
-            this.employee = response.data
-            this.notfound = false
-            if (response.data.length == 0) {
-              this.notfound = true
-            }
-          })
-          .catch((error) => {
-            console.log(error)
-          })
+      if (AuthService.hasRoles('ROLE_OWNER')) {
+        if (this.searchfiller == 'Full Name') {
+          EmployeeSearchService.searchEmpFullnameOwner(
+            searchinfo.searchinformation
+          )
+            .then((response) => {
+              console.log(response.data)
+              this.employee = response.data
+              this.notfound = false
+              if (response.data.length == 0) {
+                this.notfound = true
+              }
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+        }
+        if (this.searchfiller == 'Username') {
+          EmployeeSearchService.searchEmpUsernameOwner(
+            searchinfo.searchinformation
+          )
+            .then((response) => {
+              console.log(response.data)
+              this.employee = response.data
+              this.notfound = false
+              if (response.data.length == 0) {
+                this.notfound = true
+              }
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+        }
       }
     }
   }
