@@ -59,7 +59,8 @@
             </div>
           </Form>
         </div>
-        <div v-if="notfound">Not found any employee</div>
+        <div v-if="!notfound">Not found any employee</div>
+        <EmployeeRegister class="mb-4" v-if="isOwner" />
         <div
           class="w-full"
           v-for="data in employee"
@@ -68,7 +69,24 @@
         >
           <EmployeeCard :data="data" class="mb-4" />
         </div>
-        <EmployeeRegister v-if="isOwner" />
+        <div class="w-full grid grid-cols-2 gap-4" v-if="notfound && usesearch">
+          <div>
+            <router-link
+              :to="{ name: 'EmployeeManagement', query: { page: page - 1 } }"
+              rel="prev"
+            >
+              <BaseButton v-if="page != 1"> Back </BaseButton>
+            </router-link>
+          </div>
+          <div class="gird justify-item-end">
+            <router-link
+              :to="{ name: 'EmployeeManagement', query: { page: page + 1 } }"
+              rel="next"
+            >
+              <BaseButton v-if="hasNextPage"> Next </BaseButton></router-link
+            >
+          </div>
+        </div>
       </div>
     </div>
   </AppLayout>
@@ -88,6 +106,7 @@ import BaseSelect from '@/components/dropdown/BaseSelect.vue'
 import { Form } from 'vee-validate'
 import * as yup from 'yup'
 import store from '@/store'
+import { watchEffect } from '@vue/runtime-core'
 
 export default {
   name: 'EmployeeManagement',
@@ -100,6 +119,12 @@ export default {
     BaseSelect,
     Form
   },
+  props: {
+    page: {
+      type: Number,
+      required: true
+    }
+  },
   data() {
     const schema = yup.object().shape({
       searchinformation: yup.string()
@@ -110,40 +135,52 @@ export default {
       farmownerid: store.getters.farminspect,
       farmowner: null,
       schema,
-      notfound: false,
+      notfound: true,
       searchfiller: '',
-      items: [{ message: 'Full Name' }, { message: 'Username' }]
+      items: [{ message: 'Full Name' }, { message: 'Username' }],
+      totalEvents: 0,
+      usesearch: true
     }
   },
   created() {
     if (AuthService.hasRoles('ROLE_OWNER')) {
       console.log('this is owner')
-      DatabaseService.getAllEmp()
-        .then((response) => {
-          this.employee = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+      watchEffect(() => {
+        DatabaseService.getAllEmps(6, this.page)
+          .then((response) => {
+            this.employee = response.data
+            this.totalEvents = response.headers['x-total-count']
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      })
     } else if (AuthService.hasRoles('ROLE_ADMIN')) {
       console.log('this is admin')
-      DatabaseService.getEmpInFarm(this.farmownerid)
-        .then((response) => {
-          this.employee = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-      DatabaseService.getAllFarm()
-        .then((response) => {
-          this.farmowner = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+      watchEffect(() => {
+        DatabaseService.getEmpInFarms(this.farmownerid, 6, this.page)
+          .then((response) => {
+            this.employee = response.data
+            this.totalEvents = response.headers['x-total-count']
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+        DatabaseService.getAllFarm()
+          .then((response) => {
+            this.farmowner = response.data
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      })
     }
   },
   computed: {
+    hasNextPage() {
+      let totalPages = Math.ceil(this.totalEvents / 6)
+      return this.page < totalPages
+    },
     isOwner() {
       return AuthService.hasRoles('ROLE_OWNER')
     },
@@ -161,10 +198,16 @@ export default {
           )
             .then((response) => {
               console.log(response.data)
-              this.employee = response.data
-              this.notfound = false
+              this.bird = response.data
               if (response.data.length == 0) {
+                this.notfound = false
+                this.usesearch = true
+              } else if (searchinfo.searchinformation == '') {
                 this.notfound = true
+                this.usesearch = true
+              } else {
+                this.notfound = true
+                this.usesearch = false
               }
             })
             .catch((error) => {
@@ -178,10 +221,16 @@ export default {
           )
             .then((response) => {
               console.log(response.data)
-              this.employee = response.data
-              this.notfound = false
+              this.bird = response.data
               if (response.data.length == 0) {
+                this.notfound = false
+                this.usesearch = true
+              } else if (searchinfo.searchinformation == '') {
                 this.notfound = true
+                this.usesearch = true
+              } else {
+                this.notfound = true
+                this.usesearch = false
               }
             })
             .catch((error) => {
@@ -196,10 +245,16 @@ export default {
           )
             .then((response) => {
               console.log(response.data)
-              this.employee = response.data
-              this.notfound = false
+              this.bird = response.data
               if (response.data.length == 0) {
+                this.notfound = false
+                this.usesearch = true
+              } else if (searchinfo.searchinformation == '') {
                 this.notfound = true
+                this.usesearch = true
+              } else {
+                this.notfound = true
+                this.usesearch = false
               }
             })
             .catch((error) => {
@@ -212,10 +267,16 @@ export default {
           )
             .then((response) => {
               console.log(response.data)
-              this.employee = response.data
-              this.notfound = false
+              this.bird = response.data
               if (response.data.length == 0) {
+                this.notfound = false
+                this.usesearch = true
+              } else if (searchinfo.searchinformation == '') {
                 this.notfound = true
+                this.usesearch = true
+              } else {
+                this.notfound = true
+                this.usesearch = false
               }
             })
             .catch((error) => {

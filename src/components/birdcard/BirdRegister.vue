@@ -1,7 +1,7 @@
 <template>
   <router-link
     :to="ROUTE_PATH.BIRD_REGISTER"
-    class="w-[350px] h-[380px] px-7 grid place-content-center rounded-[20px] bg-primary-200"
+    class="w-full h-[52px] px-7 mb-4 grid place-content-center rounded-[20px] bg-primary-200"
   >
     <fa icon="circle-plus" class="iconcolor h-5 pr-4" />
   </router-link>

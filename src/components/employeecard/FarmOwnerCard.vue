@@ -87,7 +87,7 @@ export default {
     DatabaseService.getEmpInFarm(this.data.affiliation.id)
       .then((response) => {
         this.employee = response.data
-        this.totalEmp = this.employee.length
+        this.totalEmp = response.headers['x-total-count']
       })
       .catch((error) => {
         console.log(error)
@@ -95,7 +95,7 @@ export default {
     BirdService.getAllBirdAdmin(this.data.affiliation.id)
       .then((response) => {
         this.bird = response.data
-        this.totalBird = this.bird.length
+        this.totalBird = response.headers['x-total-count']
       })
       .catch((error) => {
         console.log(error)

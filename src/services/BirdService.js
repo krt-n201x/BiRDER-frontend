@@ -1,8 +1,24 @@
 import apiClient from '@/services/AxiosClient.js'
 
 export default {
+  getAllBird() {
+    return apiClient.get('/viewBirdList')
+  },
+  getAllBirds(perPage, page) {
+    return apiClient.get('/viewBirdList?_limit=' + perPage + '&_page=' + page)
+  },
   getAllBirdAdmin(affiliation) {
     return apiClient.get('/viewBirdList?affiliation=' + affiliation)
+  },
+  getAllBirdsAdmin(affiliation, perPage, page) {
+    return apiClient.get(
+      '/viewBirdList?affiliation=' +
+        affiliation +
+        '&_limit=' +
+        perPage +
+        '&_page=' +
+        page
+    )
   },
   getBirdDetail(id) {
     return apiClient.get('/viewBirdDetail/' + id)

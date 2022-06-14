@@ -36,31 +36,34 @@
             </div>
           </Form>
         </div>
-        <div v-if="notfound">Not found any birds</div>
+        <div v-if="!notfound">Not found any birds</div>
+        <BirdRegister />
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
           <div
             class="w-full"
-            v-for="data in Otherstatus"
+            v-for="data in this.bird"
             :key="data.id"
             :data="data"
           >
-            <BirdCard :data="data" v-if="data.birdStatus" />
+            <BirdCard :data="data" />
           </div>
-          <BirdRegister />
         </div>
-        <p
-          class="text-xl lg:text-2xl text-primary-900 leading-[17px] pb-4 lg:pb-6"
-        >
-          Unavailable Bird
-        </p>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-          <div
-            class="w-full"
-            v-for="data in Unavailable"
-            :key="data.id"
-            :data="data"
-          >
-            <BirdCard :data="data" v-if="data.birdStatus" />
+        <div class="w-full grid grid-cols-2 gap-4" v-if="notfound && usesearch">
+          <div>
+            <router-link
+              :to="{ name: 'BirdManagement', query: { page: page - 1 } }"
+              rel="prev"
+            >
+              <BaseButton v-if="page != 1"> Back </BaseButton>
+            </router-link>
+          </div>
+          <div class="gird justify-item-end">
+            <router-link
+              :to="{ name: 'BirdManagement', query: { page: page + 1 } }"
+              rel="next"
+            >
+              <BaseButton v-if="hasNextPage"> Next </BaseButton></router-link
+            >
           </div>
         </div>
       </div>
@@ -73,7 +76,6 @@ import AppLayout from '@/layout/AppLayout.vue'
 import ROUTE_PATH from '@/constants/router.js'
 import BirdRegister from '@/components/birdcard/BirdRegister.vue'
 import BirdCard from '@/components/birdcard/BirdCard.vue'
-import DatabaseService from '@/services/DatabaseService.js'
 import BirdService from '@/services/BirdService.js'
 import BirdSearchService from '@/services/BirdSearchService.js'
 import AuthService from '@/services/AuthService.js'
@@ -83,6 +85,7 @@ import BaseSelect from '@/components/dropdown/BaseSelect.vue'
 import { Form } from 'vee-validate'
 import * as yup from 'yup'
 import store from '@/store'
+import { watchEffect } from '@vue/runtime-core'
 
 export default {
   name: 'BirdManagement',
@@ -95,6 +98,12 @@ export default {
     BaseSelect,
     Form
   },
+  props: {
+    page: {
+      type: Number,
+      required: true
+    }
+  },
   data() {
     const schema = yup.object().shape({
       searchinformation: yup.string()
@@ -105,38 +114,57 @@ export default {
       farmownerid: store.getters.farminspect,
       farmowner: null,
       schema,
-      notfound: false,
+      notfound: true,
       searchfiller: '',
       items: [
         { message: 'Bird Name' },
         { message: 'Bird Code' },
         { message: 'Bird Species' },
         { message: 'Bird Status' }
-      ]
+      ],
+      totalEvents: 0,
+      usesearch: true
     }
   },
   created() {
     if (AuthService.hasRoles('ROLE_ADMIN')) {
       console.log('this is admin')
-      BirdService.getAllBirdAdmin(this.farmownerid)
-        .then((response) => {
-          this.bird = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+      watchEffect(() => {
+        BirdService.getAllBirdsAdmin(this.farmownerid, 6, this.page)
+          .then((response) => {
+            this.bird = response.data
+            this.totalEvents = response.headers['x-total-count']
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      })
     } else {
       console.log('this is owner')
-      DatabaseService.getAllBird()
-        .then((response) => {
-          this.bird = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+      // BirdService.getAllBird()
+      //   .then((response) => {
+      //     this.bird = response.data
+      //   })
+      //   .catch((error) => {
+      //     console.log(error)
+      //   })
+      watchEffect(() => {
+        BirdService.getAllBirds(6, this.page)
+          .then((response) => {
+            this.bird = response.data
+            this.totalEvents = response.headers['x-total-count']
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      })
     }
   },
   computed: {
+    hasNextPage() {
+      let totalPages = Math.ceil(this.totalEvents / 6)
+      return this.page < totalPages
+    },
     isOwner() {
       return AuthService.hasRoles('ROLE_OWNER')
     },
@@ -165,9 +193,15 @@ export default {
             .then((response) => {
               console.log(response.data)
               this.bird = response.data
-              this.notfound = false
               if (response.data.length == 0) {
+                this.notfound = false
+                this.usesearch = true
+              } else if (searchinfo.searchinformation == '') {
                 this.notfound = true
+                this.usesearch = true
+              } else {
+                this.notfound = true
+                this.usesearch = false
               }
             })
             .catch((error) => {
@@ -182,9 +216,15 @@ export default {
             .then((response) => {
               console.log(response.data)
               this.bird = response.data
-              this.notfound = false
               if (response.data.length == 0) {
+                this.notfound = false
+                this.usesearch = true
+              } else if (searchinfo.searchinformation == '') {
                 this.notfound = true
+                this.usesearch = true
+              } else {
+                this.notfound = true
+                this.usesearch = false
               }
             })
             .catch((error) => {
@@ -199,9 +239,15 @@ export default {
             .then((response) => {
               console.log(response.data)
               this.bird = response.data
-              this.notfound = false
               if (response.data.length == 0) {
+                this.notfound = false
+                this.usesearch = true
+              } else if (searchinfo.searchinformation == '') {
                 this.notfound = true
+                this.usesearch = true
+              } else {
+                this.notfound = true
+                this.usesearch = false
               }
             })
             .catch((error) => {
@@ -216,9 +262,15 @@ export default {
             .then((response) => {
               console.log(response.data)
               this.bird = response.data
-              this.notfound = false
               if (response.data.length == 0) {
+                this.notfound = false
+                this.usesearch = true
+              } else if (searchinfo.searchinformation == '') {
                 this.notfound = true
+                this.usesearch = true
+              } else {
+                this.notfound = true
+                this.usesearch = false
               }
             })
             .catch((error) => {
@@ -232,9 +284,15 @@ export default {
             .then((response) => {
               console.log(response.data)
               this.bird = response.data
-              this.notfound = false
               if (response.data.length == 0) {
+                this.notfound = false
+                this.usesearch = true
+              } else if (searchinfo.searchinformation == '') {
                 this.notfound = true
+                this.usesearch = true
+              } else {
+                this.notfound = true
+                this.usesearch = false
               }
             })
             .catch((error) => {
@@ -246,9 +304,15 @@ export default {
             .then((response) => {
               console.log(response.data)
               this.bird = response.data
-              this.notfound = false
               if (response.data.length == 0) {
+                this.notfound = false
+                this.usesearch = true
+              } else if (searchinfo.searchinformation == '') {
                 this.notfound = true
+                this.usesearch = true
+              } else {
+                this.notfound = true
+                this.usesearch = false
               }
             })
             .catch((error) => {
@@ -260,9 +324,15 @@ export default {
             .then((response) => {
               console.log(response.data)
               this.bird = response.data
-              this.notfound = false
               if (response.data.length == 0) {
+                this.notfound = false
+                this.usesearch = true
+              } else if (searchinfo.searchinformation == '') {
                 this.notfound = true
+                this.usesearch = true
+              } else {
+                this.notfound = true
+                this.usesearch = false
               }
             })
             .catch((error) => {
@@ -274,9 +344,15 @@ export default {
             .then((response) => {
               console.log(response.data)
               this.bird = response.data
-              this.notfound = false
               if (response.data.length == 0) {
+                this.notfound = false
+                this.usesearch = true
+              } else if (searchinfo.searchinformation == '') {
                 this.notfound = true
+                this.usesearch = true
+              } else {
+                this.notfound = true
+                this.usesearch = false
               }
             })
             .catch((error) => {

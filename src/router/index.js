@@ -37,7 +37,8 @@ const routes = [
   {
     path: ROUTE_PATH.EMPLOYEE_MANAGEMENT,
     name: 'EmployeeManagement',
-    component: EmployeeManagement
+    component: EmployeeManagement,
+    props: (route) => ({ page: parseInt(route.query.page) || 1 })
   },
   {
     path: ROUTE_PATH.EMPLOYEE_REGISTER,
@@ -105,7 +106,8 @@ const routes = [
   {
     path: ROUTE_PATH.BIRD_MANAGEMENT,
     name: 'BirdManagement',
-    component: BirdManagement
+    component: BirdManagement,
+    props: (route) => ({ page: parseInt(route.query.page) || 1 })
   },
   {
     path: ROUTE_PATH.SELECT_MANAGE,

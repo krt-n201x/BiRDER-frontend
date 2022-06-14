@@ -1,11 +1,13 @@
 import apiClient from '@/services/AxiosClient.js'
 
 export default {
-  getAllBird() {
-    return apiClient.get('/viewBirdList')
-  },
   getAllEmp() {
     return apiClient.get('/viewFarmEmployeeList')
+  },
+  getAllEmps(perPage, page) {
+    return apiClient.get(
+      '/viewFarmEmployeeList?_limit=' + perPage + '&_page=' + page
+    )
   },
   searchFarmUsername(username) {
     return apiClient.get('/searchFarmList/?username=' + username)
@@ -15,6 +17,16 @@ export default {
   },
   getEmpInFarm(affiliation) {
     return apiClient.get('/viewFarmEmployeeList?affiliation=' + affiliation)
+  },
+  getEmpInFarms(affiliation, perPage, page) {
+    return apiClient.get(
+      '/viewFarmEmployeeList?affiliation=' +
+        affiliation +
+        '&_limit=' +
+        perPage +
+        '&_page=' +
+        page
+    )
   },
   getAllFarm() {
     return apiClient.get('/viewFarmList')
