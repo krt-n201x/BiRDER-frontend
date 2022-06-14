@@ -2,7 +2,7 @@
   <AppLayout>
     <div class="grid justify-items-center mt-[16px] lg:mt-[50px]">
       <FormWrapper label="Bird Detail"
-        ><Form @submit="updateBird" :validation-schema="schema"
+        ><Form @submit="updatebird" :validation-schema="schema"
           ><div class="mt-[22px] lg:mt-[36px]">
             <div v-if="!edit"><img :src="this.bird.birdImage" /></div>
             <div v-if="edit">
@@ -122,7 +122,7 @@
                 label="Paring code"
                 type="text"
                 placeholder="Enter paring code"
-                :message="this.bird.paringBirdId"
+                :message="this.paringBirdId"
                 :disabled="!edit"
               />
             </div>
@@ -135,6 +135,22 @@
                 :message="this.bird.birdTreatmentRecord"
                 :disabled="!edit"
               />
+            </div>
+            <div
+              class="grid grid-cols-2 gap-2 mt-[22px] lg:mt-[36px]"
+              v-if="edit"
+            >
+              <SecondaryButton @click="cancelChange">Cancel</SecondaryButton>
+              <BaseButton type="submit">Save</BaseButton>
+            </div>
+            <div class="grid grid-cols-1 gap-2 mt-[22px]" v-if="edit">
+              <DeleteButton @click="DeleteBird">Delete Account</DeleteButton>
+            </div>
+            <div
+              class="grid grid-cols-1 gap-2 mt-[22px] lg:mt-[36px]"
+              v-if="!edit"
+            >
+              <BaseButton @click="editchange">Edit</BaseButton>
             </div>
           </div>
         </Form>
@@ -154,7 +170,22 @@ import { Form } from 'vee-validate'
 import * as yup from 'yup'
 import BaseSelect from '@/components/dropdown/BaseSelect.vue'
 import AreaField from '@/components/textfield/AreaField.vue'
+import BaseButton from '@/components/button/BaseButton.vue'
+import SecondaryButton from '@/components/button/SecondaryButton.vue'
+import DeleteButton from '@/components/button/DeleteButton.vue'
+import DatabaseService from '@/services/DatabaseService.js'
+import AuthService from '@/services/AuthService.js'
+import ROUTE_PATH from '@/constants/router.js'
+import BirdService from '@/services/BirdService.js'
+import { useToast } from 'vue-toastification'
 
+const toast = useToast()
+const NetworkError = (
+  <div>
+    <h1>Register Failed!</h1>
+    <span>The system cannot connect to database</span>
+  </div>
+)
 export default {
   name: 'BirdDetail',
   components: {
@@ -165,7 +196,10 @@ export default {
     DatePicker,
     Form,
     BaseSelect,
-    AreaField
+    AreaField,
+    BaseButton,
+    SecondaryButton,
+    DeleteButton
   },
   data() {
     const schema = yup.object().shape({
@@ -173,39 +207,47 @@ export default {
         .string()
         .min(1, 'The length shall be between 1-25')
         .max(25, 'The length shall be between 1-25')
-        .required('Cage number is required!'),
+        .required('Cage number is required!')
+        .nullable(true),
       birdcode: yup
         .string()
         .min(4, 'The length shall be between 4-15')
         .max(15, 'The length shall be between 4-15')
-        .required('Bird code is required!'),
+        .required('Bird code is required!')
+        .nullable(true),
       birdname: yup
         .string()
         .min(1, 'The length shall be between 1-25')
         .max(25, 'The length shall be between 1-25')
-        .required('Bird code is required!'),
+        .required('Bird code is required!')
+        .nullable(true),
       birdspecies: yup
         .string()
         .min(4, 'The length shall be between 4-50')
         .max(50, 'The length shall be between 4-50')
-        .required('Bird species is required!'),
+        .required('Bird species is required!')
+        .nullable(true),
       birdcolor: yup
         .string()
         .min(4, 'The length shall be between 4-100')
         .max(100, 'The length shall be between 4-100')
-        .required('Bird species is required!'),
+        .required('Bird species is required!')
+        .nullable(true),
       maleparentcode: yup
         .string()
-        .min(4, 'The length shall be between 4-15')
-        .max(15, 'The length shall be between 4-15'),
+        .min(0, 'The length shall be between 0-15')
+        .max(15, 'The length shall be between 4-15')
+        .nullable(true),
       femaleparentcode: yup
         .string()
-        .min(4, 'The length shall be between 4-15')
-        .max(15, 'The length shall be between 4-15'),
+        .min(0, 'The length shall be between 0-15')
+        .max(15, 'The length shall be between 4-15')
+        .nullable(true),
       paringcode: yup
         .string()
-        .min(4, 'The length shall be between 4-15')
-        .max(15, 'The length shall be between 4-15'),
+        .min(0, 'The length shall be between 0-15')
+        .max(15, 'The length shall be between 4-15')
+        .nullable(true),
       birdtrecord: yup.string().max(1000, 'The max with 1000 character')
     })
     return {
@@ -214,8 +256,9 @@ export default {
       schema,
       files: [],
       imageUrls: [],
-      maleParentId: '',
-      femaleParentId: '',
+      maleParentId: null,
+      femaleParentId: null,
+      paringBirdId: null,
       birdstatus: store.getters.birdinformation.birdStatus,
       birdsex: store.getters.birdinformation.sexOfBird,
       status: [
@@ -230,7 +273,10 @@ export default {
         { message: 'Donated' }
       ],
       sex: [{ message: 'M' }, { message: 'F' }, { message: 'U' }],
-      bird: store.getters.birdinformation
+      bird: store.getters.birdinformation,
+      ROUTE_PATH,
+      imageUrlspath: store.getters.birdinformation.birdImage,
+      farmownerid: store.getters.farminspect
     }
   },
   created() {
@@ -241,7 +287,108 @@ export default {
       this.femaleParentId =
         store.getters.birdinformation.femaleParentId.birdCode
     }
+    if (store.getters.birdinformation.paringBirdId != null) {
+      this.paringBirdId = store.getters.birdinformation.paringBirdId
+    }
   },
-  methods: {}
+  methods: {
+    editchange() {
+      this.edit = !this.edit
+    },
+    DeleteBird() {
+      this.$swal({
+        title: 'Deleted Brid!',
+        text: 'Are you sure to deleted this Bird?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it',
+        cancelButtonText: 'No, cancel',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          DatabaseService.deleteBird(store.getters.birdinformation.id)
+            .then(() => {
+              toast.success('Deleted Success!')
+              this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+            })
+            .catch((error) => {
+              toast.error('Deleted Falis!')
+              console.log(error)
+            })
+        }
+      })
+    },
+    updatebird(updateinfo) {
+      Promise.all(
+        this.files.map((file) => {
+          return DatabaseService.uploadFile(file)
+        })
+      ).then((response) => {
+        console.log(response.map((r) => r.data))
+        console.log('finish upload file')
+        this.imageUrls = response.map((r) => r.data)
+        if (this.imageUrls.length == 1) {
+          this.imageUrlspath = this.imageUrls[0]
+        } else {
+          console.log('do not have new img')
+        }
+        if (AuthService.hasRoles('ROLE_ADMIN')) {
+          console.log(updateinfo)
+          BirdService.updatebirdAdmin(
+            updateinfo,
+            this.time1,
+            this.birdstatus,
+            this.birdsex,
+            this.imageUrlspath,
+            this.bird.id,
+            this.farmownerid
+          )
+            .then(() => {
+              toast.success('Update Bird Success!')
+              this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+            })
+            .catch((error) => {
+              if (error.message == 'Network Error') {
+                toast.error(NetworkError)
+              } else {
+                toast.error(error.response.data.message)
+                this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+              }
+              console.log(error)
+            })
+        } else {
+          console.log(updateinfo)
+          BirdService.updatebirdOther(
+            updateinfo,
+            this.time1,
+            this.birdstatus,
+            this.birdsex,
+            this.imageUrlspath,
+            this.bird.id
+          )
+            .then(() => {
+              toast.success('Update Bird Success!')
+              this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+            })
+            .catch((error) => {
+              if (error.message == 'Network Error') {
+                toast.error(NetworkError)
+              } else {
+                toast.error(error.response.data.message)
+                this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+              }
+              console.log(error)
+            })
+        }
+      })
+    },
+    cancel() {
+      this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+    },
+    handleImages(files) {
+      console.log(files)
+      this.files = files
+    }
+  }
 }
 </script>

@@ -86,7 +86,7 @@ export default {
   methods: {
     DeleteAccount() {
       this.$swal({
-        title: 'Deleted User!',
+        title: 'Deleted Bird!',
         text: 'Are you sure to deleted this Bird?',
         icon: 'warning',
         showCancelButton: true,

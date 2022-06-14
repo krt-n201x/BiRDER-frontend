@@ -46,7 +46,7 @@
           >
             <BirdCard :data="data" v-if="data.birdStatus" />
           </div>
-          <BirdRegister v-if="!isAdmin" />
+          <BirdRegister />
         </div>
         <p
           class="text-xl lg:text-2xl text-primary-900 leading-[17px] pb-4 lg:pb-6"

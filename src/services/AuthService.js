@@ -78,6 +78,34 @@ export default {
         return Promise.reject(error)
       })
   },
+  createBirdAdmin(
+    registerinfo,
+    time,
+    birdstatus,
+    birdsex,
+    imageUrls,
+    affiliation
+  ) {
+    return apiClient
+      .post('/createBirdDetail?affiliation=' + affiliation, {
+        birdName: registerinfo.birdname,
+        birdCode: registerinfo.birdcode,
+        birdColor: registerinfo.birdcolor,
+        cageNumber: registerinfo.cagenumber,
+        maleParentId: registerinfo.maleparentcode,
+        femaleParentId: registerinfo.femaleparentcode,
+        paringBirdId: registerinfo.paringcode,
+        birdTreatmentRecord: registerinfo.birdtrecord,
+        birdSpecies: registerinfo.birdspecies,
+        dateOfBirth: time,
+        sexOfBird: birdsex,
+        birdStatus: birdstatus,
+        birdImage: imageUrls
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
   hasRoles(roles) {
     if (Store.getters.currentUser && roles) {
       let containRoles = Store.getters.currentUser.authorities.filter(

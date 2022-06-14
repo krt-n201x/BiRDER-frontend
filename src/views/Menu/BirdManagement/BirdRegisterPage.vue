@@ -142,6 +142,7 @@ import { useToast } from 'vue-toastification'
 import DatePicker from 'vue-datepicker-next'
 import UploadImages from 'vue-upload-drop-images'
 import 'vue-datepicker-next/index.css'
+import store from '@/store'
 
 const toast = useToast()
 const NetworkError = (
@@ -214,6 +215,7 @@ export default {
       schema,
       birdstatus: '',
       birdsex: '',
+      farmownerid: store.getters.farminspect,
       status: [
         { message: 'Sold' },
         { message: 'For sale' },
@@ -230,36 +232,63 @@ export default {
   },
   methods: {
     registerbird(registerinfo) {
-      Promise.all(
-        this.files.map((file) => {
-          return DatabaseService.uploadFile(file)
-        })
-      ).then((response) => {
-        console.log(response.map((r) => r.data))
-        console.log('finish upload file')
-        this.imageUrls = response.map((r) => r.data)
-        if (AuthService.hasRoles('ROLE_OWNER')) {
-          AuthService.createBird(
-            registerinfo,
-            this.time1,
-            this.birdstatus,
-            this.birdsex,
-            this.imageUrls[0]
-          )
-            .then(() => {
-              toast.success('Create Bird Success!')
-            })
-            .catch((error) => {
-              if (error.message == 'Network Error') {
-                toast.error(NetworkError)
-              } else {
-                toast.error(error.response.data.message)
+      if (this.files.length == 0) {
+        toast.error("Please upload bird's picture")
+      } else {
+        Promise.all(
+          this.files.map((file) => {
+            return DatabaseService.uploadFile(file)
+          })
+        ).then((response) => {
+          console.log(response.map((r) => r.data))
+          console.log('finish upload file')
+          this.imageUrls = response.map((r) => r.data)
+          if (AuthService.hasRoles('ROLE_ADMIN')) {
+            AuthService.createBirdAdmin(
+              registerinfo,
+              this.time1,
+              this.birdstatus,
+              this.birdsex,
+              this.imageUrls[0],
+              this.farmownerid
+            )
+              .then(() => {
+                toast.success('Create Bird Success!')
                 this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
-              }
-              console.log(error)
-            })
-        }
-      })
+              })
+              .catch((error) => {
+                if (error.message == 'Network Error') {
+                  toast.error(NetworkError)
+                } else {
+                  toast.error(error.response.data.message)
+                  this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+                }
+                console.log(error)
+              })
+          } else {
+            AuthService.createBird(
+              registerinfo,
+              this.time1,
+              this.birdstatus,
+              this.birdsex,
+              this.imageUrls[0]
+            )
+              .then(() => {
+                toast.success('Create Bird Success!')
+                this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+              })
+              .catch((error) => {
+                if (error.message == 'Network Error') {
+                  toast.error(NetworkError)
+                } else {
+                  toast.error(error.response.data.message)
+                  this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+                }
+                console.log(error)
+              })
+          }
+        })
+      }
     },
     cancel() {
       this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
