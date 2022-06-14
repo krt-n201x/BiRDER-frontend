@@ -8,6 +8,7 @@ const ROUTE_PATH = {
   ACCOUNT_SETTING: '/account-setting',
   FARM_MANAGEMENT: '/farm-management',
   BIRD_MANAGEMENT: '/bird-management',
+  BIRD_INFORMATION: '/bird-information',
   SELECT_MANAGE: '/select-manage',
   BIRD_REGISTER: '/bird-register',
   NETWORK_ERROR: '/network-error'

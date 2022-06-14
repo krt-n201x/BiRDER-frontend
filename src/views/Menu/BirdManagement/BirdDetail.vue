@@ -1,10 +1,11 @@
 <template>
   <AppLayout>
     <div class="grid justify-items-center mt-[16px] lg:mt-[50px]">
-      <FormWrapper label="Register Bird">
-        <Form @submit="registerbird" :validation-schema="schema">
-          <div class="mt-[22px] lg:mt-[36px]">
-            <div>
+      <FormWrapper label="Bird Detail"
+        ><Form @submit="updateBird" :validation-schema="schema"
+          ><div class="mt-[22px] lg:mt-[36px]">
+            <div v-if="!edit"><img :src="this.bird.birdImage" /></div>
+            <div v-if="edit">
               <UploadImages
                 :max="1"
                 maxError="Allow to upload only 1 picture"
@@ -18,6 +19,8 @@
                   label="Cage number"
                   type="text"
                   placeholder="Plese enter cage number"
+                  :message="this.bird.cageNumber"
+                  :disabled="!edit"
                   required
                 />
               </div>
@@ -27,6 +30,8 @@
                   label="Bird Code"
                   type="text"
                   placeholder="Plese enter bird code"
+                  :message="this.bird.birdCode"
+                  :disabled="!edit"
                   required
                 />
               </div>
@@ -38,6 +43,8 @@
                   label="Bird Name"
                   type="text"
                   placeholder="Plese enter bird name"
+                  :message="this.bird.birdName"
+                  :disabled="!edit"
                   required
                 />
               </div>
@@ -49,6 +56,7 @@
                   value-type="format"
                   placeholder="Select date"
                   format="YYYY-MM-DD"
+                  :disabled="!edit"
                 />
               </div>
             </div>
@@ -58,6 +66,8 @@
                 label="Bird species"
                 type="text"
                 placeholder="Plese enter birds pecies"
+                :message="this.bird.birdSpecies"
+                :disabled="!edit"
                 required
               />
             </div>
@@ -67,6 +77,8 @@
                 label="Bird color"
                 type="text"
                 placeholder="Plese enter bird color"
+                :message="this.bird.birdColor"
+                :disabled="!edit"
                 required
               />
             </div>
@@ -76,12 +88,14 @@
                 v-model="this.birdsex"
                 label="Sex of bird"
                 placeholder="Select sex of bird"
+                :disabled="!edit"
               />
               <BaseSelect
                 :options="this.status"
                 v-model="this.birdstatus"
                 label="Bird status"
                 placeholder="Select bird status"
+                :disabled="!edit"
               />
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-4">
@@ -90,12 +104,16 @@
                 label="Male Parent Code"
                 type="text"
                 placeholder="Enter male parent code"
+                :message="this.maleParentId"
+                :disabled="!edit"
               />
               <TextField
                 name="femaleparentcode"
                 label="Female Parent Code"
                 type="text"
                 placeholder="Enter female parent code"
+                :message="this.femaleParentId"
+                :disabled="!edit"
               />
             </div>
             <div>
@@ -104,6 +122,8 @@
                 label="Paring code"
                 type="text"
                 placeholder="Enter paring code"
+                :message="this.bird.paringBirdId"
+                :disabled="!edit"
               />
             </div>
             <div>
@@ -112,12 +132,10 @@
                 label="Bird treatment history record"
                 type="text"
                 placeholder="Enter your bird treatment history record"
+                :message="this.bird.birdTreatmentRecord"
+                :disabled="!edit"
               />
             </div>
-          </div>
-          <div class="grid grid-cols-2 gap-2 mt-[22px] lg:mt-[36px]">
-            <SecondaryButton @click="cancel">Cancel</SecondaryButton>
-            <BaseButton type="submit">Register</BaseButton>
           </div>
         </Form>
       </FormWrapper>
@@ -126,44 +144,28 @@
 </template>
 
 <script>
+import store from '@/store/index.js'
 import AppLayout from '@/layout/AppLayout.vue'
 import FormWrapper from '@/components/form/FormWrapper.vue'
+import UploadImages from 'vue-upload-drop-images'
 import TextField from '@/components/textfield/BaseField.vue'
-import BaseButton from '@/components/button/BaseButton.vue'
-import BaseSelect from '@/components/dropdown/BaseSelect.vue'
-import SecondaryButton from '@/components/button/SecondaryButton.vue'
-import AreaField from '@/components/textfield/AreaField.vue'
-import ROUTE_PATH from '@/constants/router.js'
-import AuthService from '@/services/AuthService.js'
-import DatabaseService from '@/services/DatabaseService.js'
+import DatePicker from 'vue-datepicker-next'
 import { Form } from 'vee-validate'
 import * as yup from 'yup'
-import { useToast } from 'vue-toastification'
-import DatePicker from 'vue-datepicker-next'
-import UploadImages from 'vue-upload-drop-images'
-import 'vue-datepicker-next/index.css'
-
-const toast = useToast()
-const NetworkError = (
-  <div>
-    <h1>Register Failed!</h1>
-    <span>The system cannot connect to database</span>
-  </div>
-)
+import BaseSelect from '@/components/dropdown/BaseSelect.vue'
+import AreaField from '@/components/textfield/AreaField.vue'
 
 export default {
-  name: 'BirdRegisterPage',
+  name: 'BirdDetail',
   components: {
     AppLayout,
     FormWrapper,
+    UploadImages,
     TextField,
-    BaseButton,
-    SecondaryButton,
-    Form,
     DatePicker,
+    Form,
     BaseSelect,
-    AreaField,
-    UploadImages
+    AreaField
   },
   data() {
     const schema = yup.object().shape({
@@ -207,13 +209,15 @@ export default {
       birdtrecord: yup.string().max(1000, 'The max with 1000 character')
     })
     return {
-      time1: null,
+      time1: store.getters.birdinformation.dateOfBirth,
+      edit: false,
+      schema,
       files: [],
       imageUrls: [],
-      ROUTE_PATH,
-      schema,
-      birdstatus: '',
-      birdsex: '',
+      maleParentId: '',
+      femaleParentId: '',
+      birdstatus: store.getters.birdinformation.birdStatus,
+      birdsex: store.getters.birdinformation.sexOfBird,
       status: [
         { message: 'Sold' },
         { message: 'For sale' },
@@ -225,49 +229,19 @@ export default {
         { message: 'Lost' },
         { message: 'Donated' }
       ],
-      sex: [{ message: 'M' }, { message: 'F' }, { message: 'U' }]
+      sex: [{ message: 'M' }, { message: 'F' }, { message: 'U' }],
+      bird: store.getters.birdinformation
     }
   },
-  methods: {
-    registerbird(registerinfo) {
-      Promise.all(
-        this.files.map((file) => {
-          return DatabaseService.uploadFile(file)
-        })
-      ).then((response) => {
-        console.log(response.map((r) => r.data))
-        console.log('finish upload file')
-        this.imageUrls = response.map((r) => r.data)
-        if (AuthService.hasRoles('ROLE_OWNER')) {
-          AuthService.createBird(
-            registerinfo,
-            this.time1,
-            this.birdstatus,
-            this.birdsex,
-            this.imageUrls[0]
-          )
-            .then(() => {
-              toast.success('Create Bird Success!')
-            })
-            .catch((error) => {
-              if (error.message == 'Network Error') {
-                toast.error(NetworkError)
-              } else {
-                toast.error(error.response.data.message)
-                this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
-              }
-              console.log(error)
-            })
-        }
-      })
-    },
-    cancel() {
-      this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
-    },
-    handleImages(files) {
-      console.log(files)
-      this.files = files
+  created() {
+    if (store.getters.birdinformation.maleParentId != null) {
+      this.maleParentId = store.getters.birdinformation.maleParentId.birdCode
     }
-  }
+    if (store.getters.birdinformation.femaleParentId != null) {
+      this.femaleParentId =
+        store.getters.birdinformation.femaleParentId.birdCode
+    }
+  },
+  methods: {}
 }
 </script>

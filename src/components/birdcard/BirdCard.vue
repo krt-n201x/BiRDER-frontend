@@ -52,7 +52,7 @@
     <div class="grid grid-cols-2 gap-2" v-if="data.birdStatus != 'Unavailable'">
       <router-link
         :to="{
-          name: 'AccountSetting',
+          name: 'BirdDetail',
           params: { id: data.id }
         }"
         ><ViewButton>View</ViewButton></router-link

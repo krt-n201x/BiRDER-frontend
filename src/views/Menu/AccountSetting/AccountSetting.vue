@@ -1,6 +1,6 @@
 <template>
   <AppLayout>
-    <div class="grid justify-items-center mt-[16px] lg:mt-[118px]">
+    <div class="grid justify-items-center mt-[16px] lg:mt-[50px]">
       <FormWrapper label="Account Setting">
         <Form @submit="updateuser" :validation-schema="userinfo">
           <div class="mt-[22px] lg:mt-[36px]">
