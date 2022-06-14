@@ -1,6 +1,9 @@
 import apiClient from '@/services/AxiosClient.js'
 
 export default {
+  getAllBird() {
+    return apiClient.get('/viewBirdList')
+  },
   getAllEmp() {
     return apiClient.get('/viewFarmEmployeeList')
   },
