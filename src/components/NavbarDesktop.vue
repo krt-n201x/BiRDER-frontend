@@ -26,7 +26,7 @@
         <button class="text-2xl text-white font-light">Farm Management</button>
       </router-link>
     </div>
-    <div v-if="!isAdmin" class="mr-8 h-full flex items-center">
+    <div v-if="isOwner || isEmpl" class="mr-8 h-full flex items-center">
       <router-link :to="ROUTE_PATH.BIRD_MANAGEMENT">
         <button class="text-2xl text-white font-light">Bird Management</button>
       </router-link>
@@ -60,6 +60,9 @@ export default {
     },
     isAdmin() {
       return AuthService.hasRoles('ROLE_ADMIN')
+    },
+    isEmpl() {
+      return AuthService.hasRoles('ROLE_EMPLOYEE')
     }
   }
 }

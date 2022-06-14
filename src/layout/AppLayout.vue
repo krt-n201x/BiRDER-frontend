@@ -48,7 +48,7 @@
         </router-link>
         <router-link :to="ROUTE_PATH.BIRD_MANAGEMENT">
           <div
-            v-if="!isAdmin"
+            v-if="isOwner || isEmpl"
             class="flex justify-center py-4 hover:bg-primary-900 transition duration-300"
           >
             <fa icon="dove" class="iconcolor h-6 pr-4" />
@@ -102,6 +102,9 @@ export default {
     },
     isAdmin() {
       return AuthService.hasRoles('ROLE_ADMIN')
+    },
+    isEmpl() {
+      return AuthService.hasRoles('ROLE_EMPLOYEE')
     }
   }
 }
