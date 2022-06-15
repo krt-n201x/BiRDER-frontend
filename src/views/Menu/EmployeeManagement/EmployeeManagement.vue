@@ -52,7 +52,7 @@
                   :options="this.items"
                   v-model="this.searchfiller"
                   label="Select fillter"
-                  placeholder="Select Your Fillter"
+                  placeholder="Select Your Filter"
                 />
                 <BaseButton type="submit" @click="searchby">Search</BaseButton>
               </div>

@@ -142,7 +142,11 @@ export default {
         .string()
         .email('please use as e-mail form')
         .required('The Email is required!'),
-      password: yup.string().required('The Password is required!'),
+      password: yup
+        .string()
+        .min(4, 'The length shall be between 4-15')
+        .max(15, 'The length shall be between 4-15')
+        .required('The Password is required!'),
       confirmpassword: yup
         .string()
         .required('please confirm your password')

@@ -182,7 +182,7 @@ export default {
         .string()
         .min(1, 'The length shall be between 1-25')
         .max(25, 'The length shall be between 1-25')
-        .required('Bird code is required!'),
+        .required('Bird name is required!'),
       birdspecies: yup
         .string()
         .min(4, 'The length shall be between 4-50')

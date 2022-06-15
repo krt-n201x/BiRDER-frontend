@@ -219,7 +219,7 @@ export default {
         .string()
         .min(1, 'The length shall be between 1-25')
         .max(25, 'The length shall be between 1-25')
-        .required('Bird code is required!')
+        .required('Bird name is required!')
         .nullable(true),
       birdspecies: yup
         .string()
@@ -319,67 +319,75 @@ export default {
       })
     },
     updatebird(updateinfo) {
-      Promise.all(
-        this.files.map((file) => {
-          return DatabaseService.uploadFile(file)
-        })
-      ).then((response) => {
-        console.log(response.map((r) => r.data))
-        console.log('finish upload file')
-        this.imageUrls = response.map((r) => r.data)
-        if (this.imageUrls.length == 1) {
-          this.imageUrlspath = this.imageUrls[0]
-        } else {
-          console.log('do not have new img')
-        }
-        if (AuthService.hasRoles('ROLE_ADMIN')) {
-          console.log(updateinfo)
-          BirdService.updatebirdAdmin(
-            updateinfo,
-            this.time1,
-            this.birdstatus,
-            this.birdsex,
-            this.imageUrlspath,
-            this.bird.id,
-            this.farmownerid
-          )
-            .then(() => {
-              toast.success('Update Bird Success!')
-              this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
-            })
-            .catch((error) => {
-              if (error.message == 'Network Error') {
-                toast.error(NetworkError)
-              } else {
-                toast.error(error.response.data.message)
-              }
-              console.log(error)
-            })
-        } else {
-          console.log(updateinfo)
-          BirdService.updatebirdOther(
-            updateinfo,
-            this.time1,
-            this.birdstatus,
-            this.birdsex,
-            this.imageUrlspath,
-            this.bird.id
-          )
-            .then(() => {
-              toast.success('Update Bird Success!')
-              this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
-            })
-            .catch((error) => {
-              if (error.message == 'Network Error') {
-                toast.error(NetworkError)
-              } else {
-                toast.error(error.response.data.message)
+      if (this.birdstatus == '') {
+        toast.error('Please select bird status')
+      } else if (this.birdsex == '') {
+        toast.error('Please select bird sex')
+      } else if (this.time1 == '' || this.time1 == null) {
+        toast.error('Please select birth date')
+      } else {
+        Promise.all(
+          this.files.map((file) => {
+            return DatabaseService.uploadFile(file)
+          })
+        ).then((response) => {
+          console.log(response.map((r) => r.data))
+          console.log('finish upload file')
+          this.imageUrls = response.map((r) => r.data)
+          if (this.imageUrls.length == 1) {
+            this.imageUrlspath = this.imageUrls[0]
+          } else {
+            console.log('do not have new img')
+          }
+          if (AuthService.hasRoles('ROLE_ADMIN')) {
+            console.log(updateinfo)
+            BirdService.updatebirdAdmin(
+              updateinfo,
+              this.time1,
+              this.birdstatus,
+              this.birdsex,
+              this.imageUrlspath,
+              this.bird.id,
+              this.farmownerid
+            )
+              .then(() => {
+                toast.success('Update Bird Success!')
                 this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
-              }
-              console.log(error)
-            })
-        }
-      })
+              })
+              .catch((error) => {
+                if (error.message == 'Network Error') {
+                  toast.error(NetworkError)
+                } else {
+                  toast.error(error.response.data.message)
+                }
+                console.log(error)
+              })
+          } else {
+            console.log(updateinfo)
+            BirdService.updatebirdOther(
+              updateinfo,
+              this.time1,
+              this.birdstatus,
+              this.birdsex,
+              this.imageUrlspath,
+              this.bird.id
+            )
+              .then(() => {
+                toast.success('Update Bird Success!')
+                this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+              })
+              .catch((error) => {
+                if (error.message == 'Network Error') {
+                  toast.error(NetworkError)
+                } else {
+                  toast.error(error.response.data.message)
+                  this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+                }
+                console.log(error)
+              })
+          }
+        })
+      }
     },
     cancel() {
       this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
