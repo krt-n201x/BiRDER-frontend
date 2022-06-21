@@ -311,6 +311,9 @@ export default {
           if (error.message == 'Network Error') {
             toast.error(NetworkError)
           }
+          if (error.response.status == 404) {
+            toast.error('Old Password might not correct')
+          }
           console.log(error)
         })
     },

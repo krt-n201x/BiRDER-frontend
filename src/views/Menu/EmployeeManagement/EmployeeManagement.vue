@@ -198,7 +198,7 @@ export default {
           )
             .then((response) => {
               console.log(response.data)
-              this.bird = response.data
+              this.employee = response.data
               if (response.data.length == 0) {
                 this.notfound = false
                 this.usesearch = true
@@ -221,7 +221,7 @@ export default {
           )
             .then((response) => {
               console.log(response.data)
-              this.bird = response.data
+              this.employee = response.data
               if (response.data.length == 0) {
                 this.notfound = false
                 this.usesearch = true
@@ -245,7 +245,7 @@ export default {
           )
             .then((response) => {
               console.log(response.data)
-              this.bird = response.data
+              this.employee = response.data
               if (response.data.length == 0) {
                 this.notfound = false
                 this.usesearch = true
@@ -267,7 +267,7 @@ export default {
           )
             .then((response) => {
               console.log(response.data)
-              this.bird = response.data
+              this.employee = response.data
               if (response.data.length == 0) {
                 this.notfound = false
                 this.usesearch = true
