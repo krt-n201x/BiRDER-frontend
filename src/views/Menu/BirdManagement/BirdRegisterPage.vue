@@ -195,15 +195,15 @@ export default {
         .required('Bird species is required!'),
       maleparentcode: yup
         .string()
-        .min(4, 'The length shall be between 4-15')
+        .matches(/^(|.{4,})$/, 'The length shall be between 4-15')
         .max(15, 'The length shall be between 4-15'),
       femaleparentcode: yup
         .string()
-        .min(4, 'The length shall be between 4-15')
+        .matches(/^(|.{4,})$/, 'The length shall be between 4-15')
         .max(15, 'The length shall be between 4-15'),
       paringcode: yup
         .string()
-        .min(4, 'The length shall be between 4-15')
+        .matches(/^(|.{4,})$/, 'The length shall be between 4-15')
         .max(15, 'The length shall be between 4-15'),
       birdtrecord: yup.string().max(1000, 'The max with 1000 character')
     })
@@ -232,6 +232,18 @@ export default {
   },
   methods: {
     registerbird(registerinfo) {
+      if (registerinfo.maleparentcode == '') {
+        registerinfo.maleparentcode = null
+      }
+      if (registerinfo.femaleparentcode == '') {
+        registerinfo.femaleparentcode = null
+      }
+      if (registerinfo.paringcode == '') {
+        registerinfo.paringcode = null
+      }
+      if (registerinfo.birdtrecord == '') {
+        registerinfo.birdtrecord = null
+      }
       if (this.files.length == 0) {
         toast.error("Please upload bird's picture")
       } else if (this.birdstatus == '') {

@@ -235,17 +235,17 @@ export default {
         .nullable(true),
       maleparentcode: yup
         .string()
-        .min(0, 'The length shall be between 0-15')
+        .matches(/^(|.{4,})$/, 'The length shall be between 4-15')
         .max(15, 'The length shall be between 4-15')
         .nullable(true),
       femaleparentcode: yup
         .string()
-        .min(0, 'The length shall be between 0-15')
+        .matches(/^(|.{4,})$/, 'The length shall be between 4-15')
         .max(15, 'The length shall be between 4-15')
         .nullable(true),
       paringcode: yup
         .string()
-        .min(0, 'The length shall be between 0-15')
+        .matches(/^(|.{4,})$/, 'The length shall be between 4-15')
         .max(15, 'The length shall be between 4-15')
         .nullable(true),
       birdtrecord: yup.string().max(1000, 'The max with 1000 character')
@@ -319,6 +319,18 @@ export default {
       })
     },
     updatebird(updateinfo) {
+      if (updateinfo.maleparentcode == '') {
+        updateinfo.maleparentcode = null
+      }
+      if (updateinfo.femaleparentcode == '') {
+        updateinfo.femaleparentcode = null
+      }
+      if (updateinfo.paringcode == '') {
+        updateinfo.paringcode = null
+      }
+      if (updateinfo.birdtrecord == '') {
+        updateinfo.birdtrecord = null
+      }
       if (this.birdstatus == '') {
         toast.error('Please select bird status')
       } else if (this.birdsex == '') {
