@@ -7,10 +7,15 @@ import EmployeeRegisterPage from '../views/Menu/EmployeeManagement/EmployeeRegis
 import NetWorkError from '../views/NetworkError.vue'
 import NotFound from '../views/NotFound.vue'
 import NotAuth from '@/views/NotAuth.vue'
+import SelectManage from '../views/Menu/FarmManagement/SelectManage.vue'
+import BirdDetail from '../views/Menu/BirdManagement/BirdDetail.vue'
 import AccountSetting from '../views/Menu/AccountSetting/AccountSetting.vue'
 import FarmManagement from '../views/Menu/FarmManagement/FarmManagement.vue'
+import BirdRegisterPage from '../views/Menu/BirdManagement/BirdRegisterPage.vue'
+import BirdManagement from '../views/Menu/BirdManagement/BirdManagement.vue'
 import store from '@/store/index.js'
 import DatabaseService from '@/services/DatabaseService.js'
+import BirdService from '@/services/BirdService.js'
 import ROUTE_PATH from '../constants/router'
 
 const routes = [
@@ -32,7 +37,8 @@ const routes = [
   {
     path: ROUTE_PATH.EMPLOYEE_MANAGEMENT,
     name: 'EmployeeManagement',
-    component: EmployeeManagement
+    component: EmployeeManagement,
+    props: (route) => ({ page: parseInt(route.query.page) || 1 })
   },
   {
     path: ROUTE_PATH.EMPLOYEE_REGISTER,
@@ -67,6 +73,46 @@ const routes = [
           }
         })
     }
+  },
+  {
+    path: ROUTE_PATH.BIRD_INFORMATION,
+    name: 'BirdDetail',
+    component: BirdDetail,
+    beforeEnter: (to) => {
+      return BirdService.getBirdDetail(to.params.id)
+        .then((response) => {
+          store.dispatch('updatebirdinformation', response.data)
+        })
+        .catch((error) => {
+          if (error.response && error.response.status == 404) {
+            return {
+              name: '404Resource'
+            }
+          } else if (error.response && error.response.status == 401) {
+            return {
+              name: '401Resource'
+            }
+          } else {
+            return { name: 'NetworkError' }
+          }
+        })
+    }
+  },
+  {
+    path: ROUTE_PATH.BIRD_REGISTER,
+    name: 'BirdRegisterPage',
+    component: BirdRegisterPage
+  },
+  {
+    path: ROUTE_PATH.BIRD_MANAGEMENT,
+    name: 'BirdManagement',
+    component: BirdManagement,
+    props: (route) => ({ page: parseInt(route.query.page) || 1 })
+  },
+  {
+    path: ROUTE_PATH.SELECT_MANAGE,
+    name: 'SelectManage',
+    component: SelectManage
   },
   {
     path: ROUTE_PATH.FARM_MANAGEMENT,

@@ -46,6 +46,15 @@
             <p class="text-white">FARM MANAGEMENT</p>
           </div>
         </router-link>
+        <router-link :to="ROUTE_PATH.BIRD_MANAGEMENT">
+          <div
+            v-if="isOwner || isEmpl"
+            class="flex justify-center py-4 hover:bg-primary-900 transition duration-300"
+          >
+            <fa icon="dove" class="iconcolor h-6 pr-4" />
+            <p class="text-white">Bird MANAGEMENT</p>
+          </div>
+        </router-link>
       </div>
       <div class="mb-20">
         <SecondaryButton @click="logout">Log Out</SecondaryButton>
@@ -93,6 +102,9 @@ export default {
     },
     isAdmin() {
       return AuthService.hasRoles('ROLE_ADMIN')
+    },
+    isEmpl() {
+      return AuthService.hasRoles('ROLE_EMPLOYEE')
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <AppLayout>
-    <div class="grid justify-items-center mt-[16px] lg:mt-[118px]">
+    <div class="grid justify-items-center mt-[16px] lg:mt-[50px]">
       <FormWrapper label="Account Setting">
         <Form @submit="updateuser" :validation-schema="userinfo">
           <div class="mt-[22px] lg:mt-[36px]">
@@ -276,10 +276,14 @@ export default {
       DatabaseService.updateUser(this.user.id, userinfo)
         .then(() => {
           if (this.user.id == this.temp.id) {
-            if (this.user.username != this.userinfo.username) {
+            if (this.user.username != userinfo.username) {
+              console.log(this.user.username + userinfo.username)
               toast.success('Update Success! Please Login again')
               AuthService.logout()
               this.$router.push(`${ROUTE_PATH.LOGIN_PAGE}`)
+            } else {
+              toast.success('Update Success!')
+              this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
             }
           } else {
             toast.success('Update Success!')
@@ -287,7 +291,7 @@ export default {
           }
         })
         .catch((error) => {
-          toast.error('Update Falis!')
+          toast.error(error)
           console.log(error)
         })
     },
@@ -306,6 +310,9 @@ export default {
         .catch((error) => {
           if (error.message == 'Network Error') {
             toast.error(NetworkError)
+          }
+          if (error.response.status == 404) {
+            toast.error('Old Password might not correct')
           }
           console.log(error)
         })

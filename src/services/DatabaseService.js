@@ -4,30 +4,29 @@ export default {
   getAllEmp() {
     return apiClient.get('/viewFarmEmployeeList')
   },
+  getAllEmps(perPage, page) {
+    return apiClient.get(
+      '/viewFarmEmployeeList?_limit=' + perPage + '&_page=' + page
+    )
+  },
   searchFarmUsername(username) {
     return apiClient.get('/searchFarmList/?username=' + username)
   },
   searchFarmFullname(fullName) {
     return apiClient.get('/searchFarmList/?fullName=' + fullName)
   },
-  searchEmpFullname(fullName, affiliation) {
-    return apiClient.get(
-      '/searchFarmEmployeeList/?fullName=' +
-        fullName +
-        '&affiliation=' +
-        affiliation
-    )
-  },
-  searchEmpUsername(username, affiliation) {
-    return apiClient.get(
-      '/searchFarmEmployeeList/?username=' +
-        username +
-        '&affiliation=' +
-        affiliation
-    )
-  },
   getEmpInFarm(affiliation) {
     return apiClient.get('/viewFarmEmployeeList?affiliation=' + affiliation)
+  },
+  getEmpInFarms(affiliation, perPage, page) {
+    return apiClient.get(
+      '/viewFarmEmployeeList?affiliation=' +
+        affiliation +
+        '&_limit=' +
+        perPage +
+        '&_page=' +
+        page
+    )
   },
   getAllFarm() {
     return apiClient.get('/viewFarmList')
@@ -68,5 +67,17 @@ export default {
   },
   deleteUser(id) {
     return apiClient.post('/deleteAccount/' + id)
+  },
+  deleteBird(id) {
+    return apiClient.post('/deleteBird/' + id)
+  },
+  uploadFile(file) {
+    let formData = new FormData()
+    formData.append('file', file)
+    return apiClient.post('/uploadFile', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
   }
 }
