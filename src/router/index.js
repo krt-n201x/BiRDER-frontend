@@ -16,6 +16,7 @@ import BirdManagement from '../views/Menu/BirdManagement/BirdManagement.vue'
 import store from '@/store/index.js'
 import DatabaseService from '@/services/DatabaseService.js'
 import BirdService from '@/services/BirdService.js'
+import ComponentTest from '@/views/ComponentTest.vue'
 import ROUTE_PATH from '../constants/router'
 
 const routes = [
@@ -134,6 +135,11 @@ const routes = [
     path: ROUTE_PATH.NETWORK_ERROR,
     name: 'NetworkError',
     component: NetWorkError
+  },
+  {
+    path: ROUTE_PATH.COMPONENT_TEST,
+    name: 'ComponentTest',
+    component: ComponentTest
   }
 ]
 
