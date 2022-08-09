@@ -27,7 +27,7 @@
                 class="grid grid-cols-1 gap-2 mt-[22px] lg:mt-[36px]"
                 v-if="!edit"
               >
-                <BaseButton @click="editchange">add</BaseButton>
+                <BaseButton @click="addActivity">add</BaseButton>
               </div>
             </div>
           </Form>
@@ -74,7 +74,12 @@ export default {
       }
     }
   },
-  created() {}
+  created() {},
+  methods: {
+    addActivity() {
+      this.$router.push(`${ROUTE_PATH.BIRD_CREATEACTIVIT}`)
+    }
+  }
 }
 </script>
 <style scoped>

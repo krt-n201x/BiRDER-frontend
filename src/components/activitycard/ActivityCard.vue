@@ -1,81 +1,44 @@
 <template>
   <div
-    class="w-[350px] h-[380px] px-7 grid place-content-center grid-cols-1 gap-2 rounded-[20px] bg-primary-900"
+    class="relative flex gap-4 py-4 px-4 hover:bg-neutral-50 transition duration-300"
   >
-    <img class="object-contain h-[200px] w-full" :src="data.birdImage" />
-    <div class="grid grid-cols-2 lg:grid-cols-2">
-      <div class="grid grid-cols-1">
-        <p class="text-white text-[10px] leading-[17px]">Cage No.</p>
-        <p class="text-white text-[14px] lg:text-[16px] leading-[17px]">
-          {{ data.cageNumber }}
-        </p>
-      </div>
-      <div class="grid grid-cols-1">
-        <p class="text-white text-[10px] leading-[17px]">Bird Code</p>
-        <p class="text-white text-[14px] lg:text-[16px] leading-[17px]">
-          {{ data.birdCode }}
-        </p>
-      </div>
-    </div>
-    <div class="grid grid-cols-3 lg:grid-cols-3">
-      <div class="grid grid-cols-1">
-        <p class="text-white text-[10px] leading-[17px]">Bird name</p>
-        <p class="text-white text-[14px] lg:text-[16px] leading-[17px]">
-          {{ data.birdName }}
-        </p>
-      </div>
-      <div class="grid grid-cols-1">
-        <p class="text-white text-[10px] leading-[17px]">Bird sex</p>
-        <div v-if="data.sexOfBird == 'F'">
-          <p class="text-white text-[14px] lg:text-[16px] leading-[17px]">
-            Female
-          </p>
-        </div>
-        <div v-if="data.sexOfBird == 'M'">
-          <p class="text-white text-[14px] lg:text-[16px] leading-[17px]">
-            Male
-          </p>
-        </div>
-        <div v-if="data.sexOfBird == 'U'">
-          <p class="text-white text-[14px] lg:text-[16px] leading-[17px]">
-            Unknown
-          </p>
-        </div>
-      </div>
-      <div class="grid grid-cols-1">
-        <p class="text-white text-[10px] leading-[17px]">Bird Status</p>
-        <p class="text-white text-[14px] lg:text-[16px] leading-[17px]">
-          {{ data.birdStatus }}
-        </p>
+    <span v-if="today" class="absolute top-0 left-0 flex h-3 w-3">
+      <span
+        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"
+      ></span>
+      <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+    </span>
+    <p class="w-full self-center text-sm font-normal leading-[17px]">
+      {{ data.date }}
+    </p>
+    <div class="w-full">
+      <p class="w-full text-sm font-normal leading-[17px]">{{ data.title }}</p>
+      <div class="w-full mt-1 flex flex-wrap gap-1">
+        <TagGenerator />
       </div>
     </div>
-    <div class="grid grid-cols-2 gap-2" v-if="data.birdStatus != 'Unavailable'">
-      <router-link
-        :to="{
-          name: 'BirdDetail',
-          params: { id: data.id }
-        }"
-        ><ViewButton>View</ViewButton></router-link
-      ><DeleteButton @click="DeleteAccount">Delete</DeleteButton>
+    <div class="flex">
+      <IconGenerator />
+      <fa icon="pen-to-square" class="self-center iconcolormore h-4" />
     </div>
   </div>
 </template>
 
 <script>
 import ROUTE_PATH from '@/constants/router.js'
-import DeleteButton from '@/components/button/DeleteButton.vue'
-import ViewButton from '@/components/button/ViewButton.vue'
 import DatabaseService from '@/services/DatabaseService.js'
+import TagGenerator from '@/components/activitycard/TagGenerator.vue'
+import IconGenerator from './IconGenerator'
 import { useToast } from 'vue-toastification'
 
 const toast = useToast()
 export default {
-  name: 'BirdCard',
-  components: { DeleteButton, ViewButton },
+  name: 'ActivityCard',
+  components: { TagGenerator, IconGenerator },
   props: {
     data: {
       type: String,
-      required: true
+      required: false
     }
   },
   data() {
@@ -110,3 +73,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.iconcolormore {
+  color: black;
+  cursor: pointer;
+}
+</style>

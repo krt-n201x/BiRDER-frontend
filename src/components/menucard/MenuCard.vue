@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-[250px] h-[250px] grid place-content-center justify-items-center grid-cols-1 lg:grid-cols-1 gap-6 rounded-[20px] bg-primary-500"
+    class="w-[250px] h-[250px] grid place-content-center justify-items-center grid-cols-1 lg:grid-cols-1 gap-6 rounded-[20px] bg-primary-500 hover:cursor-pointer"
   >
     <div
       class="bg-primary-50 grid place-content-center justify-items-center w-[230px] h-[230px] rounded-[20px]"

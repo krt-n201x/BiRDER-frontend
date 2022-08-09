@@ -17,6 +17,8 @@ import store from '@/store/index.js'
 import DatabaseService from '@/services/DatabaseService.js'
 import BirdService from '@/services/BirdService.js'
 import ComponentTest from '@/views/ComponentTest.vue'
+import BirdActivityList from '@/views/Menu/BirdActivity/BirdActivityList.vue'
+import BirdActivityCreate from '@/views/Menu/BirdActivity/BirdActivityCreate.vue'
 import ROUTE_PATH from '../constants/router'
 
 const routes = [
@@ -119,6 +121,16 @@ const routes = [
     path: ROUTE_PATH.FARM_MANAGEMENT,
     name: 'FarmManagement',
     component: FarmManagement
+  },
+  {
+    path: ROUTE_PATH.BIRD_ACTIVITYLIST,
+    name: 'BirdActivityList',
+    component: BirdActivityList
+  },
+  {
+    path: ROUTE_PATH.BIRD_CREATEACTIVIT,
+    name: 'BirdActivityCreate',
+    component: BirdActivityCreate
   },
   {
     path: '/401',

@@ -12,6 +12,8 @@ const ROUTE_PATH = {
   SELECT_MANAGE: '/select-manage',
   BIRD_REGISTER: '/bird-register',
   NETWORK_ERROR: '/network-error',
+  BIRD_ACTIVITYLIST: '/bird-activity-list',
+  BIRD_CREATEACTIVIT: '/bird-activity-create',
   COMPONENT_TEST: '/component-test'
 }
 

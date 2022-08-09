@@ -18,6 +18,7 @@
             @click="Empmanage"
           />
           <MenuCard icon="dove" label="Bird Management" @click="Birdmanage" />
+          <MenuCard icon="clipboard" label="Bird Activity" @click="Activity" />
         </div>
       </div>
     </div>
@@ -47,6 +48,9 @@ export default {
     },
     Birdmanage() {
       this.$router.push(`${ROUTE_PATH.BIRD_MANAGEMENT}`)
+    },
+    Activity() {
+      this.$router.push(`${ROUTE_PATH.BIRD_ACTIVITYLIST}`)
     }
   }
 }
