@@ -64,6 +64,15 @@
             <p class="text-white">Bird Activity</p>
           </div>
         </router-link>
+        <router-link :to="ROUTE_PATH.BIRD_BREEDING">
+          <div
+            v-if="isOwner || isEmpl"
+            class="flex justify-center py-4 hover:bg-primary-900 transition duration-300"
+          >
+            <fa icon="crow" class="iconcolor h-6 pr-4" />
+            <p class="text-white">Bird Breeding</p>
+          </div>
+        </router-link>
       </div>
       <div class="mb-20">
         <SecondaryButton @click="logout">Log Out</SecondaryButton>

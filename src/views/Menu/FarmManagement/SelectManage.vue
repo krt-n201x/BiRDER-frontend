@@ -19,6 +19,7 @@
           />
           <MenuCard icon="dove" label="Bird Management" @click="Birdmanage" />
           <MenuCard icon="clipboard" label="Bird Activity" @click="Activity" />
+          <MenuCard icon="crow" label="Bird Breeding" @click="Breeding" />
         </div>
       </div>
     </div>
@@ -51,6 +52,9 @@ export default {
     },
     Activity() {
       this.$router.push(`${ROUTE_PATH.BIRD_ACTIVITYLIST}`)
+    },
+    Breeding() {
+      this.$router.push(`${ROUTE_PATH.BIRD_BREEDING}`)
     }
   }
 }

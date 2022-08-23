@@ -14,6 +14,9 @@ const ROUTE_PATH = {
   NETWORK_ERROR: '/network-error',
   BIRD_ACTIVITYLIST: '/bird-activity-list',
   BIRD_CREATEACTIVIT: '/bird-activity-create',
+  BIRD_BREEDING: '/bird-breeding',
+  BIRD_BREEDINGDETAILS: '/bird-breeding-details',
+  BIRD_BREEDINGCREATE: '/bird-breeding-create',
   COMPONENT_TEST: '/component-test'
 }
 

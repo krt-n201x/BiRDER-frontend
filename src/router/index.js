@@ -16,9 +16,13 @@ import BirdManagement from '../views/Menu/BirdManagement/BirdManagement.vue'
 import store from '@/store/index.js'
 import DatabaseService from '@/services/DatabaseService.js'
 import BirdService from '@/services/BirdService.js'
+import BirdBreedingService from '@/services/Breeding/BreedingService.js'
 import ComponentTest from '@/views/ComponentTest.vue'
 import BirdActivityList from '@/views/Menu/BirdActivity/BirdActivityList.vue'
 import BirdActivityCreate from '@/views/Menu/BirdActivity/BirdActivityCreate.vue'
+import BirdBreeding from '@/views/Menu/Breeding/BirdBreedingList.vue'
+import BirdBreedingDetails from '@/views/Menu/Breeding/BirdBreedingDetails.vue'
+import BirdBreedingCreate from '@/views/Menu/Breeding/BirdBreedingCreate.vue'
 import ROUTE_PATH from '../constants/router'
 
 const routes = [
@@ -131,6 +135,40 @@ const routes = [
     path: ROUTE_PATH.BIRD_CREATEACTIVIT,
     name: 'BirdActivityCreate',
     component: BirdActivityCreate
+  },
+  {
+    path: ROUTE_PATH.BIRD_BREEDING,
+    name: 'BirdBreeding',
+    component: BirdBreeding
+  },
+  {
+    path: ROUTE_PATH.BIRD_BREEDINGCREATE,
+    name: 'BirdBreedingCreate',
+    component: BirdBreedingCreate
+  },
+  {
+    path: ROUTE_PATH.BIRD_BREEDINGDETAILS,
+    name: 'BirdBreedingDetails',
+    component: BirdBreedingDetails,
+    beforeEnter: (to) => {
+      return BirdBreedingService.getBirdBreedingDetail(to.params.id)
+        .then((response) => {
+          store.dispatch('updateBirdBreedingDetails', response.data)
+        })
+        .catch((error) => {
+          if (error.response && error.response.status == 404) {
+            return {
+              name: '404Resource'
+            }
+          } else if (error.response && error.response.status == 401) {
+            return {
+              name: '401Resource'
+            }
+          } else {
+            return { name: 'NetworkError' }
+          }
+        })
+    }
   },
   {
     path: '/401',

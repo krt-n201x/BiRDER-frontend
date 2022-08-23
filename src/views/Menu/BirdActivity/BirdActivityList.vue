@@ -45,7 +45,7 @@ import BaseButton from '@/components/button/BaseButton.vue'
 import { Form } from 'vee-validate'
 import ActivityCard from '@/components/activitycard/ActivityCard.vue'
 export default {
-  name: 'NetworkError',
+  name: 'BirdActivityList',
   components: {
     AppLayout,
     FormWrapper,

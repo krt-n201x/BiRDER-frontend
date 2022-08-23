@@ -187,7 +187,7 @@ const NetworkError = (
   </div>
 )
 export default {
-  name: 'BirdDetail',
+  name: 'BirdActivityCreate',
   components: {
     AppLayout,
     FormWrapper,
