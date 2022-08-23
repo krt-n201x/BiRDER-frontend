@@ -168,7 +168,9 @@ export default {
     search(searchinfo) {
       if (AuthService.hasRoles('ROLE_OWNER')) {
         if (this.searchfiller == 'Breeding CageNumber') {
-          BreedingSearchService.searchBreedingbreedingCageNumber(searchinfo)
+          BreedingSearchService.searchBreedingbreedingCageNumber(
+            searchinfo.searchinformation
+          )
             .then((response) => {
               console.log(response.data)
               this.bird = response.data
@@ -178,7 +180,9 @@ export default {
             })
         }
         if (this.searchfiller == 'Breeding Status') {
-          BreedingSearchService.searchBreedingbreedingStatus(searchinfo)
+          BreedingSearchService.searchBreedingbreedingStatus(
+            searchinfo.searchinformation
+          )
             .then((response) => {
               console.log(response.data)
               this.bird = response.data
@@ -188,7 +192,9 @@ export default {
             })
         }
         if (this.searchfiller == 'Female Code') {
-          BreedingSearchService.searchBreedingfemaleCode(searchinfo)
+          BreedingSearchService.searchBreedingfemaleCode(
+            searchinfo.searchinformation
+          )
             .then((response) => {
               console.log(response.data)
               this.bird = response.data
@@ -198,7 +204,9 @@ export default {
             })
         }
         if (this.searchfiller == 'Male Code') {
-          BreedingSearchService.searchBreedingmaleCode(searchinfo)
+          BreedingSearchService.searchBreedingmaleCode(
+            searchinfo.searchinformation
+          )
             .then((response) => {
               console.log(response.data)
               this.bird = response.data
@@ -210,7 +218,7 @@ export default {
       } else {
         if (this.searchfiller == 'Breeding CageNumber') {
           BreedingSearchService.searchBreedingbreedingCageNumberAdmin(
-            searchinfo,
+            searchinfo.searchinformation,
             this.farmownerid
           )
             .then((response) => {
@@ -223,7 +231,7 @@ export default {
         }
         if (this.searchfiller == 'Breeding Status') {
           BreedingSearchService.searchBreedingbreedingStatusAdmin(
-            searchinfo,
+            searchinfo.searchinformation,
             this.farmownerid
           )
             .then((response) => {
@@ -236,7 +244,7 @@ export default {
         }
         if (this.searchfiller == 'Female Code') {
           BreedingSearchService.searchBreedingfemaleCodeAdmin(
-            searchinfo,
+            searchinfo.searchinformation,
             this.farmownerid
           )
             .then((response) => {
@@ -249,7 +257,7 @@ export default {
         }
         if (this.searchfiller == 'Male Code') {
           BreedingSearchService.searchBreedingmaleCodeAdmin(
-            searchinfo,
+            searchinfo.searchinformation,
             this.farmownerid
           )
             .then((response) => {
