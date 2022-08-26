@@ -23,6 +23,7 @@ import BirdActivityCreate from '@/views/Menu/BirdActivity/BirdActivityCreate.vue
 import BirdBreeding from '@/views/Menu/Breeding/BirdBreedingList.vue'
 import BirdBreedingDetails from '@/views/Menu/Breeding/BirdBreedingDetails.vue'
 import BirdBreedingCreate from '@/views/Menu/Breeding/BirdBreedingCreate.vue'
+import BirdPedigree from '@/views/Menu/BirdManagement/BirdPedigree.vue'
 import ROUTE_PATH from '../constants/router'
 
 const routes = [
@@ -88,6 +89,31 @@ const routes = [
     beforeEnter: (to) => {
       return BirdService.getBirdDetail(to.params.id)
         .then((response) => {
+          store.dispatch('updatebirdinformation', response.data)
+        })
+        .catch((error) => {
+          if (error.response && error.response.status == 404) {
+            return {
+              name: '404Resource'
+            }
+          } else if (error.response && error.response.status == 401) {
+            return {
+              name: '401Resource'
+            }
+          } else {
+            return { name: 'NetworkError' }
+          }
+        })
+    }
+  },
+  {
+    path: ROUTE_PATH.BIRD_PEDIGREE,
+    name: 'BirdPedigree',
+    component: BirdPedigree,
+    beforeEnter: (to) => {
+      return BirdService.getBirdPedigree(to.params.id)
+        .then((response) => {
+          console.log('enter page')
           store.dispatch('updatebirdinformation', response.data)
         })
         .catch((error) => {

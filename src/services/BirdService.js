@@ -72,5 +72,9 @@ export default {
       .catch((error) => {
         return Promise.reject(error)
       })
+  },
+  getBirdPedigree(id) {
+    console.log('bird pedigree = ' + id)
+    return apiClient.get('/viewBirdBreedingPedigree/' + id)
   }
 }
