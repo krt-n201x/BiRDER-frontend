@@ -141,13 +141,6 @@ export default {
       })
     } else {
       console.log('this is owner')
-      // BirdService.getAllBird()
-      //   .then((response) => {
-      //     this.bird = response.data
-      //   })
-      //   .catch((error) => {
-      //     console.log(error)
-      //   })
       watchEffect(() => {
         BirdService.getAllBirds(6, this.page)
           .then((response) => {

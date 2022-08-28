@@ -7,7 +7,7 @@
       >
         <div class="w-full" v-if="this.bird.maleParentId != null">
           <div
-            class="w-full"
+            class="grid justify-items-center w-full"
             v-if="this.bird.maleParentId.maleParentId != null"
           >
             <FormWrapperForpedigree sex="M"
@@ -17,7 +17,7 @@
         </div>
         <div class="w-full" v-if="this.bird.maleParentId != null">
           <div
-            class="w-full"
+            class="grid justify-items-center w-full"
             v-if="this.bird.maleParentId.femaleParentId != null"
           >
             <FormWrapperForpedigree sex="F"
@@ -31,7 +31,7 @@
       >
         <div class="w-full" v-if="this.bird.femaleParentId != null">
           <div
-            class="w-full"
+            class="grid justify-items-center w-full"
             v-if="this.bird.femaleParentId.maleParentId != null"
           >
             <FormWrapperForpedigree sex="M"
@@ -41,7 +41,7 @@
         </div>
         <div class="w-full" v-if="this.bird.femaleParentId != null">
           <div
-            class="w-full"
+            class="grid justify-items-center w-full"
             v-if="this.bird.femaleParentId.femaleParentId != null"
           >
             <FormWrapperForpedigree sex="F"

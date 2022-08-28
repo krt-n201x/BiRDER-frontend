@@ -61,7 +61,7 @@
             class="flex justify-center py-4 hover:bg-primary-900 transition duration-300"
           >
             <fa icon="clipboard" class="iconcolor h-6 pr-4" />
-            <p class="text-white">Bird Activity</p>
+            <p class="text-white">Bird Planning</p>
           </div>
         </router-link>
         <router-link :to="ROUTE_PATH.BIRD_BREEDING">

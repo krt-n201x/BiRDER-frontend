@@ -13,6 +13,7 @@
                   value-type="format"
                   placeholder="Select date"
                   format="YYYY-MM-DD"
+                  :disabled="!edit"
                 />
               </div>
               <div class="h-full mt-4">
@@ -23,6 +24,7 @@
                   value-type="format"
                   placeholder="Select date"
                   type="time"
+                  :disabled="!edit"
                 />
               </div>
             </div>
@@ -33,6 +35,8 @@
                   label="Title"
                   type="text"
                   placeholder="Plese enter title"
+                  :message="this.information.title"
+                  :disabled="!edit"
                   required
                 />
               </div>
@@ -43,12 +47,14 @@
                 v-model="this.info.birdselected"
                 label="Bird selected"
                 placeholder="Select Bird"
+                :disabled="!edit"
               />
               <BaseSelect
                 :options="this.planstatus"
                 v-model="this.info.selectplanstatus"
                 label="Plan status"
                 placeholder="Select plan status"
+                :disabled="!edit"
               />
             </div>
             <div>
@@ -57,6 +63,8 @@
                 label="Description"
                 type="text"
                 placeholder="Enter your Description"
+                :message="this.information.description"
+                :disabled="!edit"
               />
             </div>
             <div>
@@ -67,6 +75,7 @@
                   id="activity"
                   value="Activity"
                   v-model="info.planTag"
+                  :disabled="!edit"
                 />
                 <label for="activity"
                   ><p class="text-[16px] pr-4">Activity</p></label
@@ -76,6 +85,7 @@
                   id="breed"
                   value="Breed"
                   v-model="info.planTag"
+                  :disabled="!edit"
                 />
                 <label for="breed"><p class="text-[16px] pr-4">Breed</p></label>
                 <input
@@ -83,6 +93,7 @@
                   id="food"
                   value="Food"
                   v-model="info.planTag"
+                  :disabled="!edit"
                 />
                 <label for="food"><p class="text-[16px] pr-4">Food</p></label>
                 <input
@@ -90,6 +101,7 @@
                   id="health"
                   value="Health"
                   v-model="info.planTag"
+                  :disabled="!edit"
                 />
                 <label for="health"
                   ><p class="text-[16px] pr-4">Health</p></label
@@ -99,14 +111,31 @@
                   id="trade"
                   value="Trade"
                   v-model="info.planTag"
+                  :disabled="!edit"
                 />
                 <label for="trade"><p class="text-[16px] pr-4">Trade</p></label>
               </div>
             </div>
           </div>
-          <div class="grid grid-cols-2 gap-2 mt-[22px] lg:mt-[36px]">
+          <div
+            class="grid grid-cols-2 gap-2 mt-[22px] lg:mt-[36px]"
+            v-if="edit"
+          >
             <SecondaryButton @click="cancel">Cancel</SecondaryButton>
-            <BaseButton type="submit">Create</BaseButton>
+            <BaseButton type="submit">Update</BaseButton>
+          </div>
+          <div class="grid grid-cols-1 gap-2 mt-[22px]" v-if="edit">
+            <DeleteButton @click="DeletePlanning"
+              >Delete This Planning</DeleteButton
+            >
+          </div>
+          <div
+            class="grid grid-cols-1 gap-2 mt-[22px] lg:mt-[36px]"
+            v-if="!edit"
+          >
+            <BaseButton v-if="isOwner || isAdmin" @click="editchange"
+              >Edit</BaseButton
+            >
           </div>
         </Form>
       </FormWrapper>
@@ -134,6 +163,7 @@ import { watchEffect } from '@vue/runtime-core'
 import BirdService from '@/services/BirdService.js'
 import BaseSelectBird from '@/components/dropdown/BaseSelectBird.vue'
 import PlanningService from '@/services/Planning/PlanningService'
+import DeleteButton from '@/components/button/DeleteButton.vue'
 
 const toast = useToast()
 const NetworkError = (
@@ -144,7 +174,7 @@ const NetworkError = (
 )
 
 export default {
-  name: 'BirdActivityCreate',
+  name: 'BirdActivityDetail',
   components: {
     AppLayout,
     FormWrapper,
@@ -155,7 +185,8 @@ export default {
     DatePicker,
     BaseSelect,
     AreaField,
-    BaseSelectBird
+    BaseSelectBird,
+    DeleteButton
   },
   data() {
     const schema = yup.object().shape({
@@ -169,8 +200,11 @@ export default {
     return {
       ROUTE_PATH,
       schema,
+      information: [],
       BirdList: [],
       birdselecteddetail: null,
+      birdtemp: '',
+      edit: false,
       info: {
         time: null,
         date: null,
@@ -182,7 +216,38 @@ export default {
       planstatus: [{ message: 'In progress' }, { message: 'Done' }]
     }
   },
+  computed: {
+    isOwner() {
+      return AuthService.hasRoles('ROLE_OWNER')
+    },
+    isAdmin() {
+      return AuthService.hasRoles('ROLE_ADMIN')
+    }
+  },
   methods: {
+    DeletePlanning() {
+      this.$swal({
+        title: 'Deleted Brid!',
+        text: 'Are you sure to deleted this Bird?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it',
+        cancelButtonText: 'No, cancel',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          PlanningService.deletePlanning(this.information.id)
+            .then(() => {
+              toast.success('Deleted Success!')
+              this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+            })
+            .catch((error) => {
+              toast.error('Deleted Falis!')
+              console.log(error)
+            })
+        }
+      })
+    },
     createPlanning(data) {
       if (this.info.selectplanstatus == '') {
         toast.error('Please Select planstatus')
@@ -193,11 +258,15 @@ export default {
       } else {
         console.log(this.info.birdselected)
         if (this.info.birdselected == '') {
-          if (AuthService.hasRoles('ROLE_OWNER')) {
-            PlanningService.createPlanningOwner(
+          if (
+            AuthService.hasRoles('ROLE_OWNER') ||
+            AuthService.hasRoles('ROLE_EMPLOYEE')
+          ) {
+            PlanningService.UpdatePlanningOwner(
               data,
               this.info,
-              this.birdselecteddetail
+              this.birdselecteddetail,
+              this.information.id
             )
               .then(() => {
                 toast.success('Create Planning Success!')
@@ -212,11 +281,12 @@ export default {
                 console.log(error)
               })
           } else {
-            PlanningService.createPlanningOwnerAdmin(
+            PlanningService.UpdatePlanningOwner(
               this.farmownerid,
               data,
               this.info,
-              this.birdselecteddetail
+              this.birdselecteddetail,
+              this.information.id
             )
               .then(() => {
                 toast.success('Create Planning Success!')
@@ -235,11 +305,15 @@ export default {
           BirdService.getBirdDetail(this.info.birdselected)
             .then((response) => {
               this.birdselecteddetail = response.data
-              if (AuthService.hasRoles('ROLE_OWNER')) {
-                PlanningService.createPlanningOwner(
+              if (
+                AuthService.hasRoles('ROLE_OWNER') ||
+                AuthService.hasRoles('ROLE_EMPLOYEE')
+              ) {
+                PlanningService.UpdatePlanningOwner(
                   data,
                   this.info,
-                  this.birdselecteddetail
+                  this.birdselecteddetail,
+                  this.information.id
                 )
                   .then(() => {
                     toast.success('Create Planning Success!')
@@ -254,11 +328,12 @@ export default {
                     console.log(error)
                   })
               } else {
-                PlanningService.createPlanningOwnerAdmin(
+                PlanningService.UpdatePlanningOwner(
                   this.farmownerid,
                   data,
                   this.info,
-                  this.birdselecteddetail
+                  this.birdselecteddetail,
+                  this.information.id
                 )
                   .then(() => {
                     toast.success('Create Planning Success!')
@@ -283,12 +358,20 @@ export default {
     cancel() {
       this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
     },
-    handleImages(files) {
-      console.log(files)
-      this.files = files
+    editchange() {
+      this.edit = !this.edit
     }
   },
   created() {
+    this.information = store.getters.planningdetail
+    this.info.time = this.information.timeOfPlan
+    this.info.date = this.information.dateOfPlan
+    if (this.information.birdId != [] && this.information.birdId != null) {
+      this.birdtemp = this.information.birdId.id
+    }
+    this.info.birdselected = this.birdtemp
+    this.info.planTag = this.information.labelTag
+    this.info.selectplanstatus = this.information.planStatus
     if (AuthService.hasRoles('ROLE_OWNER')) {
       watchEffect(() => {
         BirdService.getAllBirdWithoutPagination()

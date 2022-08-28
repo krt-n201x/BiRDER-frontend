@@ -148,7 +148,10 @@ export default {
   },
   methods: {
     search(searchinfo) {
-      if (AuthService.hasRoles('ROLE_OWNER')) {
+      if (
+        AuthService.hasRoles('ROLE_OWNER') ||
+        AuthService.hasRoles('ROLE_EMPLOYEE')
+      ) {
         if (this.searchfiller == 'Breeding CageNumber') {
           BreedingSearchService.searchBreedingbreedingCageNumber(
             searchinfo.searchinformation

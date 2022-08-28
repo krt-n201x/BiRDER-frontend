@@ -1,21 +1,24 @@
 <template>
   <fa
-    v-if="progress == 'inprogress'"
+    v-if="this.data.planStatus == 'In progress'"
     icon="circle-check"
     class="self-center iconcolor h-4 pr-4"
     @click="donethisact"
   />
   <fa
-    v-if="progress == 'done'"
+    v-if="this.data.planStatus == 'Done'"
     icon="circle-check"
-    class="self-center iconcolordone h-4 pr-4"
+    class="self-center iconcolordone h-4 pr-4 cursor-pointer"
+    @click="undonethisact"
   />
 </template>
 
 <script>
-// import { useToast } from 'vue-toastification'
+import { useToast } from 'vue-toastification'
+import PlanningService from '@/services/Planning/PlanningService.js'
+import ROUTE_PATH from '@/constants/router.js'
 
-// const toast = useToast()
+const toast = useToast()
 export default {
   name: 'IconGenerator',
   components: {},
@@ -27,7 +30,8 @@ export default {
   },
   data() {
     return {
-      progress: 'done'
+      progress: 'Done',
+      info: []
     }
   },
   methods: {
@@ -40,18 +44,45 @@ export default {
         confirmButtonText: 'Yes, done it',
         cancelButtonText: 'No, cancel',
         reverseButtons: true
-      }).then(() => {
-        // if (result.isConfirmed) {
-        //   DatabaseService.deleteBird(this.data.id)
-        //     .then(() => {
-        //       toast.success('Deleted Success!')
-        //       this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
-        //     })
-        //     .catch((error) => {
-        //       toast.error('Deleted Falis!')
-        //       console.log(error)
-        //     })
-        // }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.info = this.data
+          this.info.planStatus = this.progress
+          PlanningService.updatePaln(this.info)
+            .then(() => {
+              toast.success('Update Success!')
+              this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+            })
+            .catch((error) => {
+              toast.error('Update Falis!')
+              console.log(error)
+            })
+        }
+      })
+    },
+    undonethisact() {
+      this.$swal({
+        title: 'Undone this activity!',
+        text: 'Are you sure to Undone this activity?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, do it',
+        cancelButtonText: 'No, cancel',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.info = this.data
+          this.info.planStatus = 'In progress'
+          PlanningService.updatePaln(this.info)
+            .then(() => {
+              toast.success('Update Success!')
+              this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+            })
+            .catch((error) => {
+              toast.error('Update Falis!')
+              console.log(error)
+            })
+        }
       })
     }
   }
@@ -67,6 +98,7 @@ export default {
 }
 .iconcolor:hover {
   stroke: #45b400;
+  stroke-width: 0;
   color: #45b400;
 }
 .iconcolordone {

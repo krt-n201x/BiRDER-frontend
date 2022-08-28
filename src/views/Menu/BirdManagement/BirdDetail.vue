@@ -192,7 +192,7 @@ import { useToast } from 'vue-toastification'
 const toast = useToast()
 const NetworkError = (
   <div>
-    <h1>Register Failed!</h1>
+    <h1>Network Error!</h1>
     <span>The system cannot connect to database</span>
   </div>
 )

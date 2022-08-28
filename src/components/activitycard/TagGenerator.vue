@@ -1,10 +1,12 @@
 <template>
   <div class="w-full mt-1 flex flex-wrap gap-1">
-    <ActivitySolidTag>Activity</ActivitySolidTag>
-    <BreedSolidTag>Breed</BreedSolidTag>
-    <FoodSolidTag>Food</FoodSolidTag>
-    <HealthSolidTag>Health</HealthSolidTag>
-    <TreadSolidTag>Tread</TreadSolidTag>
+    <div v-if="data == 'Activity'">
+      <ActivitySolidTag>Activity</ActivitySolidTag>
+    </div>
+    <div v-if="data == 'Breed'"><BreedSolidTag>Breed</BreedSolidTag></div>
+    <div v-if="data == 'Food'"><FoodSolidTag>Food</FoodSolidTag></div>
+    <div v-if="data == 'Health'"><HealthSolidTag>Health</HealthSolidTag></div>
+    <div v-if="data == 'Trade'"><TreadSolidTag>Trade</TreadSolidTag></div>
   </div>
 </template>
 

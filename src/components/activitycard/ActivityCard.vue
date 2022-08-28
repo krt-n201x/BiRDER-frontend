@@ -9,17 +9,27 @@
       <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
     </span>
     <p class="w-full self-center text-sm font-normal leading-[17px]">
-      {{ data.date }}
+      {{ this.time }}
     </p>
     <div class="w-full">
-      <p class="w-full text-sm font-normal leading-[17px]">{{ data.title }}</p>
+      <p class="w-full text-sm font-normal leading-[17px]">
+        {{ this.data.title }}
+      </p>
       <div class="w-full mt-1 flex flex-wrap gap-1">
-        <TagGenerator />
+        <TagGenerator :data="this.data.labelTag" />
       </div>
     </div>
     <div class="flex">
-      <IconGenerator />
-      <fa icon="pen-to-square" class="self-center iconcolormore h-4" />
+      <IconGenerator :data="this.data" />
+      <router-link
+        class="grid content-center h-full"
+        :to="{
+          name: 'BirdActivityDetail',
+          params: { id: this.data.id }
+        }"
+      >
+        <fa icon="pen-to-square" class="self-center iconcolormore h-4" />
+      </router-link>
     </div>
   </div>
 </template>
@@ -43,7 +53,8 @@ export default {
   },
   data() {
     return {
-      ROUTE_PATH
+      ROUTE_PATH,
+      time: ''
     }
   },
   methods: {
@@ -70,6 +81,10 @@ export default {
         }
       })
     }
+  },
+  created() {
+    const a = this.data.dateOfPlan.split('T')
+    this.time = a[0]
   }
 }
 </script>

@@ -24,6 +24,8 @@ import BirdBreeding from '@/views/Menu/Breeding/BirdBreedingList.vue'
 import BirdBreedingDetails from '@/views/Menu/Breeding/BirdBreedingDetails.vue'
 import BirdBreedingCreate from '@/views/Menu/Breeding/BirdBreedingCreate.vue'
 import BirdPedigree from '@/views/Menu/BirdManagement/BirdPedigree.vue'
+import BirdActivityDetail from '@/views/Menu/BirdActivity/BirdActivityDetail.vue'
+import PlanningService from '@/services/Planning/PlanningService'
 import ROUTE_PATH from '../constants/router'
 
 const routes = [
@@ -132,6 +134,31 @@ const routes = [
     }
   },
   {
+    path: ROUTE_PATH.BIRD_ACTIVITYDETAIL,
+    name: 'BirdActivityDetail',
+    component: BirdActivityDetail,
+    beforeEnter: (to) => {
+      return PlanningService.getPlanDetail(to.params.id)
+        .then((response) => {
+          console.log('enter page')
+          store.dispatch('updatePlanningDetail', response.data)
+        })
+        .catch((error) => {
+          if (error.response && error.response.status == 404) {
+            return {
+              name: '404Resource'
+            }
+          } else if (error.response && error.response.status == 401) {
+            return {
+              name: '401Resource'
+            }
+          } else {
+            return { name: 'NetworkError' }
+          }
+        })
+    }
+  },
+  {
     path: ROUTE_PATH.BIRD_REGISTER,
     name: 'BirdRegisterPage',
     component: BirdRegisterPage
@@ -155,7 +182,8 @@ const routes = [
   {
     path: ROUTE_PATH.BIRD_ACTIVITYLIST,
     name: 'BirdActivityList',
-    component: BirdActivityList
+    component: BirdActivityList,
+    props: (route) => ({ page: parseInt(route.query.page) || 1 })
   },
   {
     path: ROUTE_PATH.BIRD_CREATEACTIVIT,
