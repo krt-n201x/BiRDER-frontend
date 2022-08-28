@@ -31,6 +31,16 @@
         <button class="text-2xl text-white font-light">Bird Management</button>
       </router-link>
     </div>
+    <div v-if="isOwner || isEmpl" class="mr-8 h-full flex items-center">
+      <router-link :to="ROUTE_PATH.BIRD_ACTIVITYLIST">
+        <button class="text-2xl text-white font-light">Bird Planning</button>
+      </router-link>
+    </div>
+    <div v-if="isOwner || isEmpl" class="mr-8 h-full flex items-center">
+      <router-link :to="ROUTE_PATH.BIRD_BREEDING">
+        <button class="text-2xl text-white font-light">Bird Breeding</button>
+      </router-link>
+    </div>
     <UserButton :currentuser="currentuser" v-if="currentuser" />
   </div>
 </template>

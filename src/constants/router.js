@@ -11,7 +11,15 @@ const ROUTE_PATH = {
   BIRD_INFORMATION: '/bird-information',
   SELECT_MANAGE: '/select-manage',
   BIRD_REGISTER: '/bird-register',
-  NETWORK_ERROR: '/network-error'
+  NETWORK_ERROR: '/network-error',
+  BIRD_ACTIVITYLIST: '/bird-planning-list',
+  BIRD_CREATEACTIVIT: '/bird-planning-create',
+  BIRD_BREEDING: '/bird-breeding',
+  BIRD_BREEDINGDETAILS: '/bird-breeding-details',
+  BIRD_BREEDINGCREATE: '/bird-breeding-create',
+  BIRD_PEDIGREE: '/bird-pedigree',
+  BIRD_ACTIVITYDETAIL: '/bird-planning-detail',
+  COMPONENT_TEST: '/component-test'
 }
 
 export default ROUTE_PATH

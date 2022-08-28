@@ -6,6 +6,8 @@ export default createStore({
     farmownerinspect: null,
     userinspect: null,
     birdinspect: null,
+    birdbreedingdetails: [],
+    planningdetail: null,
     currentLowUser: null,
     currentUser: JSON.parse(localStorage.getItem('user'))
   },
@@ -21,6 +23,12 @@ export default createStore({
     },
     birdinformation(state) {
       return state.birdinspect
+    },
+    birdbreedingdetails(state) {
+      return state.birdbreedingdetails
+    },
+    planningdetail(state) {
+      return state.planningdetail
     }
   },
   mutations: {
@@ -35,6 +43,12 @@ export default createStore({
     },
     updateFarmInspect(state, value) {
       state.farminspect = value
+    },
+    updateBirdBreedingDetails(state, value) {
+      state.birdbreedingdetails = value
+    },
+    updatePlanningDetail(state, value) {
+      state.planningdetail = value
     }
   },
   actions: {
@@ -49,6 +63,12 @@ export default createStore({
     },
     updateFarmInspect(context, value) {
       context.commit('updateFarmInspect', value)
+    },
+    updateBirdBreedingDetails(context, value) {
+      context.commit('updateBirdBreedingDetails', value)
+    },
+    updatePlanningDetail(context, value) {
+      context.commit('updatePlanningDetail', value)
     }
   },
   modules: {},
