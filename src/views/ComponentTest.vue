@@ -1,37 +1,77 @@
 <template>
   <AppLayout>
-    <div>
-      <div class="grid justify-items-center mt-[16px] lg:mt-[50px]">
-        <FormWrapper label="Bird Activity"
-          ><Form @submit="updatebird" :validation-schema="schema"
-            ><div class="mt-[22px] lg:mt-[0px]">
-              <div class="mt-6">
-                <div class="grid grid-cols-2 gap-4 mr-[68px] px-4">
-                  <p class="text-[10px] text-neutral-600">Date</p>
-                  <p class="text-[10px] text-neutral-600">Title</p>
-                </div>
-              </div>
-              <div>
-                <!-- // -->
-                <div
-                  class="w-full"
-                  v-for="data in this.activity"
-                  :key="data.id"
-                  :data="data"
-                >
-                  <ActivityCard :data="data" />
-                </div>
-                <!-- // -->
-              </div>
-              <div
-                class="grid grid-cols-1 gap-2 mt-[22px] lg:mt-[36px]"
-                v-if="!edit"
-              >
-                <BaseButton @click="editchange">add</BaseButton>
-              </div>
-            </div>
-          </Form>
-        </FormWrapper>
+    <div class="grid grid-cols-2 w-full gap-4 px-4">
+      <div class="flex justify-items-center mt-[16px] lg:mt-[50px] gap-2">
+        <FormWrapperForpedigree sex="M"
+          ><PedigreeDatail />
+        </FormWrapperForpedigree>
+        <FormWrapperForpedigree sex="F"
+          ><PedigreeDatail />
+        </FormWrapperForpedigree>
+      </div>
+      <div class="flex justify-items-center mt-[16px] lg:mt-[50px] gap-4">
+        <FormWrapperForpedigree sex="M"
+          ><PedigreeDatail />
+        </FormWrapperForpedigree>
+        <FormWrapperForpedigree sex="F"
+          ><PedigreeDatail />
+        </FormWrapperForpedigree>
+      </div>
+      <div class="grid grid-cols-2">
+        <div class="grid grid-cols-2">
+          <div class="w-full h-9 border-r-4 border-primary-200"></div>
+          <div class="w-full h-9 border-b-4 border-primary-200"></div>
+        </div>
+        <div class="grid grid-cols-2">
+          <div class="w-full h-9 border-b-4 border-primary-200"></div>
+          <div class="w-full h-9 border-l-4 border-primary-200"></div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2">
+        <div class="grid grid-cols-2">
+          <div class="w-full h-9 border-r-4 border-primary-200"></div>
+          <div class="w-full h-9 border-b-4 border-primary-200"></div>
+        </div>
+        <div class="grid grid-cols-2">
+          <div class="w-full h-9 border-b-4 border-primary-200"></div>
+          <div class="w-full h-9 border-l-4 border-primary-200"></div>
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 w-full gap-0 px-4">
+      <div class="grid justify-items-center w-full gap-2">
+        <div class="grid grid-cols-2">
+          <div class="w-full h-9 border-l-4 border-primary-200"></div>
+        </div>
+        <FormWrapperForpedigree sex="M"
+          ><PedigreeDatail />
+        </FormWrapperForpedigree>
+        <div class="grid grid-cols-2 w-full">
+          <div class="w-full h-9 border-r-4 border-primary-200"></div>
+          <div class="w-full h-9 border-b-4 border-primary-200"></div>
+        </div>
+      </div>
+      <div class="grid justify-items-center w-full gap-2">
+        <div class="grid grid-cols-2">
+          <div class="w-full h-9 border-l-4 border-primary-200"></div>
+        </div>
+        <FormWrapperForpedigree sex="F"
+          ><PedigreeDatail />
+        </FormWrapperForpedigree>
+        <div class="grid grid-cols-2 w-full">
+          <div class="w-full h-9 border-b-4 border-primary-200"></div>
+          <div class="w-full h-9 border-l-4 border-primary-200"></div>
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 w-full gap-4 px-4">
+      <div class="grid justify-items-center w-full gap-2">
+        <div class="grid grid-cols-2">
+          <div class="w-full h-9 border-l-4 border-primary-200"></div>
+        </div>
+        <FormWrapperForpedigree sex="M"
+          ><PedigreeDatail />
+        </FormWrapperForpedigree>
       </div>
     </div>
   </AppLayout>
@@ -40,18 +80,14 @@
 import AppLayout from '@/layout/AppLayout.vue'
 import ROUTE_PATH from '@/constants/router.js'
 import store from '@/store/index.js'
-import FormWrapper from '@/components/form/FormWrapper.vue'
-import BaseButton from '@/components/button/BaseButton.vue'
-import { Form } from 'vee-validate'
-import ActivityCard from '@/components/activitycard/ActivityCard.vue'
+import FormWrapperForpedigree from '@/components/form/FormWrapperForpedigree.vue'
+import PedigreeDatail from '@/components/pedigree/PedigreeDetail.vue'
 export default {
   name: 'NetworkError',
   components: {
     AppLayout,
-    FormWrapper,
-    BaseButton,
-    Form,
-    ActivityCard
+    FormWrapperForpedigree,
+    PedigreeDatail
   },
   data() {
     return {

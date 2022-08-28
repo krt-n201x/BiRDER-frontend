@@ -52,19 +52,27 @@ export default {
     return apiClient.post('/deleteBirdBreeding/' + id)
   },
   getBirdFemaleListOwner() {
-    return apiClient.get('/getMaleOrFemaleBirdList/0?affiliation=&sex=F')
+    return apiClient.get(
+      '/getMaleOrFemaleBirdListForBreeding/?affiliation=&sex=F'
+    )
   },
   getBirdFemaleListAdmin(affiliation) {
     return apiClient.get(
-      '/getMaleOrFemaleBirdList/0?affiliation=' + affiliation + '&sex=F'
+      '/getMaleOrFemaleBirdListForBreeding/?affiliation=' +
+        affiliation +
+        '&sex=F'
     )
   },
   getBirdMaleListOwner() {
-    return apiClient.get('/getMaleOrFemaleBirdList/0?affiliation=&sex=M')
+    return apiClient.get(
+      '/getMaleOrFemaleBirdListForBreeding/?affiliation=&sex=M'
+    )
   },
   getBirdMaleListAdmin(affiliation) {
     return apiClient.get(
-      '/getMaleOrFemaleBirdList/0?affiliation=' + affiliation + '&sex=M'
+      '/getMaleOrFemaleBirdListForBreeding/?affiliation=' +
+        affiliation +
+        '&sex=M'
     )
   },
   getpedigree(id) {

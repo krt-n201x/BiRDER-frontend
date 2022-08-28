@@ -144,7 +144,11 @@ export default {
       watchEffect(() => {
         BreedingService.getBirdFemaleListOwner()
           .then((response) => {
-            this.femaleList = response.data
+            for (var i = 0; i < response.data.length; i++) {
+              if (response.data[i].birdStatus == 'Available') {
+                this.femaleList.push(response.data[i])
+              }
+            }
           })
           .catch((error) => {
             console.log(error)
@@ -154,7 +158,11 @@ export default {
       watchEffect(() => {
         BreedingService.getBirdFemaleListAdmin(store.getters.farminspect)
           .then((response) => {
-            this.femaleList = response.data
+            for (var i = 0; i < response.data.length; i++) {
+              if (response.data[i].birdStatus == 'Available') {
+                this.femaleList.push(response.data[i])
+              }
+            }
           })
           .catch((error) => {
             console.log(error)
@@ -165,7 +173,11 @@ export default {
       watchEffect(() => {
         BreedingService.getBirdMaleListOwner()
           .then((response) => {
-            this.maleList = response.data
+            for (var i = 0; i < response.data.length; i++) {
+              if (response.data[i].birdStatus == 'Available') {
+                this.maleList.push(response.data[i])
+              }
+            }
           })
           .catch((error) => {
             console.log(error)
@@ -175,7 +187,11 @@ export default {
       watchEffect(() => {
         BreedingService.getBirdMaleListAdmin(store.getters.farminspect)
           .then((response) => {
-            this.maleList = response.data
+            for (var i = 0; i < response.data.length; i++) {
+              if (response.data[i].birdStatus == 'Available') {
+                this.maleList.push(response.data[i])
+              }
+            }
           })
           .catch((error) => {
             console.log(error)

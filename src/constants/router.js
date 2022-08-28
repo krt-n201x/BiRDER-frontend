@@ -12,11 +12,13 @@ const ROUTE_PATH = {
   SELECT_MANAGE: '/select-manage',
   BIRD_REGISTER: '/bird-register',
   NETWORK_ERROR: '/network-error',
-  BIRD_ACTIVITYLIST: '/bird-activity-list',
-  BIRD_CREATEACTIVIT: '/bird-activity-create',
+  BIRD_ACTIVITYLIST: '/bird-planning-list',
+  BIRD_CREATEACTIVIT: '/bird-planning-create',
   BIRD_BREEDING: '/bird-breeding',
   BIRD_BREEDINGDETAILS: '/bird-breeding-details',
   BIRD_BREEDINGCREATE: '/bird-breeding-create',
+  BIRD_PEDIGREE: '/bird-pedigree',
+  BIRD_ACTIVITYDETAIL: '/bird-planning-detail',
   COMPONENT_TEST: '/component-test'
 }
 

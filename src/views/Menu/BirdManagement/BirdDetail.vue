@@ -1,7 +1,7 @@
 <template>
   <AppLayout>
     <div class="grid justify-items-center mt-[16px] lg:mt-[50px]">
-      <FormWrapper label="Bird Detail"
+      <FormWrapper label="Bird Detail" class="relative"
         ><Form @submit="updatebird" :validation-schema="schema"
           ><div class="mt-[22px] lg:mt-[36px]">
             <div v-if="!edit"><img :src="this.bird.birdImage" /></div>
@@ -140,7 +140,7 @@
               class="grid grid-cols-2 gap-2 mt-[22px] lg:mt-[36px]"
               v-if="edit"
             >
-              <SecondaryButton @click="cancelChange">Cancel</SecondaryButton>
+              <SecondaryButton @click="cancel">Cancel</SecondaryButton>
               <BaseButton type="submit">Save</BaseButton>
             </div>
             <div class="grid grid-cols-1 gap-2 mt-[22px]" v-if="edit">
@@ -152,6 +152,16 @@
             >
               <BaseButton @click="editchange">Edit</BaseButton>
             </div>
+          </div>
+          <div class="absolute top-9 right-4 w-[150px]">
+            <router-link
+              :to="{
+                name: 'BirdPedigree',
+                params: { id: this.bird.id }
+              }"
+            >
+              <BaseButton>View Pedigree</BaseButton>
+            </router-link>
           </div>
         </Form>
       </FormWrapper>
@@ -182,12 +192,12 @@ import { useToast } from 'vue-toastification'
 const toast = useToast()
 const NetworkError = (
   <div>
-    <h1>Register Failed!</h1>
+    <h1>Network Error!</h1>
     <span>The system cannot connect to database</span>
   </div>
 )
 export default {
-  name: 'BirdDetail',
+  name: 'BirdPedigree',
   components: {
     AppLayout,
     FormWrapper,

@@ -80,20 +80,7 @@ import BreedingService from '@/services/Breeding/BreedingService.js'
 import BreedingSearchService from '@/services/Breeding/BreedingSearchService.js'
 import { watchEffect } from '@vue/runtime-core'
 import * as yup from 'yup'
-const monthNames = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December'
-]
+
 export default {
   name: 'BirdBreedingList',
   components: {
@@ -133,13 +120,8 @@ export default {
             this.bird = response.data
             for (const data of this.bird) {
               console.log(data.breedingDate)
-              data.breedingDate = new Date(data.breedingDate)
-              data.breedingDate =
-                data.breedingDate.getDay() +
-                ' ' +
-                monthNames[data.breedingDate.getMonth()] +
-                ' ' +
-                data.breedingDate.getFullYear()
+              const a = data.breedingDate.split('T')
+              data.breedingDate = a[0]
             }
           })
           .catch((error) => {
@@ -166,7 +148,10 @@ export default {
   },
   methods: {
     search(searchinfo) {
-      if (AuthService.hasRoles('ROLE_OWNER')) {
+      if (
+        AuthService.hasRoles('ROLE_OWNER') ||
+        AuthService.hasRoles('ROLE_EMPLOYEE')
+      ) {
         if (this.searchfiller == 'Breeding CageNumber') {
           BreedingSearchService.searchBreedingbreedingCageNumber(
             searchinfo.searchinformation
@@ -174,6 +159,11 @@ export default {
             .then((response) => {
               console.log(response.data)
               this.bird = response.data
+              for (const data of this.bird) {
+                console.log(data.breedingDate)
+                const a = data.breedingDate.split('T')
+                data.breedingDate = a[0]
+              }
             })
             .catch((error) => {
               console.log(error)
@@ -186,6 +176,11 @@ export default {
             .then((response) => {
               console.log(response.data)
               this.bird = response.data
+              for (const data of this.bird) {
+                console.log(data.breedingDate)
+                const a = data.breedingDate.split('T')
+                data.breedingDate = a[0]
+              }
             })
             .catch((error) => {
               console.log(error)
@@ -198,6 +193,11 @@ export default {
             .then((response) => {
               console.log(response.data)
               this.bird = response.data
+              for (const data of this.bird) {
+                console.log(data.breedingDate)
+                const a = data.breedingDate.split('T')
+                data.breedingDate = a[0]
+              }
             })
             .catch((error) => {
               console.log(error)
@@ -210,6 +210,11 @@ export default {
             .then((response) => {
               console.log(response.data)
               this.bird = response.data
+              for (const data of this.bird) {
+                console.log(data.breedingDate)
+                const a = data.breedingDate.split('T')
+                data.breedingDate = a[0]
+              }
             })
             .catch((error) => {
               console.log(error)
@@ -224,6 +229,11 @@ export default {
             .then((response) => {
               console.log(response.data)
               this.bird = response.data
+              for (const data of this.bird) {
+                console.log(data.breedingDate)
+                const a = data.breedingDate.split('T')
+                data.breedingDate = a[0]
+              }
             })
             .catch((error) => {
               console.log(error)
@@ -237,6 +247,11 @@ export default {
             .then((response) => {
               console.log(response.data)
               this.bird = response.data
+              for (const data of this.bird) {
+                console.log(data.breedingDate)
+                const a = data.breedingDate.split('T')
+                data.breedingDate = a[0]
+              }
             })
             .catch((error) => {
               console.log(error)
@@ -250,6 +265,11 @@ export default {
             .then((response) => {
               console.log(response.data)
               this.bird = response.data
+              for (const data of this.bird) {
+                console.log(data.breedingDate)
+                const a = data.breedingDate.split('T')
+                data.breedingDate = a[0]
+              }
             })
             .catch((error) => {
               console.log(error)
@@ -263,6 +283,11 @@ export default {
             .then((response) => {
               console.log(response.data)
               this.bird = response.data
+              for (const data of this.bird) {
+                console.log(data.breedingDate)
+                const a = data.breedingDate.split('T')
+                data.breedingDate = a[0]
+              }
             })
             .catch((error) => {
               console.log(error)

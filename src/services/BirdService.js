@@ -4,6 +4,14 @@ export default {
   getAllBird() {
     return apiClient.get('/viewBirdList')
   },
+  getAllBirdWithoutPagination() {
+    return apiClient.get('/getBirdListWithoutPaging')
+  },
+  getAllBirdWithoutPaginationAdmin(affiliation) {
+    return apiClient.get(
+      '/getBirdListWithoutPaging/?affiliation=' + affiliation
+    )
+  },
   getAllBirds(perPage, page) {
     return apiClient.get('/viewBirdList?_limit=' + perPage + '&_page=' + page)
   },
@@ -72,5 +80,9 @@ export default {
       .catch((error) => {
         return Promise.reject(error)
       })
+  },
+  getBirdPedigree(id) {
+    console.log('bird pedigree = ' + id)
+    return apiClient.get('/viewBirdBreedingPedigree/' + id)
   }
 }
