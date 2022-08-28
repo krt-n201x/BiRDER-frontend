@@ -19,6 +19,9 @@ const ROUTE_PATH = {
   BIRD_BREEDINGCREATE: '/bird-breeding-create',
   BIRD_PEDIGREE: '/bird-pedigree',
   BIRD_ACTIVITYDETAIL: '/bird-planning-detail',
+  BIRD_SPECIES_LIST: '/bird-species-list',
+  BIRD_SPECIES_CREATE: '/bird-species-create',
+  BIRD_SPECIES_DETAIL: '/bird-species-details',
   COMPONENT_TEST: '/component-test'
 }
 

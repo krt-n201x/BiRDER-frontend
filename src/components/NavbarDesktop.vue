@@ -41,6 +41,11 @@
         <button class="text-2xl text-white font-light">Bird Breeding</button>
       </router-link>
     </div>
+    <div v-if="isOwner || isEmpl" class="mr-8 h-full flex items-center">
+      <router-link :to="ROUTE_PATH.BIRD_SPECIES_LIST">
+        <button class="text-2xl text-white font-light">Bird Species</button>
+      </router-link>
+    </div>
     <UserButton :currentuser="currentuser" v-if="currentuser" />
   </div>
 </template>

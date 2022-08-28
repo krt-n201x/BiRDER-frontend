@@ -9,6 +9,7 @@ export default createStore({
     birdbreedingdetails: [],
     planningdetail: null,
     currentLowUser: null,
+    speciesDetail: [],
     currentUser: JSON.parse(localStorage.getItem('user'))
   },
   getters: {
@@ -29,6 +30,9 @@ export default createStore({
     },
     planningdetail(state) {
       return state.planningdetail
+    },
+    speciesDetail(state) {
+      return state.speciesDetail
     }
   },
   mutations: {
@@ -49,6 +53,9 @@ export default createStore({
     },
     updatePlanningDetail(state, value) {
       state.planningdetail = value
+    },
+    updatespeciesDetail(state, value) {
+      state.speciesDetail = value
     }
   },
   actions: {
@@ -69,6 +76,9 @@ export default createStore({
     },
     updatePlanningDetail(context, value) {
       context.commit('updatePlanningDetail', value)
+    },
+    updatespeciesDetail(context, value) {
+      context.commit('updatespeciesDetail', value)
     }
   },
   modules: {},

@@ -18,8 +18,9 @@
             @click="Empmanage"
           />
           <MenuCard icon="dove" label="Bird Management" @click="Birdmanage" />
-          <MenuCard icon="clipboard" label="Bird Activity" @click="Activity" />
+          <MenuCard icon="clipboard" label="Bird Planning" @click="Activity" />
           <MenuCard icon="crow" label="Bird Breeding" @click="Breeding" />
+          <MenuCard icon="crow" label="Bird Species" @click="Species" />
         </div>
       </div>
     </div>
