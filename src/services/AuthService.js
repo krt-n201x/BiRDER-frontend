@@ -57,22 +57,32 @@ export default {
         return Promise.reject(error)
       })
   },
-  createBird(registerinfo, time, birdstatus, birdsex, imageUrls) {
+  createBird(
+    registerinfo,
+    time,
+    birdstatus,
+    birdsex,
+    imageUrls,
+    BirdListFSelected,
+    BirdListMSelected,
+    SpeciesSelect
+  ) {
     return apiClient
       .post('/createBirdDetail', {
         birdName: registerinfo.birdname,
         birdCode: registerinfo.birdcode,
         birdColor: registerinfo.birdcolor,
         cageNumber: registerinfo.cagenumber,
-        maleParentId: registerinfo.maleparentcode,
-        femaleParentId: registerinfo.femaleparentcode,
+        maleParentId: BirdListMSelected,
+        femaleParentId: BirdListFSelected,
         paringBirdId: registerinfo.paringcode,
         birdTreatmentRecord: registerinfo.birdtrecord,
         birdSpecies: registerinfo.birdspecies,
         dateOfBirth: time,
         sexOfBird: birdsex,
         birdStatus: birdstatus,
-        birdImage: imageUrls
+        birdImage: imageUrls,
+        birdSpeciesId: SpeciesSelect
       })
       .catch((error) => {
         return Promise.reject(error)
@@ -84,7 +94,10 @@ export default {
     birdstatus,
     birdsex,
     imageUrls,
-    affiliation
+    affiliation,
+    BirdListFSelected,
+    BirdListMSelected,
+    SpeciesSelect
   ) {
     return apiClient
       .post('/createBirdDetail?affiliation=' + affiliation, {
@@ -92,15 +105,16 @@ export default {
         birdCode: registerinfo.birdcode,
         birdColor: registerinfo.birdcolor,
         cageNumber: registerinfo.cagenumber,
-        maleParentId: registerinfo.maleparentcode,
-        femaleParentId: registerinfo.femaleparentcode,
+        maleParentId: BirdListMSelected,
+        femaleParentId: BirdListFSelected,
         paringBirdId: registerinfo.paringcode,
         birdTreatmentRecord: registerinfo.birdtrecord,
         birdSpecies: registerinfo.birdspecies,
         dateOfBirth: time,
         sexOfBird: birdsex,
         birdStatus: birdstatus,
-        birdImage: imageUrls
+        birdImage: imageUrls,
+        birdSpeciesId: SpeciesSelect
       })
       .catch((error) => {
         return Promise.reject(error)

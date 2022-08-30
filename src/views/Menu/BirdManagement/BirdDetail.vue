@@ -61,14 +61,12 @@
               </div>
             </div>
             <div>
-              <TextField
-                name="birdspecies"
+              <BaseSelectSpecies
+                :options="this.SpeciesList"
+                v-model="this.SpeciesSelect"
                 label="Bird species"
-                type="text"
-                placeholder="Plese enter birds pecies"
-                :message="this.bird.birdSpecies"
+                placeholder="Select Species"
                 :disabled="!edit"
-                required
               />
             </div>
             <div>
@@ -98,32 +96,30 @@
                 :disabled="!edit"
               />
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-4">
-              <TextField
-                name="maleparentcode"
-                label="Male Parent Code"
-                type="text"
-                placeholder="Enter male parent code"
-                :message="this.maleParentId"
+            <div class="grid grid-cols-2 lg:gap-4">
+              <BaseSelectBird
+                :options="this.BirdListF"
+                v-model="this.BirdListFSelected"
+                label="Male parent code"
+                placeholder="Select Bird"
                 :disabled="!edit"
               />
-              <TextField
-                name="femaleparentcode"
-                label="Female Parent Code"
-                type="text"
-                placeholder="Enter female parent code"
-                :message="this.femaleParentId"
+              <BaseSelectBird
+                :options="this.BirdListM"
+                v-model="this.BirdListMSelected"
+                label="Female parent code"
+                placeholder="Select Bird"
                 :disabled="!edit"
               />
             </div>
             <div>
               <TextField
-                name="paringcode"
-                label="Paring code"
+                name="Pairing"
+                label="Pairing code (this information can edit by Bird Breeding feature)"
                 type="text"
-                placeholder="Enter paring code"
+                placeholder=""
                 :message="this.paringBirdId"
-                :disabled="!edit"
+                :disabled="true"
               />
             </div>
             <div>
@@ -188,6 +184,10 @@ import AuthService from '@/services/AuthService.js'
 import ROUTE_PATH from '@/constants/router.js'
 import BirdService from '@/services/BirdService.js'
 import { useToast } from 'vue-toastification'
+import BaseSelectSpecies from '@/components/dropdown/BaseSelectSpecies.vue'
+import { watchEffect } from '@vue/runtime-core'
+import SpeciesService from '@/services/Species/SpeciesService.js'
+import BaseSelectBird from '@/components/dropdown/BaseSelectBird.vue'
 
 const toast = useToast()
 const NetworkError = (
@@ -209,7 +209,9 @@ export default {
     AreaField,
     BaseButton,
     SecondaryButton,
-    DeleteButton
+    DeleteButton,
+    BaseSelectSpecies,
+    BaseSelectBird
   },
   data() {
     const schema = yup.object().shape({
@@ -230,12 +232,6 @@ export default {
         .min(1, 'The length shall be between 1-25')
         .max(25, 'The length shall be between 1-25')
         .required('Bird name is required!')
-        .nullable(true),
-      birdspecies: yup
-        .string()
-        .min(4, 'The length shall be between 4-50')
-        .max(50, 'The length shall be between 4-50')
-        .required('Bird species is required!')
         .nullable(true),
       birdcolor: yup
         .string()
@@ -286,19 +282,94 @@ export default {
       bird: store.getters.birdinformation,
       ROUTE_PATH,
       imageUrlspath: store.getters.birdinformation.birdImage,
-      farmownerid: store.getters.farminspect
+      farmownerid: store.getters.farminspect,
+      BirdListF: [],
+      BirdListFSelected: '',
+      BirdListFSelectedfinal: '',
+      BirdListM: [],
+      BirdListMSelected: '',
+      BirdListMSelectedfinal: '',
+      SpeciesList: [],
+      SpeciesSelect: '',
+      SpeciesSelectfinal: ''
     }
   },
   created() {
-    if (store.getters.birdinformation.maleParentId != null) {
-      this.maleParentId = store.getters.birdinformation.maleParentId.birdCode
+    if (this.bird.paringBirdId != null) {
+      this.paringBirdId =
+        this.bird.paringBirdId.birdCode + ' ' + this.bird.paringBirdId.birdName
+      console.log(this.paringBirdId)
     }
-    if (store.getters.birdinformation.femaleParentId != null) {
-      this.femaleParentId =
-        store.getters.birdinformation.femaleParentId.birdCode
-    }
-    if (store.getters.birdinformation.paringBirdId != null) {
-      this.paringBirdId = store.getters.birdinformation.paringBirdId
+    if (AuthService.hasRoles('ROLE_ADMIN')) {
+      watchEffect(() => {
+        BirdService.getBirdFemaleAdmin(this.bird.id, this.farmownerid)
+          .then((response) => {
+            this.BirdListF = response.data
+            if (this.bird.femaleParentId != null) {
+              this.BirdListFSelected = this.bird.femaleParentId.id
+            }
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      })
+      watchEffect(() => {
+        BirdService.getBirdMaleAdmin(this.bird.id, this.farmownerid)
+          .then((response) => {
+            this.BirdListM = response.data
+            if (this.bird.maleParentId != null) {
+              this.BirdListMSelected = this.bird.maleParentId.id
+            }
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      })
+      watchEffect(() => {
+        SpeciesService.getSpeciesAlladmin(this.farmownerid)
+          .then((response) => {
+            this.SpeciesList = response.data
+            this.SpeciesSelect = this.bird.birdSpeciesId.id
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      })
+    } else {
+      watchEffect(() => {
+        BirdService.getBirdFemale(this.bird.id)
+          .then((response) => {
+            this.BirdListF = response.data
+            if (this.bird.femaleParentId != null) {
+              this.BirdListFSelected = this.bird.femaleParentId.id
+            }
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      })
+      watchEffect(() => {
+        BirdService.getBirdMale(this.bird.id)
+          .then((response) => {
+            this.BirdListM = response.data
+            if (this.bird.maleParentId != null) {
+              this.BirdListMSelected = this.bird.maleParentId.id
+            }
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      })
+      watchEffect(() => {
+        SpeciesService.getSpeciesAll()
+          .then((response) => {
+            this.SpeciesList = response.data
+            this.SpeciesSelect = this.bird.birdSpeciesId.id
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      })
     }
   },
   methods: {
@@ -329,20 +400,51 @@ export default {
       })
     },
     updatebird(updateinfo) {
-      if (updateinfo.maleparentcode == '') {
-        updateinfo.maleparentcode = null
+      if (this.BirdListFSelected != '' && this.BirdListFSelected != null) {
+        watchEffect(() => {
+          BirdService.getBirdDetail(this.BirdListFSelected)
+            .then((response) => {
+              this.BirdListFSelectedfinal = response.data
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+        })
+      } else {
+        this.BirdListFSelectedfinal = null
       }
-      if (updateinfo.femaleparentcode == '') {
-        updateinfo.femaleparentcode = null
+      if (this.BirdListMSelected != '' && this.BirdListMSelected != null) {
+        watchEffect(() => {
+          BirdService.getBirdDetail(this.BirdListMSelected)
+            .then((response) => {
+              this.BirdListMSelectedfinal = response.data
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+        })
+      } else {
+        this.BirdListMSelectedfinal = null
       }
-      if (updateinfo.paringcode == '') {
-        updateinfo.paringcode = null
+      if (this.SpeciesSelect != '') {
+        watchEffect(() => {
+          SpeciesService.getSpeciesDetail(this.SpeciesSelect)
+            .then((response) => {
+              console.log(response.data)
+              this.SpeciesSelectfinal = response.data
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+        })
       }
       if (updateinfo.birdtrecord == '') {
         updateinfo.birdtrecord = null
       }
       if (this.birdstatus == '') {
         toast.error('Please select bird status')
+      } else if (this.SpeciesSelect == '') {
+        toast.error('Please select bird species')
       } else if (this.birdsex == '') {
         toast.error('Please select bird sex')
       } else if (this.time1 == '' || this.time1 == null) {
@@ -370,7 +472,11 @@ export default {
               this.birdsex,
               this.imageUrlspath,
               this.bird.id,
-              this.farmownerid
+              this.farmownerid,
+              this.BirdListFSelectedfinal,
+              this.BirdListMSelectedfinal,
+              this.SpeciesSelectfinal,
+              this.bird.paringBirdId
             )
               .then(() => {
                 toast.success('Update Bird Success!')
@@ -385,14 +491,18 @@ export default {
                 console.log(error)
               })
           } else {
-            console.log(updateinfo)
+            console.log('father insert: 2:' + this.BirdListMSelectedfinal)
             BirdService.updatebirdOther(
               updateinfo,
               this.time1,
               this.birdstatus,
               this.birdsex,
               this.imageUrlspath,
-              this.bird.id
+              this.bird.id,
+              this.BirdListFSelectedfinal,
+              this.BirdListMSelectedfinal,
+              this.SpeciesSelectfinal,
+              this.bird.paringBirdId
             )
               .then(() => {
                 toast.success('Update Bird Success!')

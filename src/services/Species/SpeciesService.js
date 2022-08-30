@@ -1,6 +1,9 @@
 import apiClient from '@/services/AxiosClient.js'
 
 export default {
+  getBirdDetail(id) {
+    return apiClient.get('/viewBirdDetail/' + id)
+  },
   getSpeciesOwner(perPage, page) {
     return apiClient.get(
       '/viewBirdSpeciesList/?_limit=' + perPage + '&_page=' + page
@@ -38,6 +41,7 @@ export default {
     )
   },
   getSpeciesDetail(id) {
+    console.log('species id: ' + id)
     return apiClient.get('/viewBirdSpeciesDetail/' + id)
   },
   updateSpecies(id, details) {
@@ -50,5 +54,13 @@ export default {
   },
   deleteSpecies(id) {
     return apiClient.post('/deleteBirdSpecies/' + id)
+  },
+  getSpeciesAll() {
+    return apiClient.get('/getBirdSpeciesListWithoutPaging/')
+  },
+  getSpeciesAlladmin(affiliation) {
+    return apiClient.get(
+      '/getBirdSpeciesListWithoutPaging/?affiliation=' + affiliation
+    )
   }
 }

@@ -53,22 +53,23 @@
               </div>
             </div>
             <div>
-              <TextField
-                name="birdspecies"
+              <BaseSelectSpecies
+                :options="this.SpeciesList"
+                v-model="this.SpeciesSelect"
                 label="Bird species"
-                type="text"
-                placeholder="Plese enter birds pecies"
-                required
+                placeholder="Select Species"
               />
             </div>
-            <div>
-              <TextField
-                name="birdcolor"
-                label="Bird color"
-                type="text"
-                placeholder="Plese enter bird color"
-                required
-              />
+            <div class="mb-4 grid grid-cols-1 lg:grid-cols-1 lg:gap-4">
+              <div>
+                <TextField
+                  name="birdcolor"
+                  label="Bird color"
+                  type="text"
+                  placeholder="Plese enter bird color"
+                  required
+                />
+              </div>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-4">
               <BaseSelect
@@ -84,26 +85,27 @@
                 placeholder="Select bird status"
               />
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-4">
-              <TextField
-                name="maleparentcode"
-                label="Male Parent Code"
-                type="text"
-                placeholder="Enter male parent code"
+            <div class="grid grid-cols-2 lg:gap-4">
+              <BaseSelectBird
+                :options="this.BirdListF"
+                v-model="this.BirdListFSelected"
+                label="Male parent code"
+                placeholder="Select Bird"
               />
-              <TextField
-                name="femaleparentcode"
-                label="Female Parent Code"
-                type="text"
-                placeholder="Enter female parent code"
+              <BaseSelectBird
+                :options="this.BirdListM"
+                v-model="this.BirdListMSelected"
+                label="Female parent code"
+                placeholder="Select Bird"
               />
             </div>
             <div>
               <TextField
-                name="paringcode"
-                label="Paring code"
+                name="Pairing"
+                label="Pairing code (this information can edit by Bird Breeding feature)"
                 type="text"
-                placeholder="Enter paring code"
+                placeholder=""
+                :disabled="true"
               />
             </div>
             <div>
@@ -141,8 +143,13 @@ import * as yup from 'yup'
 import { useToast } from 'vue-toastification'
 import DatePicker from 'vue-datepicker-next'
 import UploadImages from 'vue-upload-drop-images'
+import BaseSelectBird from '@/components/dropdown/BaseSelectBird.vue'
+import BaseSelectSpecies from '@/components/dropdown/BaseSelectSpecies.vue'
 import 'vue-datepicker-next/index.css'
 import store from '@/store'
+import { watchEffect } from '@vue/runtime-core'
+import BirdService from '@/services/BirdService.js'
+import SpeciesService from '@/services/Species/SpeciesService.js'
 
 const toast = useToast()
 const NetworkError = (
@@ -164,7 +171,9 @@ export default {
     DatePicker,
     BaseSelect,
     AreaField,
-    UploadImages
+    UploadImages,
+    BaseSelectBird,
+    BaseSelectSpecies
   },
   data() {
     const schema = yup.object().shape({
@@ -183,24 +192,11 @@ export default {
         .min(1, 'The length shall be between 1-25')
         .max(25, 'The length shall be between 1-25')
         .required('Bird name is required!'),
-      birdspecies: yup
-        .string()
-        .min(4, 'The length shall be between 4-50')
-        .max(50, 'The length shall be between 4-50')
-        .required('Bird species is required!'),
       birdcolor: yup
         .string()
-        .min(4, 'The length shall be between 4-100')
-        .max(100, 'The length shall be between 4-100')
-        .required('Bird species is required!'),
-      maleparentcode: yup
-        .string()
-        .matches(/^(|.{4,})$/, 'The length shall be between 4-15')
-        .max(15, 'The length shall be between 4-15'),
-      femaleparentcode: yup
-        .string()
-        .matches(/^(|.{4,})$/, 'The length shall be between 4-15')
-        .max(15, 'The length shall be between 4-15'),
+        .min(1, 'The length shall be between 1-225')
+        .max(225, 'The length shall be between 1-225')
+        .required('Bird color is required!'),
       paringcode: yup
         .string()
         .matches(/^(|.{4,})$/, 'The length shall be between 4-15')
@@ -227,16 +223,61 @@ export default {
         { message: 'Lost' },
         { message: 'Donated' }
       ],
+      BirdListF: [],
+      BirdListFSelected: '',
+      BirdListFSelectedfinal: '',
+      BirdListM: [],
+      BirdListMSelected: '',
+      BirdListMSelectedfinal: '',
+      SpeciesList: [],
+      SpeciesSelect: '',
+      SpeciesSelectfinal: '',
+      disable: true,
       sex: [{ message: 'M' }, { message: 'F' }, { message: 'U' }]
     }
   },
   methods: {
+    onChange() {
+      console.log('wow')
+    },
     registerbird(registerinfo) {
-      if (registerinfo.maleparentcode == '') {
-        registerinfo.maleparentcode = null
+      if (this.BirdListFSelected != '' && this.BirdListFSelected != null) {
+        watchEffect(() => {
+          BirdService.getBirdDetail(this.BirdListFSelected)
+            .then((response) => {
+              this.BirdListFSelectedfinal = response.data
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+        })
+      } else {
+        this.BirdListFSelectedfinal = null
       }
-      if (registerinfo.femaleparentcode == '') {
-        registerinfo.femaleparentcode = null
+      if (this.BirdListMSelected != '' && this.BirdListMSelected != null) {
+        watchEffect(() => {
+          BirdService.getBirdDetail(this.BirdListMSelected)
+            .then((response) => {
+              this.BirdListMSelectedfinal = response.data
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+        })
+      } else {
+        this.BirdListMSelectedfinal = null
+      }
+      if (this.SpeciesSelect != '') {
+        watchEffect(() => {
+          SpeciesService.getSpeciesDetail(this.SpeciesSelect)
+            .then((response) => {
+              console.log(response.data)
+              this.SpeciesSelectfinal = response.data
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+        })
       }
       if (registerinfo.paringcode == '') {
         registerinfo.paringcode = null
@@ -248,6 +289,8 @@ export default {
         toast.error("Please upload bird's picture")
       } else if (this.birdstatus == '') {
         toast.error('Please select bird status')
+      } else if (this.SpeciesSelect == '') {
+        toast.error('Please select bird species')
       } else if (this.birdsex == '') {
         toast.error('Please select bird sex')
       } else if (this.time1 == '' || this.time1 == null) {
@@ -268,7 +311,10 @@ export default {
               this.birdstatus,
               this.birdsex,
               this.imageUrls[0],
-              this.farmownerid
+              this.farmownerid,
+              this.BirdListFSelectedfinal,
+              this.BirdListMSelectedfinal,
+              this.SpeciesSelectfinal
             )
               .then(() => {
                 toast.success('Create Bird Success!')
@@ -288,7 +334,10 @@ export default {
               this.time1,
               this.birdstatus,
               this.birdsex,
-              this.imageUrls[0]
+              this.imageUrls[0],
+              this.BirdListFSelectedfinal,
+              this.BirdListMSelectedfinal,
+              this.SpeciesSelectfinal
             )
               .then(() => {
                 toast.success('Create Bird Success!')
@@ -313,6 +362,65 @@ export default {
     handleImages(files) {
       console.log(files)
       this.files = files
+    }
+  },
+  created() {
+    if (AuthService.hasRoles('ROLE_ADMIN')) {
+      watchEffect(() => {
+        BirdService.getBirdFemaleAdmin(0, this.farmownerid)
+          .then((response) => {
+            this.BirdListF = response.data
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      })
+      watchEffect(() => {
+        BirdService.getBirdMaleAdmin(0, this.farmownerid)
+          .then((response) => {
+            this.BirdListM = response.data
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      })
+      watchEffect(() => {
+        SpeciesService.getSpeciesAlladmin(this.farmownerid)
+          .then((response) => {
+            this.SpeciesList = response.data
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      })
+    } else {
+      watchEffect(() => {
+        BirdService.getBirdFemale(0)
+          .then((response) => {
+            this.BirdListF = response.data
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      })
+      watchEffect(() => {
+        BirdService.getBirdMale(0)
+          .then((response) => {
+            this.BirdListM = response.data
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      })
+      watchEffect(() => {
+        SpeciesService.getSpeciesAll()
+          .then((response) => {
+            this.SpeciesList = response.data
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      })
     }
   }
 }
