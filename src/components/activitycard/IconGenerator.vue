@@ -17,6 +17,7 @@
 import { useToast } from 'vue-toastification'
 import PlanningService from '@/services/Planning/PlanningService.js'
 import ROUTE_PATH from '@/constants/router.js'
+import AuthService from '@/services/AuthService.js'
 
 const toast = useToast()
 export default {
@@ -36,54 +37,64 @@ export default {
   },
   methods: {
     donethisact() {
-      this.$swal({
-        title: 'Done this activity!',
-        text: 'Are you sure to done this activity?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, done it',
-        cancelButtonText: 'No, cancel',
-        reverseButtons: true
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.info = this.data
-          this.info.planStatus = this.progress
-          PlanningService.updatePaln(this.info)
-            .then(() => {
-              toast.success('Update Success!')
-              this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
-            })
-            .catch((error) => {
-              toast.error('Update Falis!')
-              console.log(error)
-            })
-        }
-      })
+      if (
+        AuthService.hasRoles('ROLE_OWNER') ||
+        AuthService.hasRoles('ROLE_ADMIN')
+      ) {
+        this.$swal({
+          title: 'Done this activity!',
+          text: 'Are you sure to done this activity?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, done it',
+          cancelButtonText: 'No, cancel',
+          reverseButtons: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.info = this.data
+            this.info.planStatus = this.progress
+            PlanningService.updatePaln(this.info)
+              .then(() => {
+                toast.success('Update Success!')
+                this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+              })
+              .catch((error) => {
+                toast.error('Update Falis!')
+                console.log(error)
+              })
+          }
+        })
+      }
     },
     undonethisact() {
-      this.$swal({
-        title: 'Undone this activity!',
-        text: 'Are you sure to Undone this activity?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, do it',
-        cancelButtonText: 'No, cancel',
-        reverseButtons: true
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.info = this.data
-          this.info.planStatus = 'In progress'
-          PlanningService.updatePaln(this.info)
-            .then(() => {
-              toast.success('Update Success!')
-              this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
-            })
-            .catch((error) => {
-              toast.error('Update Falis!')
-              console.log(error)
-            })
-        }
-      })
+      if (
+        AuthService.hasRoles('ROLE_OWNER') ||
+        AuthService.hasRoles('ROLE_ADMIN')
+      ) {
+        this.$swal({
+          title: 'Undone this activity!',
+          text: 'Are you sure to Undone this activity?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, do it',
+          cancelButtonText: 'No, cancel',
+          reverseButtons: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.info = this.data
+            this.info.planStatus = 'In progress'
+            PlanningService.updatePaln(this.info)
+              .then(() => {
+                toast.success('Update Success!')
+                this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
+              })
+              .catch((error) => {
+                toast.error('Update Falis!')
+                console.log(error)
+              })
+          }
+        })
+      }
     }
   }
 }

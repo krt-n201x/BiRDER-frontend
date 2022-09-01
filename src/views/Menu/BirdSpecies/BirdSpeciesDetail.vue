@@ -1,7 +1,7 @@
 <template>
   <AppLayout>
     <div class="grid justify-items-center mt-[16px] lg:mt-[50px]">
-      <FormWrapper label="Create Bird Species">
+      <FormWrapper label="Bird Species information">
         <Form @submit="updateSpecies" :validation-schema="schema">
           <div class="mt-[22px] lg:mt-[36px]">
             <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-4">

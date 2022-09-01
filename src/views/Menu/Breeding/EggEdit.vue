@@ -2,7 +2,7 @@
   <AppLayout>
     <div>
       <div class="grid justify-items-center mt-[16px] lg:mt-[50px]">
-        <FormWrapper label="Egg register"
+        <FormWrapper label="Egg edit information"
           ><Form :validation-schema="schema"
             ><div class="mt-[22px] lg:mt-[0px]">
               <div class="mt-6">

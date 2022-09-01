@@ -1,7 +1,7 @@
 <template>
   <AppLayout>
     <div class="grid justify-items-center mt-[16px] lg:mt-[50px]">
-      <FormWrapper label="Create Bird Planning">
+      <FormWrapper label="Bird Planning information">
         <Form @submit="createPlanning" :validation-schema="schema">
           <div class="mt-[22px] lg:mt-[36px]">
             <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-4">
@@ -227,8 +227,8 @@ export default {
   methods: {
     DeletePlanning() {
       this.$swal({
-        title: 'Deleted Brid!',
-        text: 'Are you sure to deleted this Bird?',
+        title: 'Deleted Planning!',
+        text: 'Are you sure to deleted this plan?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Yes, delete it',
