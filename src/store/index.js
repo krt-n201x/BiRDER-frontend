@@ -10,6 +10,7 @@ export default createStore({
     planningdetail: null,
     currentLowUser: null,
     speciesDetail: [],
+    egginspect: null,
     currentUser: JSON.parse(localStorage.getItem('user'))
   },
   getters: {
@@ -33,6 +34,9 @@ export default createStore({
     },
     speciesDetail(state) {
       return state.speciesDetail
+    },
+    egginspect(state) {
+      return state.egginspect
     }
   },
   mutations: {
@@ -56,6 +60,9 @@ export default createStore({
     },
     updatespeciesDetail(state, value) {
       state.speciesDetail = value
+    },
+    updateegginspect(state, value) {
+      state.egginspect = value
     }
   },
   actions: {
@@ -79,6 +86,9 @@ export default createStore({
     },
     updatespeciesDetail(context, value) {
       context.commit('updatespeciesDetail', value)
+    },
+    updateegginspect(context, value) {
+      context.commit('updateegginspect', value)
     }
   },
   modules: {},

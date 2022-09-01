@@ -1,6 +1,6 @@
 <template>
   <AppLayout>
-    <div class="grid justify-items-center mt-[16px] lg:mt-[50px]">
+    <div class="grid justify-items-center mt-6">
       <div
         class="w-full max-w-[1078px] grid justify-items-center lg:justify-items-center"
       >
@@ -105,7 +105,6 @@ import { Form } from 'vee-validate'
 import ActivityCard from '@/components/activitycard/ActivityCard.vue'
 import AuthService from '@/services/AuthService.js'
 import { watchEffect } from '@vue/runtime-core'
-import BirdService from '@/services/BirdService.js'
 import PlanningService from '@/services/Planning/PlanningService.js'
 import BaseSelect from '@/components/dropdown/BaseSelect.vue'
 import TextField from '@/components/textfield/BaseField.vue'
@@ -147,7 +146,7 @@ export default {
     if (AuthService.hasRoles('ROLE_ADMIN')) {
       console.log('this is admin')
       watchEffect(() => {
-        BirdService.getAllBirdsAdmin(this.farmownerid, 6, this.page)
+        PlanningService.getPlanAdmin(this.farmownerid, 6, this.page)
           .then((response) => {
             this.planning = response.data
             this.totalEvents = response.headers['x-total-count']

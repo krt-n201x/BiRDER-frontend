@@ -30,6 +30,7 @@ import BirdSpeciesList from '@/views/Menu/BirdSpecies/BirdSpeciesList.vue'
 import BirdSpeciesCreate from '@/views/Menu/BirdSpecies/BirdSpeciesCreate.vue'
 import BirdSpeciesDetail from '@/views/Menu/BirdSpecies/BirdSpeciesDetail.vue'
 import SpeciesService from '@/services/Species/SpeciesService.js'
+import EggEdit from '@/views/Menu/Breeding/EggEdit.vue'
 import ROUTE_PATH from '../constants/router'
 
 const routes = [
@@ -184,6 +185,14 @@ const routes = [
             return { name: 'NetworkError' }
           }
         })
+    }
+  },
+  {
+    path: ROUTE_PATH.EGG_EDIT,
+    name: 'EggEdit',
+    component: EggEdit,
+    beforeEnter: (to) => {
+      return store.dispatch('updateegginspect', to.params.id)
     }
   },
   {
