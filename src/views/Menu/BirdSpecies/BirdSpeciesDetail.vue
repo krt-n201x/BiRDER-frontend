@@ -50,7 +50,9 @@
             <BaseButton type="submit">Update</BaseButton>
           </div>
           <div class="grid grid-cols-1 gap-2 mt-[22px]" v-if="edit">
-            <DeleteButton @click="DeleteSpecies">Delete Account</DeleteButton>
+            <DeleteButton @click="DeleteSpecies"
+              >Delete This Species</DeleteButton
+            >
           </div>
           <div
             class="grid grid-cols-1 gap-2 mt-[22px] lg:mt-[36px]"
@@ -106,17 +108,17 @@ export default {
         .string()
         .min(1, 'The length shall be between 1-100')
         .max(100, 'The length shall be between 1-100')
-        .required('Planning title is required!'),
+        .required('Species Name is required!'),
       familyName: yup
         .string()
         .min(1, 'The length shall be between 1-100')
         .max(100, 'The length shall be between 1-100')
-        .required('Planning title is required!'),
+        .required('Family Name is required!'),
       speciesColor: yup
         .string()
         .min(1, 'The length shall be between 1-225')
         .max(225, 'The length shall be between 1-225')
-        .required('Planning title is required!')
+        .required('Species Color is required!')
     })
     return {
       ROUTE_PATH,

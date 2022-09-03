@@ -269,7 +269,7 @@ export default {
               this.information.id
             )
               .then(() => {
-                toast.success('Create Planning Success!')
+                toast.success('Update Planning Success!')
                 this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
               })
               .catch((error) => {
@@ -281,7 +281,7 @@ export default {
                 console.log(error)
               })
           } else {
-            PlanningService.UpdatePlanningOwner(
+            PlanningService.createPlanningOwnerAdmin(
               this.farmownerid,
               data,
               this.info,
@@ -289,7 +289,7 @@ export default {
               this.information.id
             )
               .then(() => {
-                toast.success('Create Planning Success!')
+                toast.success('Update Planning Success!')
                 this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
               })
               .catch((error) => {
@@ -316,7 +316,7 @@ export default {
                   this.information.id
                 )
                   .then(() => {
-                    toast.success('Create Planning Success!')
+                    toast.success('Update Planning Success!')
                     this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
                   })
                   .catch((error) => {
@@ -328,7 +328,7 @@ export default {
                     console.log(error)
                   })
               } else {
-                PlanningService.UpdatePlanningOwner(
+                PlanningService.createPlanningOwnerAdmin(
                   this.farmownerid,
                   data,
                   this.info,
@@ -336,7 +336,7 @@ export default {
                   this.information.id
                 )
                   .then(() => {
-                    toast.success('Create Planning Success!')
+                    toast.success('Update Planning Success!')
                     this.$router.push(`${ROUTE_PATH.HOME_VIEW}`)
                   })
                   .catch((error) => {
