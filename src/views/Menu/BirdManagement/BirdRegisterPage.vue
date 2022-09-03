@@ -87,14 +87,14 @@
             </div>
             <div class="grid grid-cols-2 lg:gap-4">
               <BaseSelectBird
-                :options="this.BirdListF"
-                v-model="this.BirdListFSelected"
+                :options="this.BirdListM"
+                v-model="this.BirdListMSelected"
                 label="Male parent code"
                 placeholder="Select Bird"
               />
               <BaseSelectBird
-                :options="this.BirdListM"
-                v-model="this.BirdListMSelected"
+                :options="this.BirdListF"
+                v-model="this.BirdListFSelected"
                 label="Female parent code"
                 placeholder="Select Bird"
               />

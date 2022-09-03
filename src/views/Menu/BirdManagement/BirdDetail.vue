@@ -98,15 +98,15 @@
             </div>
             <div class="grid grid-cols-2 lg:gap-4">
               <BaseSelectBird
-                :options="this.BirdListF"
-                v-model="this.BirdListFSelected"
+                :options="this.BirdListM"
+                v-model="this.BirdListMSelected"
                 label="Male parent code"
                 placeholder="Select Bird"
                 :disabled="!edit"
               />
               <BaseSelectBird
-                :options="this.BirdListM"
-                v-model="this.BirdListMSelected"
+                :options="this.BirdListF"
+                v-model="this.BirdListFSelected"
                 label="Female parent code"
                 placeholder="Select Bird"
                 :disabled="!edit"
@@ -401,42 +401,59 @@ export default {
     },
     updatebird(updateinfo) {
       if (this.BirdListFSelected != '' && this.BirdListFSelected != null) {
-        watchEffect(() => {
-          BirdService.getBirdDetail(this.BirdListFSelected)
-            .then((response) => {
-              this.BirdListFSelectedfinal = response.data
-            })
-            .catch((error) => {
-              console.log(error)
-            })
-        })
+        // watchEffect(() => {
+        //   BirdService.getBirdDetail(this.BirdListFSelected)
+        //     .then((response) => {
+        //       this.BirdListFSelectedfinal = response.data
+        //       console.log('Hi do this first')
+        //     })
+        //     .catch((error) => {
+        //       console.log(error)
+        //     })
+        // })
+        for (var i = 0; i < this.BirdListF.length; i++) {
+          if (this.BirdListFSelected == this.BirdListF[i].id) {
+            this.BirdListFSelectedfinal = this.BirdListF[i]
+          }
+        }
       } else {
         this.BirdListFSelectedfinal = null
       }
+      console.log('Hi do this last')
       if (this.BirdListMSelected != '' && this.BirdListMSelected != null) {
-        watchEffect(() => {
-          BirdService.getBirdDetail(this.BirdListMSelected)
-            .then((response) => {
-              this.BirdListMSelectedfinal = response.data
-            })
-            .catch((error) => {
-              console.log(error)
-            })
-        })
+        // watchEffect(() => {
+        //   BirdService.getBirdDetail(this.BirdListMSelected)
+        //     .then((response) => {
+        //       this.BirdListMSelectedfinal = response.data
+        //     })
+        //     .catch((error) => {
+        //       console.log(error)
+        //     })
+        // })
+        for (var j = 0; j < this.BirdListM.length; j++) {
+          if (this.BirdListMSelected == this.BirdListM[j].id) {
+            this.BirdListMSelectedfinal = this.BirdListM[j]
+          }
+        }
       } else {
         this.BirdListMSelectedfinal = null
       }
       if (this.SpeciesSelect != '') {
-        watchEffect(() => {
-          SpeciesService.getSpeciesDetail(this.SpeciesSelect)
-            .then((response) => {
-              console.log(response.data)
-              this.SpeciesSelectfinal = response.data
-            })
-            .catch((error) => {
-              console.log(error)
-            })
-        })
+        // watchEffect(() => {
+        //   SpeciesService.getSpeciesDetail(this.SpeciesSelect)
+        //     .then((response) => {
+        //       console.log(response.data)
+        //       this.SpeciesSelectfinal = response.data
+        //     })
+        //     .catch((error) => {
+        //       console.log(error)
+        //     })
+        // })
+        for (var k = 0; k < this.SpeciesList.length; k++) {
+          if (this.SpeciesSelect == this.SpeciesList[k].id) {
+            this.SpeciesSelectfinal = this.SpeciesList[k]
+          }
+        }
       }
       if (updateinfo.birdtrecord == '') {
         updateinfo.birdtrecord = null
