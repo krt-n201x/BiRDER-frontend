@@ -26,6 +26,11 @@ import BirdBreedingCreate from '@/views/Menu/Breeding/BirdBreedingCreate.vue'
 import BirdPedigree from '@/views/Menu/BirdManagement/BirdPedigree.vue'
 import BirdActivityDetail from '@/views/Menu/BirdActivity/BirdActivityDetail.vue'
 import PlanningService from '@/services/Planning/PlanningService'
+import BirdSpeciesList from '@/views/Menu/BirdSpecies/BirdSpeciesList.vue'
+import BirdSpeciesCreate from '@/views/Menu/BirdSpecies/BirdSpeciesCreate.vue'
+import BirdSpeciesDetail from '@/views/Menu/BirdSpecies/BirdSpeciesDetail.vue'
+import SpeciesService from '@/services/Species/SpeciesService.js'
+import EggEdit from '@/views/Menu/Breeding/EggEdit.vue'
 import ROUTE_PATH from '../constants/router'
 
 const routes = [
@@ -159,6 +164,38 @@ const routes = [
     }
   },
   {
+    path: ROUTE_PATH.BIRD_SPECIES_DETAIL,
+    name: 'BirdSpeciesDetail',
+    component: BirdSpeciesDetail,
+    beforeEnter: (to) => {
+      return SpeciesService.getSpeciesDetail(to.params.id)
+        .then((response) => {
+          store.dispatch('updatespeciesDetail', response.data)
+        })
+        .catch((error) => {
+          if (error.response && error.response.status == 404) {
+            return {
+              name: '404Resource'
+            }
+          } else if (error.response && error.response.status == 401) {
+            return {
+              name: '401Resource'
+            }
+          } else {
+            return { name: 'NetworkError' }
+          }
+        })
+    }
+  },
+  {
+    path: ROUTE_PATH.EGG_EDIT,
+    name: 'EggEdit',
+    component: EggEdit,
+    beforeEnter: (to) => {
+      return store.dispatch('updateegginspect', to.params.id)
+    }
+  },
+  {
     path: ROUTE_PATH.BIRD_REGISTER,
     name: 'BirdRegisterPage',
     component: BirdRegisterPage
@@ -184,6 +221,17 @@ const routes = [
     name: 'BirdActivityList',
     component: BirdActivityList,
     props: (route) => ({ page: parseInt(route.query.page) || 1 })
+  },
+  {
+    path: ROUTE_PATH.BIRD_SPECIES_LIST,
+    name: 'BirdSpeciesList',
+    component: BirdSpeciesList,
+    props: (route) => ({ page: parseInt(route.query.page) || 1 })
+  },
+  {
+    path: ROUTE_PATH.BIRD_SPECIES_CREATE,
+    name: 'BirdSpeciesCreate',
+    component: BirdSpeciesCreate
   },
   {
     path: ROUTE_PATH.BIRD_CREATEACTIVIT,

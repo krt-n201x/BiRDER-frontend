@@ -1,6 +1,6 @@
 <template>
   <AppLayout>
-    <div class="grid justify-items-center mt-6">
+    <div class="grid justify-items-center m-6">
       <div
         class="w-full max-w-[1078px] grid justify-items-center lg:justify-items-center"
       >
@@ -31,38 +31,41 @@
             </div>
           </Form>
         </div>
-        <FormWrapper label="Bird Planning"
+        <FormWrapper label="Bird Species"
           ><Form @submit="updatebird" :validation-schema="schema"
             ><div class="mt-[22px] lg:mt-[0px]">
               <div class="mt-6">
-                <div class="grid grid-cols-2 gap-4 mr-[68px] px-4">
-                  <p class="text-[10px] text-neutral-600">Date</p>
-                  <p class="text-[10px] text-neutral-600">Title</p>
+                <div class="grid grid-cols-3 gap-4 mr-[30px] px-4">
+                  <p class="text-[10px] text-neutral-600">Species Name</p>
+                  <p class="text-[10px] text-neutral-600">Family Name</p>
+                  <p class="text-[10px] text-neutral-600">Species Color</p>
                 </div>
               </div>
-              <div v-if="!notfound">Not found any Activity</div>
+              <div v-if="!notfound">Not found any species</div>
               <div>
                 <!-- // -->
                 <div
                   class="w-full"
-                  v-for="data in this.planning"
+                  v-for="data in this.species"
                   :key="data.id"
                   :data="data"
                 >
-                  <ActivityCard :data="data" />
+                  <SpeciesCard :data="data" />
                 </div>
                 <!-- // -->
               </div>
+              <div class="grid grid-cols-1 gap-2 mt-[22px] lg:mt-[36px]">
+                <BaseButton @click="addBirdSpecies" v-if="isOwner || isAdmin"
+                  >add</BaseButton
+                >
+              </div>
               <div
-                class="w-full pt-4 grid grid-cols-2 gap-4"
+                class="w-full grid grid-cols-2 gap-4"
                 v-if="notfound && usesearch"
               >
                 <div>
                   <router-link
-                    :to="{
-                      name: 'BirdActivityList',
-                      query: { page: page - 1 }
-                    }"
+                    :to="{ name: 'BirdSpeciesList', query: { page: page - 1 } }"
                     rel="prev"
                   >
                     <BaseButton v-if="page != 1"> Back </BaseButton>
@@ -70,10 +73,7 @@
                 </div>
                 <div class="gird justify-item-end">
                   <router-link
-                    :to="{
-                      name: 'BirdActivityList',
-                      query: { page: page + 1 }
-                    }"
+                    :to="{ name: 'BirdSpeciesList', query: { page: page + 1 } }"
                     rel="next"
                   >
                     <BaseButton v-if="hasNextPage">
@@ -81,12 +81,6 @@
                     </BaseButton></router-link
                   >
                 </div>
-              </div>
-              <div
-                v-if="isOwner || isAdmin"
-                class="grid grid-cols-1 gap-2 mt-4 lg:mt-4"
-              >
-                <BaseButton @click="addActivity">add</BaseButton>
               </div>
             </div>
           </Form>
@@ -101,23 +95,24 @@ import ROUTE_PATH from '@/constants/router.js'
 import store from '@/store/index.js'
 import FormWrapper from '@/components/form/FormWrapper.vue'
 import BaseButton from '@/components/button/BaseButton.vue'
-import { Form } from 'vee-validate'
-import ActivityCard from '@/components/activitycard/ActivityCard.vue'
-import AuthService from '@/services/AuthService.js'
-import { watchEffect } from '@vue/runtime-core'
-import PlanningService from '@/services/Planning/PlanningService.js'
-import BaseSelect from '@/components/dropdown/BaseSelect.vue'
 import TextField from '@/components/textfield/BaseField.vue'
-import PlanningSearchService from '@/services/Planning/PlanningSearchService.js'
+import BaseSelect from '@/components/dropdown/BaseSelect.vue'
+import { Form } from 'vee-validate'
+import AuthService from '@/services/AuthService.js'
+import SpeciesService from '@/services/Species/SpeciesService.js'
+import SpeciesCard from '@/components/species/SpeciesCards.vue'
+import SpeciesSearchService from '@/services/Species/SpeciesSearchService.js'
+import { watchEffect } from '@vue/runtime-core'
+import * as yup from 'yup'
 
 export default {
-  name: 'BirdActivityList',
+  name: 'BirdBreedingList',
   components: {
     AppLayout,
     FormWrapper,
     BaseButton,
     Form,
-    ActivityCard,
+    SpeciesCard,
     TextField,
     BaseSelect
   },
@@ -128,27 +123,29 @@ export default {
     }
   },
   data() {
+    const schema = yup.object().shape({
+      searchinformation: yup.string()
+    })
     return {
-      notfound: true,
-      usesearch: true,
       ROUTE_PATH,
       thiscurrentUser: store.getters.currentUser,
       farmownerid: store.getters.farminspect,
+      species: [],
+      items: [{ message: 'Species Name' }],
+      schema,
+      searchfiller: '',
       totalEvents: 0,
-      error: true,
-      edit: false,
-      today: false,
-      planning: [],
-      items: [{ message: 'Plan Status' }, { message: 'Label Tag' }]
+      usesearch: true,
+      notfound: true
     }
   },
   created() {
     if (AuthService.hasRoles('ROLE_ADMIN')) {
       console.log('this is admin')
       watchEffect(() => {
-        PlanningService.getPlanAdmin(this.farmownerid, 6, this.page)
+        SpeciesService.getSpeciesAdmin(this.farmownerid, 6, this.page)
           .then((response) => {
-            this.planning = response.data
+            this.species = response.data
             this.totalEvents = response.headers['x-total-count']
           })
           .catch((error) => {
@@ -158,9 +155,9 @@ export default {
     } else {
       console.log('this is owner')
       watchEffect(() => {
-        PlanningService.getPlanOwner(6, this.page)
+        SpeciesService.getSpeciesOwner(6, this.page)
           .then((response) => {
-            this.planning = response.data
+            this.species = response.data
             this.totalEvents = response.headers['x-total-count']
           })
           .catch((error) => {
@@ -172,37 +169,14 @@ export default {
   methods: {
     search(searchinfo) {
       if (AuthService.hasRoles('ROLE_ADMIN')) {
-        if (this.searchfiller == 'Plan Status') {
-          PlanningSearchService.searchPlanStatusAdmin(
+        if (this.searchfiller == 'Species Name') {
+          SpeciesSearchService.searchSpeciesNameAdmin(
             searchinfo.searchinformation,
             store.getters.farminspect
           )
             .then((response) => {
               console.log(response.data)
-              this.planning = response.data
-              if (response.data.length == 0) {
-                this.notfound = false
-                this.usesearch = true
-              } else if (searchinfo.searchinformation == '') {
-                this.notfound = true
-                this.usesearch = true
-              } else {
-                this.notfound = true
-                this.usesearch = false
-              }
-            })
-            .catch((error) => {
-              console.log(error)
-            })
-        }
-        if (this.searchfiller == 'Label Tag') {
-          PlanningSearchService.searchPlanTagAdmin(
-            searchinfo.searchinformation,
-            store.getters.farminspect
-          )
-            .then((response) => {
-              console.log(response.data)
-              this.planning = response.data
+              this.species = response.data
               if (response.data.length == 0) {
                 this.notfound = false
                 this.usesearch = true
@@ -219,31 +193,11 @@ export default {
             })
         }
       } else {
-        if (this.searchfiller == 'Plan Status') {
-          PlanningSearchService.searchPlanStatus(searchinfo.searchinformation)
+        if (this.searchfiller == 'Species Name') {
+          SpeciesSearchService.searchSpeciesName(searchinfo.searchinformation)
             .then((response) => {
               console.log(response.data)
-              this.planning = response.data
-              if (response.data.length == 0) {
-                this.notfound = false
-                this.usesearch = true
-              } else if (searchinfo.searchinformation == '') {
-                this.notfound = true
-                this.usesearch = true
-              } else {
-                this.notfound = true
-                this.usesearch = false
-              }
-            })
-            .catch((error) => {
-              console.log(error)
-            })
-        }
-        if (this.searchfiller == 'Label Tag') {
-          PlanningSearchService.searchPlanTag(searchinfo.searchinformation)
-            .then((response) => {
-              console.log(response.data)
-              this.planning = response.data
+              this.species = response.data
               if (response.data.length == 0) {
                 this.notfound = false
                 this.usesearch = true
@@ -261,8 +215,8 @@ export default {
         }
       }
     },
-    addActivity() {
-      this.$router.push(`${ROUTE_PATH.BIRD_CREATEACTIVIT}`)
+    addBirdSpecies() {
+      this.$router.push(`${ROUTE_PATH.BIRD_SPECIES_CREATE}`)
     }
   },
   computed: {
@@ -275,6 +229,9 @@ export default {
     },
     isAdmin() {
       return AuthService.hasRoles('ROLE_ADMIN')
+    },
+    isEmpl() {
+      return AuthService.hasRoles('ROLE_EMPLOYEE')
     }
   }
 }

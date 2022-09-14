@@ -10,7 +10,7 @@ export default {
   getBirdBreedingDetail(id) {
     return apiClient.get('/viewBirdBreedingDetail/' + id)
   },
-  updateBirdBreedingOwner(details) {
+  updateBirdBreedingOwner(details, egg) {
     console.log(details)
     return apiClient
       .post('/updateBirdBreedingDetail/' + details.id, {
@@ -20,13 +20,13 @@ export default {
         breedingStatus: details.breedingStatus,
         haveMale: details.haveMale,
         haveFemale: details.haveFemale,
-        haveEggs: details.haveEggs
+        haveEggs: egg
       })
       .catch((error) => {
         return Promise.reject(error)
       })
   },
-  updateBirdBreedingAdmin(details, affiliation) {
+  updateBirdBreedingAdmin(details, affiliation, egg) {
     console.log(details)
     return apiClient
       .post(
@@ -41,7 +41,7 @@ export default {
           breedingStatus: details.breedingStatus,
           haveMale: details.haveMale,
           haveFemale: details.haveFemale,
-          haveEggs: details.haveEggs
+          haveEggs: egg
         }
       )
       .catch((error) => {

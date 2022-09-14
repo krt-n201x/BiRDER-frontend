@@ -2,157 +2,7 @@
   <AppLayout>
     <div>
       <div class="grid justify-items-center mt-[16px] lg:mt-[50px]">
-        <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-4 mb-5">
-          <div>
-            <p
-              class="font-bold text-lg w-full rounded-lg bg-white mb-4 pl-4 py-2"
-            >
-              Male Bird :
-            </p>
-            <BirdCardBreedingDetails :data="breedingdetails.haveMale" />
-          </div>
-          <div>
-            <p
-              class="font-bold text-lg w-full rounded-lg bg-white mb-4 pl-4 py-2"
-            >
-              Male Bird :
-            </p>
-            <BirdCardBreedingDetails :data="breedingdetails.haveFemale" />
-          </div>
-        </div>
-        <FormWrapper label="Breeding Information"
-          ><Form @submit="updatebird" :validation-schema="schema"
-            ><div class="mt-[22px] lg:mt-[0px]">
-              <div class="mt-6">
-                <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-4">
-                  <div>
-                    <TextField
-                      name="breedingCageNumber"
-                      label="Breeding CageNumber"
-                      type="text"
-                      placeholder="Plese enter cage number"
-                      :message="this.breedingdetails.breedingCageNumber"
-                      :disabled="!edit"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <TextField
-                      name="breedingClutch"
-                      label="Breeding Clutch"
-                      type="text"
-                      placeholder="Plese enter bird code"
-                      :message="this.breedingdetails.breedingClutch"
-                      :disabled="!edit"
-                      required
-                    />
-                  </div>
-                </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-4">
-                  <BaseSelect
-                    :options="this.status"
-                    v-model="this.breedingdetails.breedingStatus"
-                    label="Bird status"
-                    placeholder="Select bird status"
-                    :disabled="!edit"
-                  />
-                  <div class="h-full mt-2">
-                    <p class="text-[10px] text-neutral-600">Breeding Date</p>
-                    <DatePicker
-                      name="dateofbirth"
-                      v-model:value="breedingdetails.breedingDate"
-                      value-type="format"
-                      placeholder="Select date"
-                      format="YYYY-MM-DD"
-                      :disabled="!edit"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div
-                class="grid grid-cols-2 gap-2 mt-[22px] lg:mt-[36px]"
-                v-if="edit"
-              >
-                <SecondaryButton @click="editchange">Cancel</SecondaryButton>
-                <BaseButton type="submit">Save</BaseButton>
-              </div>
-              <div class="grid grid-cols-1 gap-2 mt-[22px]" v-if="edit">
-                <DeleteButton @click="deletebreeding"
-                  >Delete This Breeding</DeleteButton
-                >
-              </div>
-              <div
-                class="grid grid-cols-1 gap-2 mt-[22px] lg:mt-[36px]"
-                v-if="!edit"
-              >
-                <BaseButton @click="editchange" v-if="isOwner || isAdmin"
-                  >edit</BaseButton
-                >
-              </div>
-            </div>
-          </Form>
-        </FormWrapper>
-        <div class="h-4"></div>
-        <FormWrapper label="Egg information"
-          ><Form @submit="updatebird" :validation-schema="schema"
-            ><div class="mt-[22px] lg:mt-[0px]">
-              <div class="mt-6">
-                <div class="grid grid-cols-3 gap-4 px-4">
-                  <p class="text-[10px] text-neutral-600">Lay date</p>
-                  <p class="text-[10px] text-neutral-600">Egg Type</p>
-                  <p class="text-[10px] text-neutral-600">Egg Status</p>
-                </div>
-              </div>
-              <div>
-                <!-- // -->
-                <div
-                  :v-if="this.egg != []"
-                  class="w-full"
-                  v-for="data in this.egg"
-                  :key="data.id"
-                  :data="data"
-                >
-                  <EggCards :data="data" />
-                  <div v-if="this.editEggstat" class="grid grid-cols-2 gap-2">
-                    <router-link
-                      :to="{
-                        name: 'EggEdit',
-                        params: { id: data.id }
-                      }"
-                    >
-                      <BaseButton>edit</BaseButton></router-link
-                    >
-                    <DeleteButton
-                      @click="deleteEgg(data.id)"
-                      v-if="isOwner || isAdmin"
-                      >Delete</DeleteButton
-                    >
-                  </div>
-                </div>
-                <!-- // -->
-              </div>
-              <div
-                v-if="this.editEggstat"
-                class="grid grid-cols-1 gap-2 mt-[22px] lg:mt-[36px]"
-              >
-                <SecondaryButton @click="editEgg">Cancel</SecondaryButton>
-                <BaseButton @click="updateEgg" v-if="isOwner || isAdmin"
-                  >save</BaseButton
-                >
-              </div>
-              <div
-                v-if="!this.editEggstat"
-                class="grid grid-cols-1 gap-2 mt-[22px] lg:mt-[36px]"
-              >
-                <BaseButton @click="editEgg" v-if="isOwner || isAdmin"
-                  >edit</BaseButton
-                >
-              </div>
-            </div>
-          </Form>
-        </FormWrapper>
-        <div class="h-4"></div>
-        <FormWrapper v-if="this.editEggstat" label="Egg register"
+        <FormWrapper label="Egg edit information"
           ><Form :validation-schema="schema"
             ><div class="mt-[22px] lg:mt-[0px]">
               <div class="mt-6">
@@ -184,7 +34,7 @@
                 </div>
               </div>
               <div class="grid grid-cols-1 gap-2 mt-[22px] lg:mt-[36px]">
-                <BaseButton @click="addegg" type="submit">add</BaseButton>
+                <BaseButton @click="saveegg" type="submit">save</BaseButton>
               </div>
             </div>
           </Form>
@@ -201,16 +51,11 @@ import FormWrapper from '@/components/form/FormWrapper.vue'
 import BaseButton from '@/components/button/BaseButton.vue'
 import { Form } from 'vee-validate'
 import AuthService from '@/services/AuthService.js'
-import BirdCardBreedingDetails from '@/components/birdcard/BirdCardBreedingDetails.vue'
 import DatePicker from 'vue-datepicker-next'
-import TextField from '@/components/textfield/BaseField.vue'
-import BaseSelect from '@/components/dropdown/BaseSelect.vue'
-import SecondaryButton from '@/components/button/SecondaryButton.vue'
 import BreedingService from '@/services/Breeding/BreedingService.js'
 import * as yup from 'yup'
 import { useToast } from 'vue-toastification'
-import EggCards from '@/components/breeding/EggCards.vue'
-import DeleteButton from '@/components/button/DeleteButton.vue'
+import BaseSelect from '@/components/dropdown/BaseSelect.vue'
 
 const toast = useToast()
 const NetworkError = (
@@ -221,19 +66,14 @@ const NetworkError = (
 )
 
 export default {
-  name: 'BirdBreedingDetails',
+  name: 'EggEdit',
   components: {
     AppLayout,
     FormWrapper,
     BaseButton,
     Form,
-    BirdCardBreedingDetails,
     DatePicker,
-    TextField,
-    BaseSelect,
-    SecondaryButton,
-    DeleteButton,
-    EggCards
+    BaseSelect
   },
   data() {
     const schema = yup.object().shape({
@@ -284,10 +124,11 @@ export default {
     }
   },
   created() {
-    if (this.egg != []) {
-      for (const data of this.egg) {
-        const a = data.layDate.split('T')
-        data.layDate = a[0]
+    for (const data of this.egg) {
+      if (store.getters.egginspect == data.id) {
+        this.eggselected.eggType = data.eggType
+        this.eggselected.eggStatus = data.eggStatus
+        this.eggselected.layDate = data.layDate
       }
     }
   },
@@ -340,7 +181,7 @@ export default {
       this.egg = i
       console.log(i)
     },
-    addegg() {
+    saveegg() {
       if (
         this.eggselected.eggType == '' ||
         this.eggselected.eggStatus == '' ||
@@ -348,8 +189,15 @@ export default {
       ) {
         toast.error('Please fill all information first')
       } else {
-        var a = this.egg
-        a.push(this.eggselected)
+        var a = []
+        for (const data of this.egg) {
+          if (store.getters.egginspect == data.id) {
+            data.eggType = this.eggselected.eggType
+            data.eggStatus = this.eggselected.eggStatus
+            data.layDate = this.eggselected.layDate
+          }
+          a.push(data)
+        }
         this.egg = a
         this.updateEgg()
       }

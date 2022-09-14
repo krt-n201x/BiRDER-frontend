@@ -31,18 +31,30 @@ export default {
   getBirdDetail(id) {
     return apiClient.get('/viewBirdDetail/' + id)
   },
-  updatebirdOther(updateinfo, birthdate, birdstatus, birdsex, imageUrls, id) {
+  updatebirdOther(
+    updateinfo,
+    birthdate,
+    birdstatus,
+    birdsex,
+    imageUrls,
+    id,
+    BirdListFSelectedfinal,
+    BirdListMSelectedfinal,
+    SpeciesSelectfinal,
+    paringBirdId
+  ) {
+    console.log('father' + BirdListMSelectedfinal)
     return apiClient
       .post('/updateBirdDetail/' + id, {
         birdName: updateinfo.birdname,
         birdCode: updateinfo.birdcode,
         birdColor: updateinfo.birdcolor,
         cageNumber: updateinfo.cagenumber,
-        maleParentId: updateinfo.maleparentcode,
-        femaleParentId: updateinfo.femaleparentcode,
-        paringBirdId: updateinfo.paringcode,
+        maleParentId: BirdListMSelectedfinal,
+        femaleParentId: BirdListFSelectedfinal,
+        paringBirdId: paringBirdId,
         birdTreatmentRecord: updateinfo.birdtrecord,
-        birdSpecies: updateinfo.birdspecies,
+        birdSpeciesId: SpeciesSelectfinal,
         dateOfBirth: birthdate,
         sexOfBird: birdsex,
         birdStatus: birdstatus,
@@ -59,7 +71,11 @@ export default {
     birdsex,
     imageUrls,
     id,
-    affiliation
+    affiliation,
+    BirdListFSelectedfinal,
+    BirdListMSelectedfinal,
+    SpeciesSelectfinal,
+    paringBirdId
   ) {
     return apiClient
       .post('/updateBirdDetail/' + id + '?affiliation=' + affiliation, {
@@ -67,11 +83,11 @@ export default {
         birdCode: updateinfo.birdcode,
         birdColor: updateinfo.birdcolor,
         cageNumber: updateinfo.cagenumber,
-        maleParentId: updateinfo.maleparentcode,
-        femaleParentId: updateinfo.femaleparentcode,
-        paringBirdId: updateinfo.paringcode,
+        maleParentId: BirdListMSelectedfinal,
+        femaleParentId: BirdListFSelectedfinal,
+        paringBirdId: paringBirdId,
         birdTreatmentRecord: updateinfo.birdtrecord,
-        birdSpecies: updateinfo.birdspecies,
+        birdSpeciesId: SpeciesSelectfinal,
         dateOfBirth: birthdate,
         sexOfBird: birdsex,
         birdStatus: birdstatus,
@@ -84,5 +100,21 @@ export default {
   getBirdPedigree(id) {
     console.log('bird pedigree = ' + id)
     return apiClient.get('/viewBirdBreedingPedigree/' + id)
+  },
+  getBirdFemale(id) {
+    return apiClient.get('/getMaleOrFemaleBirdList/' + id + '?&sex=F')
+  },
+  getBirdMale(id) {
+    return apiClient.get('/getMaleOrFemaleBirdList/' + id + '?&sex=M')
+  },
+  getBirdFemaleAdmin(id, affiliation) {
+    return apiClient.get(
+      '/getMaleOrFemaleBirdList/' + id + '?&sex=F&affiliation=' + affiliation
+    )
+  },
+  getBirdMaleAdmin(id, affiliation) {
+    return apiClient.get(
+      '/getMaleOrFemaleBirdList/' + id + '?&sex=M&affiliation=' + affiliation
+    )
   }
 }
