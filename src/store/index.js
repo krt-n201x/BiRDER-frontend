@@ -11,6 +11,9 @@ export default createStore({
     currentLowUser: null,
     speciesDetail: [],
     egginspect: null,
+    birdsM: 0,
+    birdsF: 0,
+    birdsU: 0,
     currentUser: JSON.parse(localStorage.getItem('user'))
   },
   getters: {
@@ -37,6 +40,15 @@ export default createStore({
     },
     egginspect(state) {
       return state.egginspect
+    },
+    birdsM(state) {
+      return state.birdsM
+    },
+    birdsF(state) {
+      return state.birdsF
+    },
+    birdsU(state) {
+      return state.birdsU
     }
   },
   mutations: {
@@ -63,6 +75,15 @@ export default createStore({
     },
     updateegginspect(state, value) {
       state.egginspect = value
+    },
+    updatebirdsM(state, value) {
+      state.birdsM = value
+    },
+    updatebirdsF(state, value) {
+      state.birdsF = value
+    },
+    updatebirdsU(state, value) {
+      state.birdsU = value
     }
   },
   actions: {
@@ -89,6 +110,15 @@ export default createStore({
     },
     updateegginspect(context, value) {
       context.commit('updateegginspect', value)
+    },
+    updatebirdsM(context, value) {
+      context.commit('updatebirdsM', value)
+    },
+    updatebirdsF(context, value) {
+      context.commit('updatebirdsF', value)
+    },
+    updatebirdsU(context, value) {
+      context.commit('updatebirdsU', value)
     }
   },
   modules: {},

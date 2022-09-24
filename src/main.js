@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import '@/services/AxiosInterceptorSetup.js'
 import VueSweetalert2 from 'vue-sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css'
+import VueApexCharts from 'vue3-apexcharts'
 
 library.add(fas, far)
 
@@ -24,6 +25,7 @@ createApp(App)
   .use(store)
   .use(router)
   .use(VueSweetalert2, options)
+  .use(VueApexCharts)
   .use(Toast, {
     closeOnClick: false,
     timeout: 5000,
