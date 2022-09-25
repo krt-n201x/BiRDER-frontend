@@ -31,6 +31,7 @@ import BirdSpeciesCreate from '@/views/Menu/BirdSpecies/BirdSpeciesCreate.vue'
 import BirdSpeciesDetail from '@/views/Menu/BirdSpecies/BirdSpeciesDetail.vue'
 import SpeciesService from '@/services/Species/SpeciesService.js'
 import EggEdit from '@/views/Menu/Breeding/EggEdit.vue'
+import FarmStat from '../views/FarmStatAdmin.vue'
 import ROUTE_PATH from '../constants/router'
 
 const routes = [
@@ -38,6 +39,11 @@ const routes = [
     path: ROUTE_PATH.HOMEVIEW,
     name: 'HomeView',
     component: HomeView
+  },
+  {
+    path: ROUTE_PATH.FARM_STAT,
+    name: 'FarmStat',
+    component: FarmStat
   },
   {
     path: '/about',

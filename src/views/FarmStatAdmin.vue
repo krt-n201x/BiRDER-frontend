@@ -1,61 +1,7 @@
 <template>
   <AppLayout>
     <div
-      class="h-full grid place-content-center grid-flow-row lg:grid-flow-col m-6 gap-x-20 gap-y-8"
-    >
-      <div v-if="!thiscurrentUser">
-        <img
-          src="../assets/logoBiRDER.png"
-          class="max-h-[106px] lg:max-h-[331px]"
-        />
-      </div>
-      <div
-        v-if="!thiscurrentUser"
-        class="border-r-2 border-black my-10"
-        id="desktop"
-      ></div>
-      <div
-        v-if="!thiscurrentUser"
-        class="grid justify-items-center content-center"
-      >
-        <p class="text-2xl lg:text-4xl leading-[17px] pb-4 lg:pb-6">
-          BiRDER welcome!
-        </p>
-        <p
-          v-if="!thiscurrentUser"
-          class="text-base lg:text-2xl leading-[17px] pb-4 lg:pb-6"
-        >
-          Please login to the system
-        </p>
-        <router-link :to="ROUTE_PATH.LOGIN_PAGE">
-          <BaseButton v-if="!thiscurrentUser" class="w-[200px]"
-            >LOGIN</BaseButton
-          >
-        </router-link>
-        <p
-          v-if="!thiscurrentUser"
-          class="text-base lg:text-2xl leading-[17px] py-4 lg:pb-6"
-        >
-          Or register
-        </p>
-        <router-link :to="ROUTE_PATH.REGISTER_PAGE">
-          <SecondaryButton v-if="!thiscurrentUser" class="w-[200px]"
-            >REGISTER</SecondaryButton
-          >
-        </router-link>
-      </div>
-    </div>
-    <div
       v-if="isAdmin"
-      class="h-full grid place-content-center grid-flow-row grid-rows-2 lg:grid-flow-col m-6 gap-x-20 gap-y-8"
-    >
-      <img
-        src="../assets/logoBiRDER.png"
-        class="max-h-[106px] lg:max-h-[331px]"
-      />
-    </div>
-    <div
-      v-if="isOwner || isEmpl"
       class="h-full grid place-content-center grid-flow-row grid-rows-2 lg:grid-flow-col m-6 gap-x-20 gap-y-8"
     >
       <FormWrapper label="Sex of Birds">
@@ -96,10 +42,8 @@
 
 <script>
 import AppLayout from '@/layout/AppLayout.vue'
-import BaseButton from '@/components/button/BaseButton.vue'
 import ROUTE_PATH from '@/constants/router.js'
 import store from '@/store/index.js'
-import SecondaryButton from '@/components/button/SecondaryButton.vue'
 import FormWrapper from '@/components/form/FormWrapper.vue'
 import BirdService from '@/services/BirdService'
 import SpeciesService from '@/services/Species/SpeciesService'
@@ -126,116 +70,110 @@ var tM = store.getters.birdstM
 var tF = store.getters.birdstF
 var tU = store.getters.birdstU
 export default {
-  name: 'HomeView',
+  name: 'FarmStat',
   components: {
     AppLayout,
-    BaseButton,
-    SecondaryButton,
     FormWrapper
   },
   created() {
-    if (
-      AuthService.hasRoles('ROLE_OWNER') ||
-      AuthService.hasRoles('ROLE_EMPLOYEE')
-    ) {
-      BirdService.getAllBirdWithoutPagination()
-        .then((response) => {
-          this.Birds = response.data
-          M = 0
-          F = 0
-          U = 0
-          for (const data of this.Birds) {
-            if (data.sexOfBird == 'M') {
-              M = M + 1
-            }
-            if (data.sexOfBird == 'F') {
-              F = F + 1
-            }
-            if (data.sexOfBird == 'U') {
-              U = U + 1
-            }
+    BirdService.getAllBirdWithoutPaginationAdmin(this.affiliation)
+      .then((response) => {
+        this.Birds = response.data
+        M = 0
+        F = 0
+        U = 0
+        for (const data of this.Birds) {
+          if (data.sexOfBird == 'M') {
+            M = M + 1
           }
-          store.dispatch('updatebirdsM', M)
-          store.dispatch('updatebirdsF', F)
-          store.dispatch('updatebirdsU', U)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-      SpeciesService.getSpeciesAll()
-        .then((response) => {
-          this.SpeciesAll = response.data
-          SpeciesName = []
-          for (const data of this.SpeciesAll) {
-            SpeciesName.push(data.speciesName)
+          if (data.sexOfBird == 'F') {
+            F = F + 1
           }
-          store.dispatch('updateSpeciesName', SpeciesName)
-          BirdService.getAllBirdWithoutPagination()
-            .then((response) => {
-              sM = []
-              sF = []
-              sU = []
-              var temp = 0
-              for (const data of this.SpeciesAll) {
-                sM.push(0)
-                sF.push(0)
-                sU.push(0)
-                for (const data2 of response.data) {
-                  if (data2.birdSpeciesId.speciesName == data.speciesName) {
-                    if (data2.sexOfBird == 'M') {
-                      sM[temp] = sM[temp] + 1
-                    }
-                    if (data2.sexOfBird == 'F') {
-                      sF[temp] = sF[temp] + 1
-                    }
-                    if (data2.sexOfBird == 'U') {
-                      sU[temp] = sU[temp] + 1
-                    }
+          if (data.sexOfBird == 'U') {
+            U = U + 1
+          }
+        }
+        store.dispatch('updatebirdsM', M)
+        store.dispatch('updatebirdsF', F)
+        store.dispatch('updatebirdsU', U)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    SpeciesService.getSpeciesAlladmin(this.affiliation)
+      .then((response) => {
+        this.SpeciesAll = response.data
+        SpeciesName = []
+        for (const data of this.SpeciesAll) {
+          SpeciesName.push(data.speciesName)
+        }
+        store.dispatch('updateSpeciesName', SpeciesName)
+        BirdService.getAllBirdWithoutPaginationAdmin(this.affiliation)
+          .then((response) => {
+            sM = []
+            sF = []
+            sU = []
+            var temp = 0
+            for (const data of this.SpeciesAll) {
+              sM.push(0)
+              sF.push(0)
+              sU.push(0)
+              for (const data2 of response.data) {
+                if (data2.birdSpeciesId.speciesName == data.speciesName) {
+                  if (data2.sexOfBird == 'M') {
+                    sM[temp] = sM[temp] + 1
+                  }
+                  if (data2.sexOfBird == 'F') {
+                    sF[temp] = sF[temp] + 1
+                  }
+                  if (data2.sexOfBird == 'U') {
+                    sU[temp] = sU[temp] + 1
                   }
                 }
-                temp = temp + 1
               }
-              tM = []
-              tF = []
-              tU = []
-              var temp2 = 0
-              for (const data4 of statuslist) {
-                tM.push(0)
-                tF.push(0)
-                tU.push(0)
-                for (const data3 of response.data) {
-                  if (data3.birdStatus == data4) {
-                    if (data3.sexOfBird == 'M') {
-                      tM[temp2] = tM[temp2] + 1
-                    }
-                    if (data3.sexOfBird == 'F') {
-                      tF[temp2] = tF[temp2] + 1
-                    }
-                    if (data3.sexOfBird == 'U') {
-                      tU[temp2] = tU[temp2] + 1
-                    }
+              temp = temp + 1
+            }
+            tM = []
+            tF = []
+            tU = []
+            var temp2 = 0
+            for (const data4 of statuslist) {
+              tM.push(0)
+              tF.push(0)
+              tU.push(0)
+              for (const data3 of response.data) {
+                if (data3.birdStatus == data4) {
+                  if (data3.sexOfBird == 'M') {
+                    tM[temp2] = tM[temp2] + 1
+                  }
+                  if (data3.sexOfBird == 'F') {
+                    tF[temp2] = tF[temp2] + 1
+                  }
+                  if (data3.sexOfBird == 'U') {
+                    tU[temp2] = tU[temp2] + 1
                   }
                 }
-                temp2 = temp2 + 1
               }
-              store.dispatch('updatebirdstM', tM)
-              store.dispatch('updatebirdstF', tF)
-              store.dispatch('updatebirdstU', tU)
-              store.dispatch('updatebirdssM', sM)
-              store.dispatch('updatebirdssF', sF)
-              store.dispatch('updatebirdssU', sU)
-            })
-            .catch((error) => {
-              console.log(error)
-            })
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    }
+              temp2 = temp2 + 1
+            }
+            store.dispatch('updatebirdstM', tM)
+            store.dispatch('updatebirdstF', tF)
+            store.dispatch('updatebirdstU', tU)
+            store.dispatch('updatebirdssM', sM)
+            store.dispatch('updatebirdssF', sF)
+            store.dispatch('updatebirdssU', sU)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   },
   data() {
     return {
+      affiliation: store.getters.farminspect,
       series3: [
         {
           name: 'Male',
