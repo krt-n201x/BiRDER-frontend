@@ -9,41 +9,70 @@
     <div v-if="currentuser" class="mr-8">
       <p class="text-2xl text-white">|</p>
     </div>
-    <div v-if="currentuser" class="mr-8">
+    <div
+      v-if="currentuser"
+      class="px-4 h-full flex items-center hover:bg-primary-700"
+    >
       <router-link :to="ROUTE_PATH.HOME_VIEW">
         <button class="text-2xl text-white font-light">Home</button>
       </router-link>
     </div>
-    <div v-if="isOwner" class="mr-8 h-full flex items-center">
+    <div
+      v-if="isOwner"
+      class="px-4 h-full flex items-center hover:bg-primary-700"
+    >
       <router-link :to="ROUTE_PATH.EMPLOYEE_MANAGEMENT">
         <button class="text-2xl text-white font-light">
           Employee Management
         </button>
       </router-link>
     </div>
-    <div v-if="isAdmin" class="mr-8 h-full flex items-center">
+    <div
+      v-if="isAdmin"
+      class="px-4 h-full flex items-center hover:bg-primary-700"
+    >
       <router-link :to="ROUTE_PATH.FARM_MANAGEMENT">
         <button class="text-2xl text-white font-light">Farm Management</button>
       </router-link>
     </div>
-    <div v-if="isOwner || isEmpl" class="mr-8 h-full flex items-center">
+    <div
+      v-if="isOwner || isEmpl"
+      class="px-4 h-full flex items-center hover:bg-primary-700"
+    >
       <router-link :to="ROUTE_PATH.BIRD_MANAGEMENT">
         <button class="text-2xl text-white font-light">Bird Management</button>
       </router-link>
     </div>
-    <div v-if="isOwner || isEmpl" class="mr-8 h-full flex items-center">
+    <div
+      v-if="isOwner || isEmpl"
+      class="px-4 h-full flex items-center hover:bg-primary-700"
+    >
       <router-link :to="ROUTE_PATH.BIRD_ACTIVITYLIST">
         <button class="text-2xl text-white font-light">Bird Planning</button>
       </router-link>
     </div>
-    <div v-if="isOwner || isEmpl" class="mr-8 h-full flex items-center">
+    <div
+      v-if="isOwner || isEmpl"
+      class="px-4 h-full flex items-center hover:bg-primary-700"
+    >
       <router-link :to="ROUTE_PATH.BIRD_BREEDING">
         <button class="text-2xl text-white font-light">Bird Breeding</button>
       </router-link>
     </div>
-    <div v-if="isOwner || isEmpl" class="mr-8 h-full flex items-center">
+    <div
+      v-if="isOwner || isEmpl"
+      class="px-4 h-full flex items-center hover:bg-primary-700"
+    >
       <router-link :to="ROUTE_PATH.BIRD_SPECIES_LIST">
         <button class="text-2xl text-white font-light">Bird Species</button>
+      </router-link>
+    </div>
+    <div
+      v-if="isOwner || isEmpl"
+      class="px-4 h-full flex items-center hover:bg-primary-700"
+    >
+      <router-link :to="ROUTE_PATH.EXPORT_BIRD">
+        <button class="text-2xl text-white font-light">Export</button>
       </router-link>
     </div>
     <UserButton :currentuser="currentuser" v-if="currentuser" />

@@ -26,6 +26,11 @@
             @click="Species"
           />
           <MenuCard icon="chart-pie" label="Farm Statistics" @click="Stat" />
+          <MenuCard
+            icon="cloud-arrow-down"
+            label="Export Bird Information"
+            @click="Export"
+          />
         </div>
       </div>
     </div>
@@ -67,6 +72,9 @@ export default {
     },
     Stat() {
       this.$router.push(`${ROUTE_PATH.FARM_STAT}`)
+    },
+    Export() {
+      this.$router.push(`${ROUTE_PATH.EXPORT_BIRD}`)
     }
   }
 }

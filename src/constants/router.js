@@ -24,6 +24,7 @@ const ROUTE_PATH = {
   BIRD_SPECIES_DETAIL: '/bird-species-details',
   EGG_EDIT: '/egg-edit',
   FARM_STAT: '/farm-statistics',
+  EXPORT_BIRD: '/export-bird',
   COMPONENT_TEST: '/component-test'
 }
 

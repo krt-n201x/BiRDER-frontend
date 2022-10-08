@@ -13,6 +13,7 @@ import '@/services/AxiosInterceptorSetup.js'
 import VueSweetalert2 from 'vue-sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css'
 import VueApexCharts from 'vue3-apexcharts'
+import JsonCSV from 'vue-json-csv'
 
 library.add(fas, far)
 
@@ -33,4 +34,5 @@ createApp(App)
     hideProgressBar: true
   })
   .component('fa', FontAwesomeIcon)
+  .component('downloadCsv', JsonCSV)
   .mount('#app')

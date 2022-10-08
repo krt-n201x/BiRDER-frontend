@@ -32,6 +32,7 @@ import BirdSpeciesDetail from '@/views/Menu/BirdSpecies/BirdSpeciesDetail.vue'
 import SpeciesService from '@/services/Species/SpeciesService.js'
 import EggEdit from '@/views/Menu/Breeding/EggEdit.vue'
 import FarmStat from '../views/FarmStatAdmin.vue'
+import ExportBird from '@/views/Menu/Export/ExportBird.vue'
 import ROUTE_PATH from '../constants/router'
 
 const routes = [
@@ -277,6 +278,11 @@ const routes = [
           }
         })
     }
+  },
+  {
+    path: ROUTE_PATH.EXPORT_BIRD,
+    name: 'ExportBird',
+    component: ExportBird
   },
   {
     path: '/401',
