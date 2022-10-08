@@ -102,6 +102,7 @@ export default {
       })
     SpeciesService.getSpeciesAlladmin(this.affiliation)
       .then((response) => {
+        console.log(response.data)
         this.SpeciesAll = response.data
         SpeciesName = []
         for (const data of this.SpeciesAll) {
@@ -119,7 +120,7 @@ export default {
               sF.push(0)
               sU.push(0)
               for (const data2 of response.data) {
-                if (data2.birdSpeciesId.speciesName == data.speciesName) {
+                if (data2.birdSpeciesId.id == data.id) {
                   if (data2.sexOfBird == 'M') {
                     sM[temp] = sM[temp] + 1
                   }

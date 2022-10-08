@@ -21,6 +21,7 @@ export default createStore({
     birdstM: [],
     birdstF: [],
     birdstU: [],
+    allbird: [],
     currentUser: JSON.parse(localStorage.getItem('user'))
   },
   getters: {
@@ -77,6 +78,9 @@ export default createStore({
     },
     birdstU(state) {
       return state.birdstU
+    },
+    allbird(state) {
+      return state.allbird
     }
   },
   mutations: {
@@ -133,6 +137,9 @@ export default createStore({
     },
     updatebirdstU(state, value) {
       state.birdstU = value
+    },
+    updateallbird(state, value) {
+      state.allbird = value
     }
   },
   actions: {
@@ -189,6 +196,9 @@ export default createStore({
     },
     updatebirdstU(context, value) {
       context.commit('updatebirdstU', value)
+    },
+    updateallbird(context, value) {
+      context.commit('updateallbird', value)
     }
   },
   modules: {},
