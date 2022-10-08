@@ -23,6 +23,7 @@ const ROUTE_PATH = {
   BIRD_SPECIES_CREATE: '/bird-species-create',
   BIRD_SPECIES_DETAIL: '/bird-species-details',
   EGG_EDIT: '/egg-edit',
+  FARM_STAT: '/farm-statistics',
   COMPONENT_TEST: '/component-test'
 }
 

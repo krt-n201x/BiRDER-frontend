@@ -11,6 +11,16 @@ export default createStore({
     currentLowUser: null,
     speciesDetail: [],
     egginspect: null,
+    birdsM: 0,
+    birdsF: 0,
+    birdsU: 0,
+    SpeciesName: [],
+    birdssM: [],
+    birdssF: [],
+    birdssU: [],
+    birdstM: [],
+    birdstF: [],
+    birdstU: [],
     currentUser: JSON.parse(localStorage.getItem('user'))
   },
   getters: {
@@ -37,6 +47,36 @@ export default createStore({
     },
     egginspect(state) {
       return state.egginspect
+    },
+    birdsM(state) {
+      return state.birdsM
+    },
+    birdsF(state) {
+      return state.birdsF
+    },
+    birdsU(state) {
+      return state.birdsU
+    },
+    SpeciesName(state) {
+      return state.SpeciesName
+    },
+    birdssM(state) {
+      return state.birdssM
+    },
+    birdssF(state) {
+      return state.birdssF
+    },
+    birdssU(state) {
+      return state.birdssU
+    },
+    birdstM(state) {
+      return state.birdstM
+    },
+    birdstF(state) {
+      return state.birdstF
+    },
+    birdstU(state) {
+      return state.birdstU
     }
   },
   mutations: {
@@ -63,6 +103,36 @@ export default createStore({
     },
     updateegginspect(state, value) {
       state.egginspect = value
+    },
+    updatebirdsM(state, value) {
+      state.birdsM = value
+    },
+    updatebirdsF(state, value) {
+      state.birdsF = value
+    },
+    updatebirdsU(state, value) {
+      state.birdsU = value
+    },
+    updateSpeciesName(state, value) {
+      state.SpeciesName = value
+    },
+    updatebirdssM(state, value) {
+      state.birdssM = value
+    },
+    updatebirdssF(state, value) {
+      state.birdssF = value
+    },
+    updatebirdssU(state, value) {
+      state.birdssU = value
+    },
+    updatebirdstM(state, value) {
+      state.birdstM = value
+    },
+    updatebirdstF(state, value) {
+      state.birdstF = value
+    },
+    updatebirdstU(state, value) {
+      state.birdstU = value
     }
   },
   actions: {
@@ -89,6 +159,36 @@ export default createStore({
     },
     updateegginspect(context, value) {
       context.commit('updateegginspect', value)
+    },
+    updatebirdsM(context, value) {
+      context.commit('updatebirdsM', value)
+    },
+    updatebirdsF(context, value) {
+      context.commit('updatebirdsF', value)
+    },
+    updatebirdsU(context, value) {
+      context.commit('updatebirdsU', value)
+    },
+    updateSpeciesName(context, value) {
+      context.commit('updateSpeciesName', value)
+    },
+    updatebirdssM(context, value) {
+      context.commit('updatebirdssM', value)
+    },
+    updatebirdssF(context, value) {
+      context.commit('updatebirdssF', value)
+    },
+    updatebirdssU(context, value) {
+      context.commit('updatebirdssU', value)
+    },
+    updatebirdstM(context, value) {
+      context.commit('updatebirdstM', value)
+    },
+    updatebirdstF(context, value) {
+      context.commit('updatebirdstF', value)
+    },
+    updatebirdstU(context, value) {
+      context.commit('updatebirdstU', value)
     }
   },
   modules: {},

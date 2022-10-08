@@ -25,6 +25,7 @@
             label="Bird Species"
             @click="Species"
           />
+          <MenuCard icon="chart-pie" label="Farm Statistics" @click="Stat" />
         </div>
       </div>
     </div>
@@ -63,6 +64,9 @@ export default {
     },
     Species() {
       this.$router.push(`${ROUTE_PATH.BIRD_SPECIES_LIST}`)
+    },
+    Stat() {
+      this.$router.push(`${ROUTE_PATH.FARM_STAT}`)
     }
   }
 }
